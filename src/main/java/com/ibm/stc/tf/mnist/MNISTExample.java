@@ -9,24 +9,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.deeplearning4j.datasets.mnist.MnistManager;
+import org.tensorflow.SavedModelBundle;
 
 /**
- * Create an MNIST model in TensorFlow and try it from Java.
+ * Try an MNIST saved model created in Tensorflow from Java.
  * 
- * TensorFlow Python script location:
- * https://github.com/tensorflow/models/blob/master/official/mnist/mnist.py
- * 
- * Model created using: mnist.py --export_dir /tmp/mnist_saved_model
- * 
- * Model information: cd tensorflow/bazel-bin/tensorflow/python/tools
- * ./saved_model_cli show --dir /tmp/mnist_saved_model/1521072365/
- * 
- * The given SavedModel contains the following tag-sets: serve
+ * For more Python and model information, see info.txt.
  * 
  */
 public class MNISTExample {
 
 	public static final String MNIST_DATA_DIR = "/tmp/mnist_data/";
+	public static final String MNIST_SAVED_MODEL_DIR = "/tmp/mnist_saved_model/";
 
 	public static final String TRAIN_IMAGES = "train-images-idx3-ubyte";
 	public static final String TRAIN_LABELS = "train-labels-idx1-ubyte";
@@ -34,6 +28,9 @@ public class MNISTExample {
 	public static final String TEST_LABELS = "t10k-labels-idx1-ubyte";
 
 	public static void main(String[] args) throws IOException {
+
+		String savedModelDir = MNIST_SAVED_MODEL_DIR + "1521072365";
+		SavedModelBundle savedModel = SavedModelBundle.load(savedModelDir, "serve");
 
 		MnistManager trainingManager = getTrainingManager();
 		trainingManager.setCurrent(0);
