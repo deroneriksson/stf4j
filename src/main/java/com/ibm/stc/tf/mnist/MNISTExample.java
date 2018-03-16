@@ -10,6 +10,20 @@ import javax.swing.JLabel;
 
 import org.deeplearning4j.datasets.mnist.MnistManager;
 
+/**
+ * Create an MNIST model in TensorFlow and try it from Java.
+ * 
+ * TensorFlow Python script location:
+ * https://github.com/tensorflow/models/blob/master/official/mnist/mnist.py
+ * 
+ * Model created using: mnist.py --export_dir /tmp/mnist_saved_model
+ * 
+ * Model information: cd tensorflow/bazel-bin/tensorflow/python/tools
+ * ./saved_model_cli show --dir /tmp/mnist_saved_model/1521072365/
+ * 
+ * The given SavedModel contains the following tag-sets: serve
+ * 
+ */
 public class MNISTExample {
 
 	public static final String MNIST_DATA_DIR = "/tmp/mnist_data/";
@@ -21,16 +35,7 @@ public class MNISTExample {
 
 	public static void main(String[] args) throws IOException {
 
-		String trainingImages = MNIST_DATA_DIR + TRAIN_IMAGES;
-		String trainingLabels = MNIST_DATA_DIR + TRAIN_LABELS;
-		String testImages = MNIST_DATA_DIR + TEST_IMAGES;
-		String testLabels = MNIST_DATA_DIR + TEST_LABELS;
-		System.out.println(trainingImages + " exists? " + new File(trainingImages).exists());
-		System.out.println(trainingLabels + " exists? " + new File(trainingLabels).exists());
-		System.out.println(testImages + " exists? " + new File(testImages).exists());
-		System.out.println(testLabels + " exists? " + new File(testLabels).exists());
-
-		MnistManager trainingManager = new MnistManager(trainingImages, trainingLabels);
+		MnistManager trainingManager = getTrainingManager();
 		trainingManager.setCurrent(0);
 		int label = trainingManager.readLabel();
 		System.out.println("Label: " + label);
@@ -38,7 +43,7 @@ public class MNISTExample {
 		displayImageAsText(image);
 		displayImage(image);
 
-		MnistManager testManager = new MnistManager(testImages, testLabels, 10000);
+		MnistManager testManager = getTestManager();
 		testManager.setCurrent(0);
 		label = trainingManager.readLabel();
 		System.out.println("Label: " + label);
@@ -46,6 +51,34 @@ public class MNISTExample {
 		displayImageAsText(image);
 		displayImage(image);
 
+	}
+
+	public static MnistManager getTrainingManager() throws IOException {
+		String trainingImages = MNIST_DATA_DIR + TRAIN_IMAGES;
+		String trainingLabels = MNIST_DATA_DIR + TRAIN_LABELS;
+		if (!new File(trainingImages).exists()) {
+			System.out.println("'" + trainingImages + "' can't be found");
+			System.exit(-1);
+		}
+		if (!new File(trainingLabels).exists()) {
+			System.out.println("'" + trainingLabels + "' can't be found");
+			System.exit(-1);
+		}
+		return new MnistManager(trainingImages, trainingLabels);
+	}
+
+	public static MnistManager getTestManager() throws IOException {
+		String testImages = MNIST_DATA_DIR + TEST_IMAGES;
+		String testLabels = MNIST_DATA_DIR + TEST_LABELS;
+		if (!new File(testImages).exists()) {
+			System.out.println("'" + testImages + "' can't be found");
+			System.exit(-1);
+		}
+		if (!new File(testLabels).exists()) {
+			System.out.println("'" + testLabels + "' can't be found");
+			System.exit(-1);
+		}
+		return new MnistManager(testImages, testLabels, 10000);
 	}
 
 	public static void displayImageAsText(int[][] image) {
