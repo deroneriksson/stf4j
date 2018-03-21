@@ -3,7 +3,6 @@ package com.ibm.stc.tf.mnist;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -14,6 +13,7 @@ import javax.swing.JLabel;
 
 import org.deeplearning4j.datasets.mnist.MnistManager;
 import org.tensorflow.SavedModelBundle;
+import org.tensorflow.Tensor;
 import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.MetaGraphDef;
 import org.tensorflow.framework.SignatureDef;
@@ -41,10 +41,6 @@ public class MNISTExample {
 
 	public static void main(String[] args) {
 		try {
-
-			String savedModelDir = MNIST_SAVED_MODEL_DIR;
-			SavedModelBundle savedModel = SavedModelBundle.load(savedModelDir, "serve");
-
 			// MnistManager trainingManager = getTrainingManager();
 			// trainingManager.setCurrent(0);
 			// int label = trainingManager.readLabel();
@@ -58,18 +54,25 @@ public class MNISTExample {
 			int label = testManager.readLabel();
 			System.out.println("Label: " + label);
 			int[][] i2Image = testManager.readImage();
-			displayImageAsText(i2Image);
+			// displayImageAsText(i2Image);
 			// displayImage(i2Image);
 
 			float[][] f2Image = iToF(i2Image);
 			float[][][] f3Image = f2ToF3(f2Image);
 
-			// Graph g = savedModel.graph();
-			// Iterator<Operation> operations = g.operations();
-			// while (operations.hasNext()) {
-			// Operation op = operations.next();
-			// System.out.println("OP:" + op);
-			// }
+			String savedModelDir = MNIST_SAVED_MODEL_DIR;
+			SavedModelBundle model = SavedModelBundle.load(savedModelDir, "serve");
+			Tensor<Float> img3d = Tensor.create(f3Image, Float.class);
+			Tensor<Long> result = model.session().runner().feed("Placeholder", img3d).fetch("ArgMax").run().get(0)
+					.expect(Long.class);
+			int prediction = (int) result.copyTo(new long[1])[0];
+			System.out.println("Prediction:" + prediction);
+
+			if (label == prediction) {
+				System.out.println("Success, prediction (" + prediction + ") matched label (" + label + ")");
+			} else {
+				System.out.println("Failure, prediction (" + prediction + ") did not match label (" + label + ")");
+			}
 
 			// displaySignatureDefInfo(savedModel);
 
