@@ -3,7 +3,6 @@ package com.ibm.stc.tf.mnist;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -13,15 +12,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.deeplearning4j.datasets.mnist.MnistManager;
-import org.tensorflow.DataType;
-import org.tensorflow.Graph;
-import org.tensorflow.Operation;
-import org.tensorflow.Output;
 import org.tensorflow.SavedModelBundle;
-import org.tensorflow.Session;
-import org.tensorflow.Tensor;
+import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.MetaGraphDef;
 import org.tensorflow.framework.SignatureDef;
+import org.tensorflow.framework.TensorInfo;
+import org.tensorflow.framework.TensorShapeProto;
+import org.tensorflow.framework.TensorShapeProto.Dim;
+
+import com.google.protobuf.InvalidProtocolBufferException;
 
 /**
  * Try an MNIST saved model created in Tensorflow from Java.
@@ -59,28 +58,86 @@ public class MNISTExample {
 			System.out.println("Label: " + label);
 			int[][] iImage = testManager.readImage();
 			displayImageAsText(iImage);
-			displayImage(iImage);
+			// displayImage(iImage);
 
 			float[][] image = iToF(iImage);
 
-			Graph g = savedModel.graph();
-			Iterator<Operation> operations = g.operations();
-			while (operations.hasNext()) {
-				Operation op = operations.next();
-				System.out.println("OP:" + op);
-			}
+			// Graph g = savedModel.graph();
+			// Iterator<Operation> operations = g.operations();
+			// while (operations.hasNext()) {
+			// Operation op = operations.next();
+			// System.out.println("OP:" + op);
+			// }
 
-			byte[] metaGraphDefBytes = savedModel.metaGraphDef();
-			MetaGraphDef mgd = MetaGraphDef.parseFrom(metaGraphDefBytes);
-			Map<String, SignatureDef> signatureDefMap = mgd.getSignatureDefMap();
-			Set<Entry<String, SignatureDef>> entries = signatureDefMap.entrySet();
-			for (Entry<String, SignatureDef> entry : entries) {
-				System.out.println("ENTRY:" + entry);
-			}
+			displaySignatureDefInfo(savedModel);
 
 		} catch (Throwable t) {
 			System.out.println(t);
 		}
+	}
+
+	public static void displaySignatureDefInfo(SavedModelBundle savedModelBundle)
+			throws InvalidProtocolBufferException {
+		byte[] metaGraphDefBytes = savedModelBundle.metaGraphDef();
+		MetaGraphDef mgd = MetaGraphDef.parseFrom(metaGraphDefBytes);
+
+		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
+		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
+		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
+			System.out.println("\nSignatureDef key: " + sdmEntry.getKey());
+			SignatureDef sigDef = sdmEntry.getValue();
+			String methodName = sigDef.getMethodName();
+			System.out.println("method name: " + methodName);
+
+			System.out.println("inputs:");
+			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
+			Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
+			for (Entry<String, TensorInfo> inputEntry : inputEntries) {
+				System.out.println("  input key: " + inputEntry.getKey());
+				TensorInfo inputTensorInfo = inputEntry.getValue();
+				DataType inputTensorDtype = inputTensorInfo.getDtype();
+				System.out.println("    dtype: " + inputTensorDtype);
+				System.out.print("    shape: (");
+				TensorShapeProto inputTensorShape = inputTensorInfo.getTensorShape();
+				int dimCount = inputTensorShape.getDimCount();
+				for (int i = 0; i < dimCount; i++) {
+					Dim dim = inputTensorShape.getDim(i);
+					long dimSize = dim.getSize();
+					if (i > 0) {
+						System.out.print(", ");
+					}
+					System.out.print(dimSize);
+				}
+				System.out.println(")");
+				String inputTensorName = inputTensorInfo.getName();
+				System.out.println("    name: " + inputTensorName);
+			}
+
+			System.out.println("outputs:");
+			Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
+			Set<Entry<String, TensorInfo>> outputEntries = outputsMap.entrySet();
+			for (Entry<String, TensorInfo> outputEntry : outputEntries) {
+				System.out.println("  output key: " + outputEntry.getKey());
+				TensorInfo outputTensorInfo = outputEntry.getValue();
+				DataType outputTensorDtype = outputTensorInfo.getDtype();
+				System.out.println("    dtype: " + outputTensorDtype);
+				System.out.print("    shape: (");
+				TensorShapeProto outputTensorShape = outputTensorInfo.getTensorShape();
+				int dimCount = outputTensorShape.getDimCount();
+				for (int i = 0; i < dimCount; i++) {
+					Dim dim = outputTensorShape.getDim(i);
+					long dimSize = dim.getSize();
+					if (i > 0) {
+						System.out.print(", ");
+					}
+					System.out.print(dimSize);
+				}
+				System.out.println(")");
+				String inputTensorName = outputTensorInfo.getName();
+				System.out.println("    name: " + inputTensorName);
+			}
+		}
+
 	}
 
 	public static MnistManager getTrainingManager() throws IOException {
