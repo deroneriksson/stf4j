@@ -3,6 +3,7 @@ package com.ibm.stc.tf.mnist;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class MNISTExample {
 	public static void main(String[] args) {
 		try {
 
-			String savedModelDir = MNIST_SAVED_MODEL_DIR; // + "1521072365";
+			String savedModelDir = MNIST_SAVED_MODEL_DIR;
 			SavedModelBundle savedModel = SavedModelBundle.load(savedModelDir, "serve");
 
 			// MnistManager trainingManager = getTrainingManager();
@@ -56,11 +57,12 @@ public class MNISTExample {
 			testManager.setCurrent(0);
 			int label = testManager.readLabel();
 			System.out.println("Label: " + label);
-			int[][] iImage = testManager.readImage();
-			displayImageAsText(iImage);
-			// displayImage(iImage);
+			int[][] i2Image = testManager.readImage();
+			displayImageAsText(i2Image);
+			// displayImage(i2Image);
 
-			float[][] image = iToF(iImage);
+			float[][] f2Image = iToF(i2Image);
+			float[][][] f3Image = f2ToF3(f2Image);
 
 			// Graph g = savedModel.graph();
 			// Iterator<Operation> operations = g.operations();
@@ -69,7 +71,7 @@ public class MNISTExample {
 			// System.out.println("OP:" + op);
 			// }
 
-			displaySignatureDefInfo(savedModel);
+			// displaySignatureDefInfo(savedModel);
 
 		} catch (Throwable t) {
 			System.out.println(t);
@@ -184,6 +186,16 @@ public class MNISTExample {
 		for (int r = 0; r < image.length; r++) {
 			for (int c = 0; c < image[0].length; c++) {
 				fImage[r][c] = image[r][c];
+			}
+		}
+		return fImage;
+	}
+
+	public static float[][][] f2ToF3(float[][] image) {
+		float[][][] fImage = new float[1][image.length][image[0].length];
+		for (int r = 0; r < image.length; r++) {
+			for (int c = 0; c < image[0].length; c++) {
+				fImage[0][r][c] = image[r][c];
 			}
 		}
 		return fImage;
