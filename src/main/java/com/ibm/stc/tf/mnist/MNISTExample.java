@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 
 import org.deeplearning4j.datasets.mnist.MnistManager;
 import org.tensorflow.SavedModelBundle;
+import org.tensorflow.Session;
+import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
 import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.MetaGraphDef;
@@ -42,33 +44,74 @@ public class MNISTExample {
 	private static MnistManager testManager = null;
 	private static MnistManager trainingManager = null;
 
+	private static SavedModelBundle model = null;
+	private static String mDir = null;
+
 	public static void main(String[] args) {
 		try {
-			int imageNum = 3;
 
-			float[][] image = getTestImage(imageNum);
-			int label = getTestImageLabel(imageNum);
-			displayImageAsText(image);
-			displayImage(image);
+			tfModel(MNIST_SAVED_MODEL_DIR);
 
-			String savedModelDir = MNIST_SAVED_MODEL_DIR;
-			SavedModelBundle model = SavedModelBundle.load(savedModelDir, "serve");
-			Tensor<Float> img3d = Tensor.create(image, Float.class);
-			int prediction = (int) model.session().runner().feed("Placeholder", img3d).fetch("ArgMax").run().get(0)
-					.expect(Long.class).copyTo(new long[1])[0];
-			System.out.println("Prediction:" + prediction);
-
-			if (label == prediction) {
-				System.out.println("Success, prediction (" + prediction + ") matched label (" + label + ")");
-			} else {
-				System.out.println("Failure, prediction (" + prediction + ") did not match label (" + label + ")");
-			}
+			singlePrediction(0, false, false);
+			singlePrediction(1, false, false);
+			singlePrediction(2, false, false);
 
 			// displaySignatureDefInfo(savedModel);
 
 		} catch (Throwable t) {
 			System.out.println(t);
 		}
+	}
+
+	public static void singlePrediction(int testImageNum, boolean displayImage, boolean displayImageAsText)
+			throws IOException {
+		float[][] image = getTestImage(testImageNum);
+		if (displayImage) {
+			displayImage(image);
+		}
+		if (displayImageAsText) {
+			displayImageAsText(image);
+		}
+		int label = getTestImageLabel(testImageNum);
+
+		Tensor<Float> imageTensor = Tensor.create(image, Float.class);
+		int prediction = (int) tfRunner().feed("Placeholder", imageTensor).fetch("ArgMax").run().get(0)
+				.expect(Long.class).copyTo(new long[1])[0];
+
+		if (label == prediction) {
+			System.out.println(String.format("Success, image #%d prediction (%d) matched label (%d)", testImageNum,
+					prediction, label));
+		} else {
+			System.out.println(String.format("Failure, image #%d prediction (%d) did not match label (%d)",
+					testImageNum, prediction, label));
+		}
+	}
+
+	public static SavedModelBundle tfModel() {
+		return model;
+	}
+
+	public static SavedModelBundle tfModel(String modelDir) {
+		return tfModel(modelDir, "serve");
+	}
+
+	public static SavedModelBundle tfModel(String modelDir, String... metaGraphDefTags) {
+		if (modelDir == null) {
+			return null;
+		}
+		if (!modelDir.equals(mDir)) {
+			model = SavedModelBundle.load(modelDir, metaGraphDefTags);
+			mDir = modelDir;
+		}
+		return model;
+	}
+
+	public static Session tfSession() {
+		return model.session();
+	}
+
+	public static Runner tfRunner() {
+		return tfSession().runner();
 	}
 
 	public static float[][] getTestImage(int imageNum) throws IOException {
