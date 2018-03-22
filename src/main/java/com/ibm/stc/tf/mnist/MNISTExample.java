@@ -39,33 +39,23 @@ public class MNISTExample {
 	public static final String TEST_IMAGES = "t10k-images-idx3-ubyte";
 	public static final String TEST_LABELS = "t10k-labels-idx1-ubyte";
 
+	private static MnistManager testManager = null;
+	private static MnistManager trainingManager = null;
+
 	public static void main(String[] args) {
 		try {
-			// MnistManager trainingManager = getTrainingManager();
-			// trainingManager.setCurrent(0);
-			// int label = trainingManager.readLabel();
-			// System.out.println("Label: " + label);
-			// int[][] image = trainingManager.readImage();
-			// displayImageAsText(image);
-			// displayImage(image);
+			int imageNum = 3;
 
-			MnistManager testManager = getTestManager();
-			testManager.setCurrent(0);
-			int label = testManager.readLabel();
-			System.out.println("Label: " + label);
-			int[][] i2Image = testManager.readImage();
-			// displayImageAsText(i2Image);
-			// displayImage(i2Image);
-
-			float[][] f2Image = iToF(i2Image);
-			float[][][] f3Image = f2ToF3(f2Image);
+			float[][] image = getTestImage(imageNum);
+			int label = getTestImageLabel(imageNum);
+			displayImageAsText(image);
+			displayImage(image);
 
 			String savedModelDir = MNIST_SAVED_MODEL_DIR;
 			SavedModelBundle model = SavedModelBundle.load(savedModelDir, "serve");
-			Tensor<Float> img3d = Tensor.create(f3Image, Float.class);
-			Tensor<Long> result = model.session().runner().feed("Placeholder", img3d).fetch("ArgMax").run().get(0)
-					.expect(Long.class);
-			int prediction = (int) result.copyTo(new long[1])[0];
+			Tensor<Float> img3d = Tensor.create(image, Float.class);
+			int prediction = (int) model.session().runner().feed("Placeholder", img3d).fetch("ArgMax").run().get(0)
+					.expect(Long.class).copyTo(new long[1])[0];
 			System.out.println("Prediction:" + prediction);
 
 			if (label == prediction) {
@@ -79,6 +69,26 @@ public class MNISTExample {
 		} catch (Throwable t) {
 			System.out.println(t);
 		}
+	}
+
+	public static float[][] getTestImage(int imageNum) throws IOException {
+		int[][] iImage = getTestImageAsInts(imageNum);
+		float[][] fImage = iToF(iImage);
+		return fImage;
+	}
+
+	public static int[][] getTestImageAsInts(int imageNum) throws IOException {
+		MnistManager testManager = getTestManager();
+		testManager.setCurrent(imageNum);
+		int[][] iImage = testManager.readImage();
+		return iImage;
+	}
+
+	public static int getTestImageLabel(int imageNum) throws IOException {
+		MnistManager testManager = getTestManager();
+		testManager.setCurrent(imageNum);
+		int label = testManager.readLabel();
+		return label;
 	}
 
 	public static void displaySignatureDefInfo(SavedModelBundle savedModelBundle)
@@ -146,6 +156,9 @@ public class MNISTExample {
 	}
 
 	public static MnistManager getTrainingManager() throws IOException {
+		if (trainingManager != null) {
+			return trainingManager;
+		}
 		String trainingImages = MNIST_DATA_DIR + TRAIN_IMAGES;
 		String trainingLabels = MNIST_DATA_DIR + TRAIN_LABELS;
 		if (!new File(trainingImages).exists()) {
@@ -156,10 +169,14 @@ public class MNISTExample {
 			System.out.println("'" + trainingLabels + "' can't be found");
 			System.exit(-1);
 		}
-		return new MnistManager(trainingImages, trainingLabels);
+		trainingManager = new MnistManager(trainingImages, trainingLabels);
+		return trainingManager;
 	}
 
 	public static MnistManager getTestManager() throws IOException {
+		if (testManager != null) {
+			return testManager;
+		}
 		String testImages = MNIST_DATA_DIR + TEST_IMAGES;
 		String testLabels = MNIST_DATA_DIR + TEST_LABELS;
 		if (!new File(testImages).exists()) {
@@ -170,7 +187,8 @@ public class MNISTExample {
 			System.out.println("'" + testLabels + "' can't be found");
 			System.exit(-1);
 		}
-		return new MnistManager(testImages, testLabels, 10000);
+		testManager = new MnistManager(testImages, testLabels, 10000);
+		return testManager;
 	}
 
 	public static void displayImageAsText(int[][] image) {
@@ -184,6 +202,11 @@ public class MNISTExample {
 		System.out.println(sb.toString());
 	}
 
+	public static void displayImageAsText(float[][] image) {
+		int[][] iImage = fToI(image);
+		displayImageAsText(iImage);
+	}
+
 	public static float[][] iToF(int[][] image) {
 		float[][] fImage = new float[image.length][image[0].length];
 		for (int r = 0; r < image.length; r++) {
@@ -192,6 +215,16 @@ public class MNISTExample {
 			}
 		}
 		return fImage;
+	}
+
+	public static int[][] fToI(float[][] image) {
+		int[][] iImage = new int[image.length][image[0].length];
+		for (int r = 0; r < image.length; r++) {
+			for (int c = 0; c < image[0].length; c++) {
+				iImage[r][c] = (int) image[r][c];
+			}
+		}
+		return iImage;
 	}
 
 	public static float[][][] f2ToF3(float[][] image) {
@@ -207,6 +240,11 @@ public class MNISTExample {
 	public static void displayImage(int[][] image) {
 		BufferedImage bi = iToBuff(image);
 		displayBufferedImage(bi);
+	}
+
+	public static void displayImage(float[][] image) {
+		int[][] iImage = fToI(image);
+		displayImage(iImage);
 	}
 
 	public static void displayBufferedImage(BufferedImage bi) {
