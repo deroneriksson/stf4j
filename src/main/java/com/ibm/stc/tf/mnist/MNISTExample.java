@@ -2,6 +2,7 @@ package com.ibm.stc.tf.mnist;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -59,11 +60,17 @@ public class MNISTExample {
 			singlePredictionClasses(3, false, false);
 			singlePredictionClasses(4, false, false);
 
-			singlePredictionProbabilities(0, false, false);
-			singlePredictionProbabilities(1, false, false);
-			singlePredictionProbabilities(2, false, false);
-			singlePredictionProbabilities(3, false, false);
-			singlePredictionProbabilities(4, false, false);
+			singlePredictionProbabilities(5, false, false);
+			singlePredictionProbabilities(6, false, false);
+			singlePredictionProbabilities(7, false, false);
+			singlePredictionProbabilities(8, false, false);
+			singlePredictionProbabilities(9, false, false);
+
+			singlePredictionClassesProbabilities(10, false, false);
+			singlePredictionClassesProbabilities(11, false, false);
+			singlePredictionClassesProbabilities(12, false, false);
+			singlePredictionClassesProbabilities(13, false, false);
+			singlePredictionClassesProbabilities(14, false, false);
 
 			// displaySignatureDefInfo(savedModel);
 
@@ -127,6 +134,42 @@ public class MNISTExample {
 			System.out
 					.println(String.format("Failure, image #%d probabilities prediction (%d) did not match label (%d)",
 							testImageNum, prediction, label));
+		}
+	}
+
+	public static void singlePredictionClassesProbabilities(int testImageNum, boolean displayImage,
+			boolean displayImageAsText) throws IOException {
+		float[][] image = getTestImage(testImageNum);
+		if (displayImage) {
+			displayImage(image);
+		}
+		if (displayImageAsText) {
+			displayImageAsText(image);
+		}
+		int label = getTestImageLabel(testImageNum);
+
+		Tensor<Float> imageTensor = Tensor.create(image, Float.class);
+
+		List<Tensor<?>> result = tfRunner().feed("Placeholder", imageTensor).fetch("ArgMax").fetch("Softmax").run();
+		int argMaxPrediction = (int) result.get(0).expect(Long.class).copyTo(new long[1])[0];
+
+		float[][] fResult = result.get(1).expect(Float.class).copyTo(new float[1][10]);
+		int softmaxPrediction = 0;
+		float maxValue = 0.0f;
+		for (int i = 0; i < fResult[0].length; i++) {
+			if (fResult[0][i] > maxValue) {
+				softmaxPrediction = i;
+				maxValue = fResult[0][1];
+			}
+		}
+
+		if ((label == argMaxPrediction) && (label == softmaxPrediction)) {
+			System.out.println(String.format("Success, image #%d label (%d) equals ArgMax (%d) and Softmax (%d)",
+					testImageNum, label, argMaxPrediction, softmaxPrediction));
+		} else {
+			System.out.println(
+					String.format("Failure, image #%d label (%d), ArgMax (%d), and Softmax (%d) are not all equal",
+							testImageNum, label, argMaxPrediction, softmaxPrediction));
 		}
 	}
 
