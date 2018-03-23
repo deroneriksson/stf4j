@@ -72,6 +72,8 @@ public class MNISTExample {
 			singlePredictionClassesProbabilities(13, false, false);
 			singlePredictionClassesProbabilities(14, false, false);
 
+			multiplePredictionClasses(15, 16, 17, 18, 19);
+
 			// displaySignatureDefInfo(savedModel);
 
 		} catch (Throwable t) {
@@ -95,10 +97,10 @@ public class MNISTExample {
 				.expect(Long.class).copyTo(new long[1])[0];
 
 		if (label == prediction) {
-			System.out.println(String.format("Success, image #%d classes prediction (%d) matched label (%d)",
+			System.out.println(String.format("Success, image (#%d) classes prediction (%d) matched label (%d)",
 					testImageNum, prediction, label));
 		} else {
-			System.out.println(String.format("Failure, image #%d classes prediction (%d) did not match label (%d)",
+			System.out.println(String.format("Failure, image (#%d) classes prediction (%d) did not match label (%d)",
 					testImageNum, prediction, label));
 		}
 	}
@@ -128,11 +130,11 @@ public class MNISTExample {
 		}
 
 		if (label == prediction) {
-			System.out.println(String.format("Success, image #%d probabilities prediction (%d) matched label (%d)",
+			System.out.println(String.format("Success, image (#%d) probabilities prediction (%d) matched label (%d)",
 					testImageNum, prediction, label));
 		} else {
-			System.out
-					.println(String.format("Failure, image #%d probabilities prediction (%d) did not match label (%d)",
+			System.out.println(
+					String.format("Failure, image (#%d) probabilities prediction (%d) did not match label (%d)",
 							testImageNum, prediction, label));
 		}
 	}
@@ -164,12 +166,34 @@ public class MNISTExample {
 		}
 
 		if ((label == argMaxPrediction) && (label == softmaxPrediction)) {
-			System.out.println(String.format("Success, image #%d label (%d) equals ArgMax (%d) and Softmax (%d)",
+			System.out.println(String.format("Success, image (#%d) label (%d) equals ArgMax (%d) and Softmax (%d)",
 					testImageNum, label, argMaxPrediction, softmaxPrediction));
 		} else {
 			System.out.println(
-					String.format("Failure, image #%d label (%d), ArgMax (%d), and Softmax (%d) are not all equal",
+					String.format("Failure, image (#%d) label (%d), ArgMax (%d), and Softmax (%d) are not all equal",
 							testImageNum, label, argMaxPrediction, softmaxPrediction));
+		}
+	}
+
+	public static void multiplePredictionClasses(int... testImageNums) throws IOException {
+
+		float[][][] images = getTestImages(testImageNums);
+		int[] labels = getTestImageLabels(testImageNums);
+
+		Tensor<Float> imageTensor = Tensor.create(images, Float.class);
+		Tensor<Long> result = tfRunner().feed("Placeholder", imageTensor).fetch("ArgMax").run().get(0)
+				.expect(Long.class);
+		long[] predictions = result.copyTo(new long[testImageNums.length]);
+
+		for (int i = 0; i < labels.length; i++) {
+			if (labels[i] == predictions[i]) {
+				System.out.println(String.format("Success, multiple image (#%d) prediction (%d) equals label (%d)",
+						testImageNums[i], predictions[i], labels[i]));
+			} else {
+				System.out.println(
+						String.format("Failure, multiple image (#%d) prediction (%d) does not equal label (%d)",
+								testImageNums[i], predictions[i], labels[i]));
+			}
 		}
 	}
 
@@ -200,6 +224,14 @@ public class MNISTExample {
 		return tfSession().runner();
 	}
 
+	public static float[][][] getTestImages(int... imageNums) throws IOException {
+		float[][][] images = new float[imageNums.length][][];
+		for (int i = 0; i < imageNums.length; i++) {
+			images[i] = getTestImage(imageNums[i]);
+		}
+		return images;
+	}
+
 	public static float[][] getTestImage(int imageNum) throws IOException {
 		int[][] iImage = getTestImageAsInts(imageNum);
 		float[][] fImage = iToF(iImage);
@@ -212,6 +244,14 @@ public class MNISTExample {
 
 	public static int getTestImageLabel(int imageNum) throws IOException {
 		return labels[imageNum];
+	}
+
+	public static int[] getTestImageLabels(int... imageNums) throws IOException {
+		int[] testLabels = new int[imageNums.length];
+		for (int i = 0; i < imageNums.length; i++) {
+			testLabels[i] = labels[imageNums[i]];
+		}
+		return testLabels;
 	}
 
 	public static void displaySignatureDefInfo(SavedModelBundle savedModelBundle)
