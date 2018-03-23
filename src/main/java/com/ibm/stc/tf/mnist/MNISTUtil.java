@@ -10,14 +10,14 @@ public class MNISTUtil {
 	public static final String TEST_LABELS = "/tmp/mnist_data/t10k-labels-idx1-ubyte";
 
 	public static void main(String[] args) throws IOException {
-		int[] labels = getTestLabels();
+		int[] labels = getLabels(TEST_LABELS);
 		System.out.println("LABEL:" + labels[0]);
-		int[][][] images = getTestImages();
+		int[][][] images = getImages(TEST_IMAGES);
 		MNISTExample.displayImage(images[0]);
 	}
 
-	public static int[] getTestLabels() throws IOException {
-		byte[] b = Files.readAllBytes(Paths.get(TEST_LABELS));
+	public static int[] getLabels(String labelFile) throws IOException {
+		byte[] b = Files.readAllBytes(Paths.get(labelFile));
 		int[] labels = new int[b.length - 8];
 		for (int i = 0; i < labels.length; i++) {
 			labels[i] = b[i + 8];
@@ -25,8 +25,8 @@ public class MNISTUtil {
 		return labels;
 	}
 
-	public static int[][][] getTestImages() throws IOException {
-		byte[] b = Files.readAllBytes(Paths.get(TEST_IMAGES));
+	public static int[][][] getImages(String imageFile) throws IOException {
+		byte[] b = Files.readAllBytes(Paths.get(imageFile));
 		int[][][] images = new int[(b.length - 16) / 784][28][28];
 		for (int i = 0; i < b.length - 16; i++) {
 			images[i / 784][i % 784 / 28][i % 784 % 28] = b[i + 16];
