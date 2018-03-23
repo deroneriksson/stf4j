@@ -53,11 +53,17 @@ public class MNISTExample {
 
 			tfModel(MNIST_SAVED_MODEL_DIR);
 
-			singlePrediction(0, true, false);
-			singlePrediction(1, true, false);
-			singlePrediction(2, true, false);
-			singlePrediction(3, true, false);
-			singlePrediction(4, true, false);
+			singlePredictionClasses(0, false, false);
+			singlePredictionClasses(1, false, false);
+			singlePredictionClasses(2, false, false);
+			singlePredictionClasses(3, false, false);
+			singlePredictionClasses(4, false, false);
+
+			singlePredictionProbabilities(0, false, false);
+			singlePredictionProbabilities(1, false, false);
+			singlePredictionProbabilities(2, false, false);
+			singlePredictionProbabilities(3, false, false);
+			singlePredictionProbabilities(4, false, false);
 
 			// displaySignatureDefInfo(savedModel);
 
@@ -66,7 +72,7 @@ public class MNISTExample {
 		}
 	}
 
-	public static void singlePrediction(int testImageNum, boolean displayImage, boolean displayImageAsText)
+	public static void singlePredictionClasses(int testImageNum, boolean displayImage, boolean displayImageAsText)
 			throws IOException {
 		float[][] image = getTestImage(testImageNum);
 		if (displayImage) {
@@ -82,11 +88,45 @@ public class MNISTExample {
 				.expect(Long.class).copyTo(new long[1])[0];
 
 		if (label == prediction) {
-			System.out.println(String.format("Success, image #%d prediction (%d) matched label (%d)", testImageNum,
-					prediction, label));
-		} else {
-			System.out.println(String.format("Failure, image #%d prediction (%d) did not match label (%d)",
+			System.out.println(String.format("Success, image #%d classes prediction (%d) matched label (%d)",
 					testImageNum, prediction, label));
+		} else {
+			System.out.println(String.format("Failure, image #%d classes prediction (%d) did not match label (%d)",
+					testImageNum, prediction, label));
+		}
+	}
+
+	public static void singlePredictionProbabilities(int testImageNum, boolean displayImage, boolean displayImageAsText)
+			throws IOException {
+		float[][] image = getTestImage(testImageNum);
+		if (displayImage) {
+			displayImage(image);
+		}
+		if (displayImageAsText) {
+			displayImageAsText(image);
+		}
+		int label = getTestImageLabel(testImageNum);
+
+		Tensor<Float> imageTensor = Tensor.create(image, Float.class);
+		Tensor<Float> tResult = tfRunner().feed("Placeholder", imageTensor).fetch("Softmax").run().get(0)
+				.expect(Float.class);
+		float[][] fResult = tResult.copyTo(new float[1][10]);
+		int prediction = 0;
+		float maxValue = 0.0f;
+		for (int i = 0; i < fResult[0].length; i++) {
+			if (fResult[0][i] > maxValue) {
+				prediction = i;
+				maxValue = fResult[0][1];
+			}
+		}
+
+		if (label == prediction) {
+			System.out.println(String.format("Success, image #%d probabilities prediction (%d) matched label (%d)",
+					testImageNum, prediction, label));
+		} else {
+			System.out
+					.println(String.format("Failure, image #%d probabilities prediction (%d) did not match label (%d)",
+							testImageNum, prediction, label));
 		}
 	}
 
