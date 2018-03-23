@@ -1,7 +1,6 @@
 package com.ibm.stc.tf.mnist;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,7 +10,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import org.deeplearning4j.datasets.mnist.MnistManager;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
 import org.tensorflow.Session.Runner;
@@ -41,20 +39,25 @@ public class MNISTExample {
 	public static final String TEST_IMAGES = "t10k-images-idx3-ubyte";
 	public static final String TEST_LABELS = "t10k-labels-idx1-ubyte";
 
-	private static MnistManager testManager = null;
-	private static MnistManager trainingManager = null;
-
 	private static SavedModelBundle model = null;
 	private static String mDir = null;
+
+	private static int[] labels = null;
+	private static int[][][] images = null;
 
 	public static void main(String[] args) {
 		try {
 
+			labels = MNISTUtil.getLabels(MNIST_DATA_DIR + TEST_LABELS);
+			images = MNISTUtil.getImages(MNIST_DATA_DIR + TEST_IMAGES);
+
 			tfModel(MNIST_SAVED_MODEL_DIR);
 
-			singlePrediction(0, false, false);
-			singlePrediction(1, false, false);
-			singlePrediction(2, false, false);
+			singlePrediction(0, true, false);
+			singlePrediction(1, true, false);
+			singlePrediction(2, true, false);
+			singlePrediction(3, true, false);
+			singlePrediction(4, true, false);
 
 			// displaySignatureDefInfo(savedModel);
 
@@ -121,17 +124,11 @@ public class MNISTExample {
 	}
 
 	public static int[][] getTestImageAsInts(int imageNum) throws IOException {
-		MnistManager testManager = getTestManager();
-		testManager.setCurrent(imageNum);
-		int[][] iImage = testManager.readImage();
-		return iImage;
+		return images[imageNum];
 	}
 
 	public static int getTestImageLabel(int imageNum) throws IOException {
-		MnistManager testManager = getTestManager();
-		testManager.setCurrent(imageNum);
-		int label = testManager.readLabel();
-		return label;
+		return labels[imageNum];
 	}
 
 	public static void displaySignatureDefInfo(SavedModelBundle savedModelBundle)
@@ -196,42 +193,6 @@ public class MNISTExample {
 			}
 		}
 
-	}
-
-	public static MnistManager getTrainingManager() throws IOException {
-		if (trainingManager != null) {
-			return trainingManager;
-		}
-		String trainingImages = MNIST_DATA_DIR + TRAIN_IMAGES;
-		String trainingLabels = MNIST_DATA_DIR + TRAIN_LABELS;
-		if (!new File(trainingImages).exists()) {
-			System.out.println("'" + trainingImages + "' can't be found");
-			System.exit(-1);
-		}
-		if (!new File(trainingLabels).exists()) {
-			System.out.println("'" + trainingLabels + "' can't be found");
-			System.exit(-1);
-		}
-		trainingManager = new MnistManager(trainingImages, trainingLabels);
-		return trainingManager;
-	}
-
-	public static MnistManager getTestManager() throws IOException {
-		if (testManager != null) {
-			return testManager;
-		}
-		String testImages = MNIST_DATA_DIR + TEST_IMAGES;
-		String testLabels = MNIST_DATA_DIR + TEST_LABELS;
-		if (!new File(testImages).exists()) {
-			System.out.println("'" + testImages + "' can't be found");
-			System.exit(-1);
-		}
-		if (!new File(testLabels).exists()) {
-			System.out.println("'" + testLabels + "' can't be found");
-			System.exit(-1);
-		}
-		testManager = new MnistManager(testImages, testLabels, 10000);
-		return testManager;
 	}
 
 	public static void displayImageAsText(int[][] image) {
