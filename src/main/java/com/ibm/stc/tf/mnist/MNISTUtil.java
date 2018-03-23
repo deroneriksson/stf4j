@@ -29,7 +29,7 @@ public class MNISTUtil {
 		byte[] b = Files.readAllBytes(Paths.get(imageFile));
 		int[][][] images = new int[(b.length - 16) / 784][28][28];
 		for (int i = 0; i < b.length - 16; i++) {
-			images[i / 784][i % 784 / 28][i % 784 % 28] = b[i + 16];
+			images[i / 784][i % 784 / 28][i % 784 % 28] = b[i + 16] & 0xFF;
 		}
 		return images;
 	}
