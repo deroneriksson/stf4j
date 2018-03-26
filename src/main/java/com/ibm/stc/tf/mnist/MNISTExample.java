@@ -74,6 +74,8 @@ public class MNISTExample {
 
 			multiplePredictionClasses(15, 16, 17, 18, 19);
 
+			multiplePredictionProbabilities(20, 21, 22, 23, 24);
+
 			// displaySignatureDefInfo(savedModel);
 
 		} catch (Throwable t) {
@@ -187,12 +189,47 @@ public class MNISTExample {
 
 		for (int i = 0; i < labels.length; i++) {
 			if (labels[i] == predictions[i]) {
-				System.out.println(String.format("Success, multiple image (#%d) classes prediction (%d) matches label (%d)",
-						testImageNums[i], predictions[i], labels[i]));
+				System.out.println(
+						String.format("Success, multiple image (#%d) classes prediction (%d) matches label (%d)",
+								testImageNums[i], predictions[i], labels[i]));
 			} else {
 				System.out.println(
 						String.format("Failure, multiple image (#%d) classes prediction (%d) does not match label (%d)",
 								testImageNums[i], predictions[i], labels[i]));
+			}
+		}
+	}
+
+	public static void multiplePredictionProbabilities(int... testImageNums) throws IOException {
+
+		float[][][] images = getTestImages(testImageNums);
+		int[] labels = getTestImageLabels(testImageNums);
+
+		Tensor<Float> imageTensor = Tensor.create(images, Float.class);
+
+		Tensor<Float> tResult = tfRunner().feed("Placeholder", imageTensor).fetch("Softmax").run().get(0)
+				.expect(Float.class);
+		float[][] fResult = tResult.copyTo(new float[testImageNums.length][10]);
+		int[] predictions = new int[testImageNums.length];
+		float[] maxValues = new float[testImageNums.length];
+		for (int i = 0; i < fResult.length; i++) {
+			for (int j = 0; j < fResult[i].length; j++) {
+				if (fResult[i][j] > maxValues[i]) {
+					predictions[i] = j;
+					maxValues[i] = fResult[i][j];
+				}
+			}
+		}
+
+		for (int i = 0; i < labels.length; i++) {
+			if (labels[i] == predictions[i]) {
+				System.out.println(
+						String.format("Success, multiple image (#%d) probabilities prediction (%d) matches label (%d)",
+								testImageNums[i], predictions[i], labels[i]));
+			} else {
+				System.out.println(String.format(
+						"Failure, multiple image (#%d) probabilities prediction (%d) does not match label (%d)",
+						testImageNums[i], predictions[i], labels[i]));
 			}
 		}
 	}
