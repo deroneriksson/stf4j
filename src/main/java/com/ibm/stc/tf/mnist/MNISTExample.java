@@ -54,6 +54,9 @@ public class MNISTExample {
 
 			tfModel(MNIST_SAVED_MODEL_DIR);
 
+			// displayImage(0);
+			// displayImageAsText(0);
+
 			singlePredictionClasses(0, false, false);
 			singlePredictionClasses(1, false, false);
 			singlePredictionClasses(2, false, false);
@@ -73,9 +76,7 @@ public class MNISTExample {
 			singlePredictionClassesProbabilities(14, false, false);
 
 			multiplePredictionClasses(15, 16, 17, 18, 19);
-
 			multiplePredictionProbabilities(20, 21, 22, 23, 24);
-
 			multiplePredictionClassesProbabilities(25, 26, 27, 28, 29);
 
 			// displaySignatureDefInfo(savedModel);
@@ -440,6 +441,16 @@ public class MNISTExample {
 			}
 		}
 		return fImage;
+	}
+
+	public static void displayImage(int imageNum) throws IOException {
+		int[][] image = getTestImageAsInts(imageNum);
+		displayImage(image);
+	}
+
+	public static void displayImageAsText(int imageNum) throws IOException {
+		float[][] image = getTestImage(imageNum);
+		displayImageAsText(image);
 	}
 
 	public static void displayImage(int[][] image) {
