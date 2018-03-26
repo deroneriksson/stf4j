@@ -76,6 +76,8 @@ public class MNISTExample {
 
 			multiplePredictionProbabilities(20, 21, 22, 23, 24);
 
+			multiplePredictionClassesProbabilities(25, 26, 27, 28, 29);
+
 			// displaySignatureDefInfo(savedModel);
 
 		} catch (Throwable t) {
@@ -230,6 +232,45 @@ public class MNISTExample {
 				System.out.println(String.format(
 						"Failure, multiple image (#%d) probabilities prediction (%d) does not match label (%d)",
 						testImageNums[i], predictions[i], labels[i]));
+			}
+		}
+	}
+
+	public static void multiplePredictionClassesProbabilities(int... testImageNums) throws IOException {
+
+		float[][][] images = getTestImages(testImageNums);
+		int[] labels = getTestImageLabels(testImageNums);
+
+		Tensor<Float> imageTensor = Tensor.create(images, Float.class);
+
+		List<Tensor<?>> result = tfRunner().feed("Placeholder", imageTensor).fetch("ArgMax").fetch("Softmax").run();
+		long[] argMaxPredictions = result.get(0).expect(Long.class).copyTo(new long[testImageNums.length]);
+
+		float[][] softmaxProbabilities = result.get(1).expect(Float.class).copyTo(new float[testImageNums.length][10]);
+		int[] softmaxPredictions = new int[testImageNums.length];
+		float[] maxValues = new float[testImageNums.length];
+		for (int i = 0; i < softmaxProbabilities.length; i++) {
+			for (int j = 0; j < softmaxProbabilities[i].length; j++) {
+				if (softmaxProbabilities[i][j] > maxValues[i]) {
+					softmaxPredictions[i] = j;
+					maxValues[i] = softmaxProbabilities[i][j];
+				}
+			}
+		}
+
+		for (int i = 0; i < labels.length; i++) {
+			int testImageNum = testImageNums[i];
+			int label = labels[i];
+			int argMaxPrediction = (int) argMaxPredictions[i];
+			int softmaxPrediction = softmaxPredictions[i];
+			if ((label == argMaxPrediction) && (label == softmaxPrediction)) {
+				System.out.println(
+						String.format("Success, multiple image (#%d) ArgMax (%d) and Softmax (%d) match label (%d)",
+								testImageNum, argMaxPrediction, softmaxPrediction, label));
+			} else {
+				System.out.println(String.format(
+						"Failure, multiple image (#%d) ArgMax (%d), Softmax (%d) and label (%d) do not all match",
+						testImageNum, argMaxPrediction, softmaxPrediction, label));
 			}
 		}
 	}
