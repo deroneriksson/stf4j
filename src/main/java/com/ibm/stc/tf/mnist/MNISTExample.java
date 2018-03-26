@@ -97,10 +97,10 @@ public class MNISTExample {
 				.expect(Long.class).copyTo(new long[1])[0];
 
 		if (label == prediction) {
-			System.out.println(String.format("Success, image (#%d) classes prediction (%d) matched label (%d)",
+			System.out.println(String.format("Success, image (#%d) classes prediction (%d) matches label (%d)",
 					testImageNum, prediction, label));
 		} else {
-			System.out.println(String.format("Failure, image (#%d) classes prediction (%d) did not match label (%d)",
+			System.out.println(String.format("Failure, image (#%d) classes prediction (%d) does not match label (%d)",
 					testImageNum, prediction, label));
 		}
 	}
@@ -130,11 +130,11 @@ public class MNISTExample {
 		}
 
 		if (label == prediction) {
-			System.out.println(String.format("Success, image (#%d) probabilities prediction (%d) matched label (%d)",
+			System.out.println(String.format("Success, image (#%d) probabilities prediction (%d) matches label (%d)",
 					testImageNum, prediction, label));
 		} else {
 			System.out.println(
-					String.format("Failure, image (#%d) probabilities prediction (%d) did not match label (%d)",
+					String.format("Failure, image (#%d) probabilities prediction (%d) does not match label (%d)",
 							testImageNum, prediction, label));
 		}
 	}
@@ -166,12 +166,12 @@ public class MNISTExample {
 		}
 
 		if ((label == argMaxPrediction) && (label == softmaxPrediction)) {
-			System.out.println(String.format("Success, image (#%d) label (%d) equals ArgMax (%d) and Softmax (%d)",
-					testImageNum, label, argMaxPrediction, softmaxPrediction));
+			System.out.println(String.format("Success, image (#%d) ArgMax (%d) and Softmax (%d) match label (%d)",
+					testImageNum, argMaxPrediction, softmaxPrediction, label));
 		} else {
 			System.out.println(
-					String.format("Failure, image (#%d) label (%d), ArgMax (%d), and Softmax (%d) are not all equal",
-							testImageNum, label, argMaxPrediction, softmaxPrediction));
+					String.format("Failure, image (#%d) ArgMax (%d), Softmax (%d) and label (%d) do not all match",
+							testImageNum, argMaxPrediction, softmaxPrediction, label));
 		}
 	}
 
@@ -187,11 +187,11 @@ public class MNISTExample {
 
 		for (int i = 0; i < labels.length; i++) {
 			if (labels[i] == predictions[i]) {
-				System.out.println(String.format("Success, multiple image (#%d) prediction (%d) equals label (%d)",
+				System.out.println(String.format("Success, multiple image (#%d) classes prediction (%d) matches label (%d)",
 						testImageNums[i], predictions[i], labels[i]));
 			} else {
 				System.out.println(
-						String.format("Failure, multiple image (#%d) prediction (%d) does not equal label (%d)",
+						String.format("Failure, multiple image (#%d) classes prediction (%d) does not match label (%d)",
 								testImageNums[i], predictions[i], labels[i]));
 			}
 		}
