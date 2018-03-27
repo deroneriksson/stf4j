@@ -16,6 +16,15 @@ public class MNISTUtil {
 		MNISTExample.displayImage(images[0]);
 	}
 
+	/**
+	 * Obtain labels from MNIST label data file.
+	 * 
+	 * @param labelFile
+	 *            MNIST label data file
+	 * @return Labels (valued 0 through 9) as an int array
+	 * @throws IOException
+	 *             if problem occurs reading data file
+	 */
 	public static int[] getLabels(String labelFile) throws IOException {
 		byte[] b = Files.readAllBytes(Paths.get(labelFile));
 		int[] labels = new int[b.length - 8];
@@ -25,6 +34,18 @@ public class MNISTUtil {
 		return labels;
 	}
 
+	/**
+	 * Obtain images from MNIST image data file. The images are returned as a
+	 * 3-dimensional int array, where dimension 1 is the image number, dimension
+	 * 2 is the rows, and dimension 3 is the columns. The pixel represents a
+	 * grayscale int value.
+	 * 
+	 * @param imageFile
+	 *            MNIST image data file
+	 * @return Images as a 3-dimensional int array
+	 * @throws IOException
+	 *             if problem occurs reading data file
+	 */
 	public static int[][][] getImages(String imageFile) throws IOException {
 		byte[] b = Files.readAllBytes(Paths.get(imageFile));
 		int[][][] images = new int[(b.length - 16) / 784][28][28];
