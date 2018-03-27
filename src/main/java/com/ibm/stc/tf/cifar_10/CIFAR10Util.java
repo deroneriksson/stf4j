@@ -9,6 +9,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+// TODO see if [channel][row][col] needs to be converted to [row][col][channel]
+// see cifar10_main.py
+
 public class CIFAR10Util {
 
 	public static final String TEST_BATCH_BIN = "/tmp/cifar10_data/cifar-10-batches-bin/test_batch.bin";
