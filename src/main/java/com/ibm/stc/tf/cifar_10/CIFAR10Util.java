@@ -32,6 +32,15 @@ public class CIFAR10Util {
 		displayImage(images[10]);
 	}
 
+	/**
+	 * Obtain labels from CIFAR-10 binary data file.
+	 * 
+	 * @param batchBinFile
+	 *            CIFAR-10 binary data file
+	 * @return Labels (valued 0 through 9) as an int array
+	 * @throws IOException
+	 *             if problem occurs reading binary data file
+	 */
 	public static int[] getLabels(String batchBinFile) throws IOException {
 		byte[] b = Files.readAllBytes(Paths.get(batchBinFile));
 		int[] labels = new int[b.length / 3073];
@@ -41,6 +50,18 @@ public class CIFAR10Util {
 		return labels;
 	}
 
+	/**
+	 * Obtain images from CIFAR-10 binary data file. The images are returned as
+	 * a 4-dimensional int array, where dimension 1 is the image number,
+	 * dimension 2 is the channel (0=R, 1=G, 2=B), dimension 3 is the rows, and
+	 * dimension 4 is the columns.
+	 * 
+	 * @param batchBinFile
+	 *            CIFAR-10 binary data file
+	 * @return Images as a 4-dimensional int array
+	 * @throws IOException
+	 *             if problem occurs reading binary data file
+	 */
 	public static int[][][][] getImages(String batchBinFile) throws IOException {
 		byte[] b = Files.readAllBytes(Paths.get(batchBinFile));
 		int[][][][] images = new int[b.length / 3073][3][32][32];
@@ -52,6 +73,15 @@ public class CIFAR10Util {
 		return images;
 	}
 
+	/**
+	 * Convert a 3-dimension int array image to a BufferedImage. For the input
+	 * array, the dimension 1 is the channel (0=R, 1=G, 2=B), dimension 2 is the
+	 * rows, and dimension 3 is the columns.
+	 * 
+	 * @param i
+	 *            Image as a 3-dimensional int array
+	 * @return BufferedImage representation of the image
+	 */
 	public static BufferedImage i3ToBuff(int[][][] i) {
 		int cols = i[0][0].length;
 		int rows = i[0].length;
@@ -72,11 +102,25 @@ public class CIFAR10Util {
 		return bi;
 	}
 
+	/**
+	 * Display an image to the screen. The input image has 3 dimensions, where
+	 * dimension 1 is the channel (0=R, 1=G, 2=B), dimension 2 is the rows, and
+	 * dimension 3 is the columns.
+	 * 
+	 * @param image
+	 *            Image as a 3-dimensional int array
+	 */
 	public static void displayImage(int[][][] image) {
 		BufferedImage bi = i3ToBuff(image);
 		displayBufferedImage(bi);
 	}
 
+	/**
+	 * Display a BufferedImage to the screen.
+	 * 
+	 * @param bi
+	 *            BufferedImage representation of the image
+	 */
 	public static void displayBufferedImage(BufferedImage bi) {
 		JFrame jframe = new JFrame();
 		JLabel jlabel = new JLabel(new ImageIcon(bi));
