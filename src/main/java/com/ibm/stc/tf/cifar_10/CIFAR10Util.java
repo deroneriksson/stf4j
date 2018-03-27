@@ -13,14 +13,17 @@ public class CIFAR10Util {
 
 	public static final String TEST_BATCH_BIN = "/tmp/cifar10_data/cifar-10-batches-bin/test_batch.bin";
 
+	public static final String[] classes = new String[] { "airplane", "automobile", "bird", "cat", "deer", "dog",
+			"frog", "horse", "ship", "truck" };
+
 	// see https://www.cs.toronto.edu/~kriz/cifar.html for format info
 	public static void main(String[] args) throws IOException {
 		int[] labels = getLabels(TEST_BATCH_BIN);
-		System.out.println("label: " + labels[6]);
-		System.out.println("label: " + labels[7]);
-		System.out.println("label: " + labels[8]);
-		System.out.println("label: " + labels[9]);
-		System.out.println("label: " + labels[10]);
+		System.out.println("class: " + classes[labels[6]]);
+		System.out.println("class: " + classes[labels[7]]);
+		System.out.println("class: " + classes[labels[8]]);
+		System.out.println("class: " + classes[labels[9]]);
+		System.out.println("class: " + classes[labels[10]]);
 		int[][][][] images = getImages(TEST_BATCH_BIN);
 		displayImage(images[6]);
 		displayImage(images[7]);
