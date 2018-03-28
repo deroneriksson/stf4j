@@ -1,4 +1,4 @@
-package com.ibm.stc.tf.mnist;
+package org.codait.tf.mnist;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

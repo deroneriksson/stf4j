@@ -1,4 +1,4 @@
-package com.ibm.stc.tf.cifar_10;
+package org.codait.tf.cifar_10;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
