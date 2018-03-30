@@ -32,7 +32,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
  */
 public class MNISTExample {
 
-	public static final String MNIST_DATA_DIR = "/tmp/mnist_data/";
+	public static final String MNIST_DATA_DIR = "./mnist_data/";
 	public static final String MNIST_SAVED_MODEL_DIR = "./model/";
 
 	public static final String TRAIN_IMAGES = "train-images-idx3-ubyte";
@@ -335,7 +335,10 @@ public class MNISTExample {
 
 	public static void displaySignatureDefInfo(SavedModelBundle savedModelBundle)
 			throws InvalidProtocolBufferException {
-		byte[] metaGraphDefBytes = savedModelBundle.metaGraphDef();
+		displaySignatureDefInfo(savedModelBundle.metaGraphDef());
+	}
+
+	public static void displaySignatureDefInfo(byte[] metaGraphDefBytes) throws InvalidProtocolBufferException {
 		MetaGraphDef mgd = MetaGraphDef.parseFrom(metaGraphDefBytes);
 
 		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
