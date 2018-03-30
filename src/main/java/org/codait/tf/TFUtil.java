@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.tensorflow.SavedModelBundle;
+import org.tensorflow.Tensor;
 import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.MetaGraphDef;
 import org.tensorflow.framework.SignatureDef;
@@ -84,6 +85,42 @@ public class TFUtil {
 			}
 		}
 
+	}
+
+	public static Tensor<?> convertToTensor(String name, Object value, MetaGraphDef mgd) {
+		System.out.println("class:" + value.getClass().toString());
+		System.out.println("class:" + value.getClass().getTypeName());
+		return null;
+	}
+
+	public static String inputKeyToName(String key, MetaGraphDef metaGraphDef) {
+		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
+		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
+		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
+			SignatureDef sigDef = sdmEntry.getValue();
+			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
+			if (inputsMap.containsKey(key)) {
+				TensorInfo tensorInfo = inputsMap.get(key);
+				String inputName = tensorInfo.getName();
+				return inputName;
+			}
+		}
+		throw new TFException("Input key '" + key + "' not found in MetaGraphDef");
+	}
+
+	public static String outputKeyToName(String key, MetaGraphDef metaGraphDef) {
+		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
+		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
+		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
+			SignatureDef sigDef = sdmEntry.getValue();
+			Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
+			if (outputsMap.containsKey(key)) {
+				TensorInfo tensorInfo = outputsMap.get(key);
+				String outputName = tensorInfo.getName();
+				return outputName;
+			}
+		}
+		throw new TFException("Output key '" + key + "' not found in MetaGraphDef");
 	}
 
 }

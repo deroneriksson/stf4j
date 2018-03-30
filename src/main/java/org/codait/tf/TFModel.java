@@ -54,18 +54,26 @@ public class TFModel {
 		return session().runner();
 	}
 
-	public TFModel in(String name, Object value) {
-		inputs.put(name, value);
+	public TFModel in(String key, Object value) {
+		String name = TFUtil.inputKeyToName(key, metaGraphDef());
+		if (value instanceof Tensor) {
+			inputs.put(name, value);
+		} else {
+			Tensor<?> tensor = TFUtil.convertToTensor(name, value, metaGraphDef());
+			inputs.put(name, tensor);
+		}
 		return this;
 	}
 
-	public TFModel out(String name) {
+	public TFModel out(String key) {
+		String name = TFUtil.outputKeyToName(key, metaGraphDef());
 		outputs.put(name, null);
 		return this;
 	}
 
-	public TFModel out(String... names) {
-		for (String name : names) {
+	public TFModel out(String... keys) {
+		for (String key : keys) {
+			String name = TFUtil.outputKeyToName(key, metaGraphDef());
 			outputs.put(name, null);
 		}
 		return this;
