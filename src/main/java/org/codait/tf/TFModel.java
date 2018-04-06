@@ -13,6 +13,7 @@ import org.tensorflow.Session;
 import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
 import org.tensorflow.framework.MetaGraphDef;
+import org.tensorflow.framework.TensorInfo;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -55,26 +56,26 @@ public class TFModel {
 	}
 
 	public TFModel in(String key, Object value) {
-		String name = TFUtil.inputKeyToName(key, metaGraphDef());
 		if (value instanceof Tensor) {
+			String name = TFUtil.inputKeyToName(key, metaGraphDef());
 			inputs.put(name, value);
 		} else {
-			Tensor<?> tensor = TFUtil.convertToTensor(name, value, metaGraphDef());
+			TensorInfo ti = TFUtil.inputKeyToTensorInfo(key, metaGraphDef());
+			String name = ti.getName();
+			Tensor<?> tensor = TFUtil.convertToTensor(name, value, ti);
 			inputs.put(name, tensor);
 		}
 		return this;
 	}
 
 	public TFModel out(String key) {
-		String name = TFUtil.outputKeyToName(key, metaGraphDef());
-		outputs.put(name, null);
+		outputs.put(key, null);
 		return this;
 	}
 
 	public TFModel out(String... keys) {
 		for (String key : keys) {
-			String name = TFUtil.outputKeyToName(key, metaGraphDef());
-			outputs.put(name, null);
+			outputs.put(key, null);
 		}
 		return this;
 	}
@@ -89,7 +90,8 @@ public class TFModel {
 		}
 		Set<String> oKeys = outputs.keySet();
 		for (String oKey : oKeys) {
-			runner.fetch(oKey);
+			String oName = TFUtil.outputKeyToName(oKey, metaGraphDef());
+			runner.fetch(oName);
 		}
 		List<Tensor<?>> res = runner.run();
 		int i = 0;

@@ -87,10 +87,51 @@ public class TFUtil {
 
 	}
 
-	public static Tensor<?> convertToTensor(String name, Object value, MetaGraphDef mgd) {
-		System.out.println("class:" + value.getClass().toString());
-		System.out.println("class:" + value.getClass().getTypeName());
-		return null;
+	public static Tensor<?> convertToTensor(String name, Object value, TensorInfo ti) {
+		// System.out.println("class:" + value.getClass().toString());
+		// System.out.println("typename:" + value.getClass().getTypeName());
+		// System.out.println("componentType:" +
+		// value.getClass().getComponentType());
+		// String typeName = value.getClass().getTypeName();
+		// Class<?> componentType = value.getClass().getComponentType();
+		DataType dtype = ti.getDtype();
+		// System.out.println("dtype:" + dtype);
+		Tensor<?> tensor = null;
+		if (DataType.DT_FLOAT == dtype && isFloatType(value)) {
+			tensor = Tensor.create(value, Float.class);
+		} else if (DataType.DT_FLOAT == dtype && isIntType(value)) {
+			if (value instanceof Integer) {
+				float val = (float) value;
+				tensor = Tensor.create(val, Float.class);
+			} else {
+
+			}
+		}
+
+		return tensor;
+	}
+
+	public static boolean isIntType(Object value) {
+		if (value instanceof Integer) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("int[")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static boolean isFloatType(Object value) {
+		if (value instanceof Float) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("float[")) {
+			return true;
+		}
+		return false;
 	}
 
 	public static String inputKeyToName(String key, MetaGraphDef metaGraphDef) {
@@ -108,6 +149,20 @@ public class TFUtil {
 		throw new TFException("Input key '" + key + "' not found in MetaGraphDef");
 	}
 
+	public static TensorInfo inputKeyToTensorInfo(String key, MetaGraphDef metaGraphDef) {
+		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
+		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
+		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
+			SignatureDef sigDef = sdmEntry.getValue();
+			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
+			if (inputsMap.containsKey(key)) {
+				TensorInfo tensorInfo = inputsMap.get(key);
+				return tensorInfo;
+			}
+		}
+		throw new TFException("Input key '" + key + "' not found in MetaGraphDef");
+	}
+
 	public static String outputKeyToName(String key, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
 		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
@@ -118,6 +173,20 @@ public class TFUtil {
 				TensorInfo tensorInfo = outputsMap.get(key);
 				String outputName = tensorInfo.getName();
 				return outputName;
+			}
+		}
+		throw new TFException("Output key '" + key + "' not found in MetaGraphDef");
+	}
+
+	public static TensorInfo outputKeyToTensorInfo(String key, MetaGraphDef metaGraphDef) {
+		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
+		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
+		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
+			SignatureDef sigDef = sdmEntry.getValue();
+			Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
+			if (outputsMap.containsKey(key)) {
+				TensorInfo tensorInfo = outputsMap.get(key);
+				return tensorInfo;
 			}
 		}
 		throw new TFException("Output key '" + key + "' not found in MetaGraphDef");
