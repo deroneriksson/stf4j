@@ -87,6 +87,8 @@ public class TFUtil {
 
 	}
 
+	// perhaps key should be used instead of name, since 'Placeholder:0' is a
+	// bit confusing in error message
 	public static Tensor<?> convertToTensor(String name, Object value, TensorInfo ti) {
 		// System.out.println("class:" + value.getClass().toString());
 		// System.out.println("typename:" + value.getClass().getTypeName());
@@ -104,10 +106,13 @@ public class TFUtil {
 				float val = (float) value;
 				tensor = Tensor.create(val, Float.class);
 			} else {
-
+				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
+				tensor = Tensor.create(floatArray, Float.class);
 			}
 		}
-
+		if (tensor == null) {
+			throw new TFException("Could not convert input '" + name + "' to Tensor");
+		}
 		return tensor;
 	}
 
@@ -116,7 +121,7 @@ public class TFUtil {
 			return true;
 		}
 		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("int[")) {
+		if (typeName.startsWith("int[") || typeName.startsWith("java.lang.Integer[")) {
 			return true;
 		} else {
 			return false;
@@ -128,7 +133,7 @@ public class TFUtil {
 			return true;
 		}
 		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("float[")) {
+		if (typeName.startsWith("float[") || typeName.startsWith("java.lang.Float[")) {
 			return true;
 		}
 		return false;
