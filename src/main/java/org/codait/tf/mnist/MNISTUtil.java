@@ -61,6 +61,13 @@ public class MNISTUtil {
 		return images;
 	}
 
+	/**
+	 * Display an MNIST image as text int values from 0 to 255, where 0
+	 * represents white and 255 represents black.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional int array
+	 */
 	public static void displayImageAsText(int[][] image) {
 		StringBuilder sb = new StringBuilder();
 		for (int r = 0; r < image.length; r++) {
@@ -72,11 +79,25 @@ public class MNISTUtil {
 		System.out.println(sb.toString());
 	}
 
+	/**
+	 * Display an MNIST image as text int values from 0 to 255, where 0
+	 * represents white and 255 represents black.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional float array
+	 */
 	public static void displayImageAsText(float[][] image) {
 		int[][] iImage = fToI(image);
 		displayImageAsText(iImage);
 	}
 
+	/**
+	 * Convert 2-dimensional int array to a 2-dimensional float array.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional int array
+	 * @return MNIST image as a 2-dimensional float array
+	 */
 	public static float[][] iToF(int[][] image) {
 		float[][] fImage = new float[image.length][image[0].length];
 		for (int r = 0; r < image.length; r++) {
@@ -87,6 +108,13 @@ public class MNISTUtil {
 		return fImage;
 	}
 
+	/**
+	 * Convert 2-dimensional float array to a 2-dimensional int array.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional float array
+	 * @return MNIST image as a 2-dimensional int array
+	 */
 	public static int[][] fToI(float[][] image) {
 		int[][] iImage = new int[image.length][image[0].length];
 		for (int r = 0; r < image.length; r++) {
@@ -97,6 +125,15 @@ public class MNISTUtil {
 		return iImage;
 	}
 
+	/**
+	 * Convert a 2-dimensional float array to a 3-dimensional float array, where
+	 * the first dimension has a size of 1.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional float array
+	 * @return MNIST image as a 3-dimensional float array, where the first
+	 *         dimension has a size of 1
+	 */
 	public static float[][][] f2ToF3(float[][] image) {
 		float[][][] fImage = new float[1][image.length][image[0].length];
 		for (int r = 0; r < image.length; r++) {
@@ -107,16 +144,34 @@ public class MNISTUtil {
 		return fImage;
 	}
 
+	/**
+	 * Display an MNIST image to the screen as an image.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional int array
+	 */
 	public static void displayImage(int[][] image) {
 		BufferedImage bi = iToBuff(image);
 		displayBufferedImage(bi);
 	}
 
+	/**
+	 * Display an MNIST image to the screen as an image.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional float array
+	 */
 	public static void displayImage(float[][] image) {
 		int[][] iImage = fToI(image);
 		displayImage(iImage);
 	}
 
+	/**
+	 * Display a BufferedImage to the screen.
+	 * 
+	 * @param bi
+	 *            the BufferedImage object
+	 */
 	public static void displayBufferedImage(BufferedImage bi) {
 		JFrame jframe = new JFrame();
 		JLabel jlabel = new JLabel(new ImageIcon(bi));
@@ -126,16 +181,24 @@ public class MNISTUtil {
 		jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
-	public static BufferedImage iToBuff(int[][] i) {
-		int cols = i[0].length;
-		int rows = i.length;
+	/**
+	 * Convert an MNIST image represented as a 2-dimensional int array to a
+	 * BufferedImage.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional int array
+	 * @return the BufferedImage object
+	 */
+	public static BufferedImage iToBuff(int[][] image) {
+		int cols = image[0].length;
+		int rows = image.length;
 
 		int[][] j = new int[rows][cols];
 
 		// convert pixels to rgb colorspace values
 		for (int r = 0; r < rows; r++) {
 			for (int c = 0; c < cols; c++) {
-				j[r][c] = 255 - i[r][c]; // invert colors
+				j[r][c] = 255 - image[r][c]; // invert colors
 				j[r][c] = 256 * 256 * j[r][c] + 256 * j[r][c] + j[r][c];
 			}
 		}
