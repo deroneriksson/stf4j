@@ -50,11 +50,19 @@ public class TFResults {
 		return (Tensor<?>) outputs.get(outputName);
 	}
 
-	public Long getLong(String outputName) {
+	public long getLong(String outputName) {
 		checkKey(outputName);
 		@SuppressWarnings("unchecked")
 		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
 		long l = tensor.copyTo(new long[1])[0];
 		return l;
+	}
+
+	public int getInt(String outputName) {
+		checkKey(outputName);
+		@SuppressWarnings("unchecked")
+		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
+		int i = (int) tensor.copyTo(new long[1])[0];
+		return i;
 	}
 }
