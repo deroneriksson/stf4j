@@ -19,6 +19,7 @@ public class MNISTUtil {
 		System.out.println("LABEL:" + labels[0]);
 		int[][][] images = getImages(TEST_IMAGES);
 		displayImage(images[0]);
+		displayImageAsText(images[0]);
 	}
 
 	/**
@@ -129,17 +130,19 @@ public class MNISTUtil {
 		int cols = i[0].length;
 		int rows = i.length;
 
+		int[][] j = new int[rows][cols];
+
 		// convert pixels to rgb colorspace values
 		for (int r = 0; r < rows; r++) {
 			for (int c = 0; c < cols; c++) {
-				i[r][c] = 255 - i[r][c]; // invert colors
-				i[r][c] = 256 * 256 * i[r][c] + 256 * i[r][c] + i[r][c];
+				j[r][c] = 255 - i[r][c]; // invert colors
+				j[r][c] = 256 * 256 * j[r][c] + 256 * j[r][c] + j[r][c];
 			}
 		}
 
 		BufferedImage bi = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
 		for (int y = 0; y < rows; y++) {
-			int[] row = i[y];
+			int[] row = j[y];
 			bi.setRGB(0, y, cols, 1, row, 0, 1);
 		}
 		return bi;
