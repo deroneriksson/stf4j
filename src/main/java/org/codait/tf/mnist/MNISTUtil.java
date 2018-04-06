@@ -62,13 +62,13 @@ public class MNISTUtil {
 	}
 
 	/**
-	 * Display an MNIST image as text int values from 0 to 255, where 0
+	 * Obtain an MNIST image as text int values from 0 to 255, where 0
 	 * represents white and 255 represents black.
 	 * 
 	 * @param image
 	 *            MNIST image as a 2-dimensional int array
 	 */
-	public static void displayImageAsText(int[][] image) {
+	public static String imageAsText(int[][] image) {
 		StringBuilder sb = new StringBuilder();
 		for (int r = 0; r < image.length; r++) {
 			for (int c = 0; c < image[0].length; c++) {
@@ -76,7 +76,30 @@ public class MNISTUtil {
 			}
 			sb.append("\n");
 		}
-		System.out.println(sb.toString());
+		return sb.toString();
+	}
+
+	/**
+	 * Display an MNIST image as text int values from 0 to 255, where 0
+	 * represents white and 255 represents black.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional int array
+	 */
+	public static void displayImageAsText(int[][] image) {
+		System.out.println(imageAsText(image));
+	}
+
+	/**
+	 * Obtain an MNIST image as text int values from 0 to 255, where 0
+	 * represents white and 255 represents black.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional float array
+	 */
+	public static String imageAsText(float[][] image) {
+		int[][] iImage = fToI(image);
+		return imageAsText(iImage);
 	}
 
 	/**
@@ -87,8 +110,7 @@ public class MNISTUtil {
 	 *            MNIST image as a 2-dimensional float array
 	 */
 	public static void displayImageAsText(float[][] image) {
-		int[][] iImage = fToI(image);
-		displayImageAsText(iImage);
+		System.out.println(imageAsText(image));
 	}
 
 	/**
