@@ -3,6 +3,8 @@ package org.codait.tf;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.tensorflow.Tensor;
+
 public class TFResults {
 
 	Map<String, Object> outputs;
@@ -35,5 +37,24 @@ public class TFResults {
 		}
 
 		return sb.toString();
+	}
+
+	protected void checkKey(String outputName) {
+		if (!outputs.containsKey(outputName)) {
+			throw new TFException("Output '" + outputName + "' not found in results");
+		}
+	}
+
+	public Tensor<?> getTensor(String outputName) {
+		checkKey(outputName);
+		return (Tensor<?>) outputs.get(outputName);
+	}
+
+	public Long getLong(String outputName) {
+		checkKey(outputName);
+		@SuppressWarnings("unchecked")
+		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
+		long l = tensor.copyTo(new long[1])[0];
+		return l;
 	}
 }
