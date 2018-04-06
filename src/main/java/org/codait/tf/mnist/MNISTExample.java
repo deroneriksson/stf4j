@@ -17,7 +17,7 @@ import org.tensorflow.Tensor;
 public class MNISTExample {
 
 	public static final String MNIST_DATA_DIR = "./mnist_data/";
-	public static final String MNIST_SAVED_MODEL_DIR = "./model/";
+	public static final String MNIST_SAVED_MODEL_DIR = "./mnist_model/";
 
 	public static final String TRAIN_IMAGES = "train-images-idx3-ubyte";
 	public static final String TRAIN_LABELS = "train-labels-idx1-ubyte";
@@ -30,53 +30,37 @@ public class MNISTExample {
 	private static int[] labels = null;
 	private static int[][][] images = null;
 
-	public static void main(String[] args) {
-		try {
+	public static void main(String[] args) throws IOException {
+		labels = MNISTUtil.getLabels(MNIST_DATA_DIR + TEST_LABELS);
+		images = MNISTUtil.getImages(MNIST_DATA_DIR + TEST_IMAGES);
 
-			labels = MNISTUtil.getLabels(MNIST_DATA_DIR + TEST_LABELS);
-			images = MNISTUtil.getImages(MNIST_DATA_DIR + TEST_IMAGES);
+		tfModel(MNIST_SAVED_MODEL_DIR);
 
-			tfModel(MNIST_SAVED_MODEL_DIR);
+		singlePredictionClasses(0);
+		singlePredictionClasses(1);
+		singlePredictionClasses(2);
+		singlePredictionClasses(3);
+		singlePredictionClasses(4);
 
-			// displayImage(0);
-			// displayImageAsText(0);
+		singlePredictionProbabilities(5);
+		singlePredictionProbabilities(6);
+		singlePredictionProbabilities(7);
+		singlePredictionProbabilities(8);
+		singlePredictionProbabilities(9);
 
-			singlePredictionClasses(0, false, false);
-			singlePredictionClasses(1, false, false);
-			singlePredictionClasses(2, false, false);
-			singlePredictionClasses(3, false, false);
-			singlePredictionClasses(4, false, false);
+		singlePredictionClassesProbabilities(10);
+		singlePredictionClassesProbabilities(11);
+		singlePredictionClassesProbabilities(12);
+		singlePredictionClassesProbabilities(13);
+		singlePredictionClassesProbabilities(14);
 
-			singlePredictionProbabilities(5, false, false);
-			singlePredictionProbabilities(6, false, false);
-			singlePredictionProbabilities(7, false, false);
-			singlePredictionProbabilities(8, false, false);
-			singlePredictionProbabilities(9, false, false);
-
-			singlePredictionClassesProbabilities(10, false, false);
-			singlePredictionClassesProbabilities(11, false, false);
-			singlePredictionClassesProbabilities(12, false, false);
-			singlePredictionClassesProbabilities(13, false, false);
-			singlePredictionClassesProbabilities(14, false, false);
-
-			multiplePredictionClasses(15, 16, 17, 18, 19);
-			multiplePredictionProbabilities(20, 21, 22, 23, 24);
-			multiplePredictionClassesProbabilities(25, 26, 27, 28, 29);
-
-		} catch (Throwable t) {
-			System.out.println(t);
-		}
+		multiplePredictionClasses(15, 16, 17, 18, 19);
+		multiplePredictionProbabilities(20, 21, 22, 23, 24);
+		multiplePredictionClassesProbabilities(25, 26, 27, 28, 29);
 	}
 
-	public static void singlePredictionClasses(int testImageNum, boolean displayImage, boolean displayImageAsText)
-			throws IOException {
+	public static void singlePredictionClasses(int testImageNum) throws IOException {
 		float[][] image = getTestImage(testImageNum);
-		if (displayImage) {
-			MNISTUtil.displayImage(image);
-		}
-		if (displayImageAsText) {
-			MNISTUtil.displayImageAsText(image);
-		}
 		int label = getTestImageLabel(testImageNum);
 
 		Tensor<Float> imageTensor = Tensor.create(image, Float.class);
@@ -92,15 +76,8 @@ public class MNISTExample {
 		}
 	}
 
-	public static void singlePredictionProbabilities(int testImageNum, boolean displayImage, boolean displayImageAsText)
-			throws IOException {
+	public static void singlePredictionProbabilities(int testImageNum) throws IOException {
 		float[][] image = getTestImage(testImageNum);
-		if (displayImage) {
-			MNISTUtil.displayImage(image);
-		}
-		if (displayImageAsText) {
-			MNISTUtil.displayImageAsText(image);
-		}
 		int label = getTestImageLabel(testImageNum);
 
 		Tensor<Float> imageTensor = Tensor.create(image, Float.class);
@@ -126,15 +103,8 @@ public class MNISTExample {
 		}
 	}
 
-	public static void singlePredictionClassesProbabilities(int testImageNum, boolean displayImage,
-			boolean displayImageAsText) throws IOException {
+	public static void singlePredictionClassesProbabilities(int testImageNum) throws IOException {
 		float[][] image = getTestImage(testImageNum);
-		if (displayImage) {
-			MNISTUtil.displayImage(image);
-		}
-		if (displayImageAsText) {
-			MNISTUtil.displayImageAsText(image);
-		}
 		int label = getTestImageLabel(testImageNum);
 
 		Tensor<Float> imageTensor = Tensor.create(image, Float.class);
@@ -314,15 +284,4 @@ public class MNISTExample {
 		}
 		return testLabels;
 	}
-
-	public static void displayImage(int imageNum) throws IOException {
-		int[][] image = getTestImageAsInts(imageNum);
-		MNISTUtil.displayImage(image);
-	}
-
-	public static void displayImageAsText(int imageNum) throws IOException {
-		float[][] image = getTestImage(imageNum);
-		MNISTUtil.displayImageAsText(image);
-	}
-
 }
