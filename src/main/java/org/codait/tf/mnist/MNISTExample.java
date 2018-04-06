@@ -2,22 +2,11 @@ package org.codait.tf.mnist;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
 import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
-import org.tensorflow.framework.DataType;
-import org.tensorflow.framework.MetaGraphDef;
-import org.tensorflow.framework.SignatureDef;
-import org.tensorflow.framework.TensorInfo;
-import org.tensorflow.framework.TensorShapeProto;
-import org.tensorflow.framework.TensorShapeProto.Dim;
-
-import com.google.protobuf.InvalidProtocolBufferException;
 
 /**
  * Try an MNIST saved model created in Tensorflow from Java.
@@ -73,8 +62,6 @@ public class MNISTExample {
 			multiplePredictionClasses(15, 16, 17, 18, 19);
 			multiplePredictionProbabilities(20, 21, 22, 23, 24);
 			multiplePredictionClassesProbabilities(25, 26, 27, 28, 29);
-
-			// displaySignatureDefInfo(savedModel);
 
 		} catch (Throwable t) {
 			System.out.println(t);
@@ -326,73 +313,6 @@ public class MNISTExample {
 			testLabels[i] = labels[imageNums[i]];
 		}
 		return testLabels;
-	}
-
-	public static void displaySignatureDefInfo(SavedModelBundle savedModelBundle)
-			throws InvalidProtocolBufferException {
-		displaySignatureDefInfo(savedModelBundle.metaGraphDef());
-	}
-
-	public static void displaySignatureDefInfo(byte[] metaGraphDefBytes) throws InvalidProtocolBufferException {
-		MetaGraphDef mgd = MetaGraphDef.parseFrom(metaGraphDefBytes);
-
-		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
-		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
-		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
-			System.out.println("\nSignatureDef key: " + sdmEntry.getKey());
-			SignatureDef sigDef = sdmEntry.getValue();
-			String methodName = sigDef.getMethodName();
-			System.out.println("method name: " + methodName);
-
-			System.out.println("inputs:");
-			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
-			Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
-			for (Entry<String, TensorInfo> inputEntry : inputEntries) {
-				System.out.println("  input key: " + inputEntry.getKey());
-				TensorInfo inputTensorInfo = inputEntry.getValue();
-				DataType inputTensorDtype = inputTensorInfo.getDtype();
-				System.out.println("    dtype: " + inputTensorDtype);
-				System.out.print("    shape: (");
-				TensorShapeProto inputTensorShape = inputTensorInfo.getTensorShape();
-				int dimCount = inputTensorShape.getDimCount();
-				for (int i = 0; i < dimCount; i++) {
-					Dim dim = inputTensorShape.getDim(i);
-					long dimSize = dim.getSize();
-					if (i > 0) {
-						System.out.print(", ");
-					}
-					System.out.print(dimSize);
-				}
-				System.out.println(")");
-				String inputTensorName = inputTensorInfo.getName();
-				System.out.println("    name: " + inputTensorName);
-			}
-
-			System.out.println("outputs:");
-			Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
-			Set<Entry<String, TensorInfo>> outputEntries = outputsMap.entrySet();
-			for (Entry<String, TensorInfo> outputEntry : outputEntries) {
-				System.out.println("  output key: " + outputEntry.getKey());
-				TensorInfo outputTensorInfo = outputEntry.getValue();
-				DataType outputTensorDtype = outputTensorInfo.getDtype();
-				System.out.println("    dtype: " + outputTensorDtype);
-				System.out.print("    shape: (");
-				TensorShapeProto outputTensorShape = outputTensorInfo.getTensorShape();
-				int dimCount = outputTensorShape.getDimCount();
-				for (int i = 0; i < dimCount; i++) {
-					Dim dim = outputTensorShape.getDim(i);
-					long dimSize = dim.getSize();
-					if (i > 0) {
-						System.out.print(", ");
-					}
-					System.out.print(dimSize);
-				}
-				System.out.println(")");
-				String inputTensorName = outputTensorInfo.getName();
-				System.out.println("    name: " + inputTensorName);
-			}
-		}
-
 	}
 
 	public static void displayImage(int imageNum) throws IOException {
