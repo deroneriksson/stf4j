@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Tensor;
 import org.tensorflow.framework.DataType;
@@ -16,6 +18,11 @@ import org.tensorflow.framework.TensorShapeProto.Dim;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class TFUtil {
+
+	/**
+	 * Logger for TFUtil
+	 */
+	protected static Logger log = LogManager.getLogger(TFUtil.class);
 
 	public static void displaySignatureDefInfo(SavedModelBundle savedModelBundle)
 			throws InvalidProtocolBufferException {
@@ -106,6 +113,7 @@ public class TFUtil {
 				float val = (float) value;
 				tensor = Tensor.create(val, Float.class);
 			} else {
+				log.warn("Implicitly converting integer array to float array");
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
 			}
