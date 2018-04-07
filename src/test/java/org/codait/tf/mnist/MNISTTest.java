@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.tensorflow.Tensor;
 
 public class MNISTTest {
 
@@ -34,9 +35,45 @@ public class MNISTTest {
 	}
 
 	@Test
-	public void testClassesPredictionImage0() {
+	public void testClassesPredictionInputIntArray() {
 		int label = labels[0];
 		int prediction = model.in("image", images[0]).out("classes").run().getInt("classes");
+		Assert.assertEquals(label, prediction);
+	}
+
+	@Test
+	public void testClassesPredictionInputFloatArray() {
+		int label = labels[1];
+		float[][] image = MNISTUtil.iToF(images[1]);
+		int prediction = model.in("image", image).out("classes").run().getInt("classes");
+		Assert.assertEquals(label, prediction);
+	}
+
+	@Test
+	public void testClassesPredictionInputTensor() {
+		int label = labels[2];
+		float[][] image = MNISTUtil.iToF(images[2]);
+		Tensor<Float> tensor = Tensor.create(image, Float.class);
+		int prediction = model.in("image", tensor).out("classes").run().getInt("classes");
+		Assert.assertEquals(label, prediction);
+	}
+
+	@Test
+	public void testClassesPredictionInputIntegerObjectArray() {
+		int label = labels[3];
+		Integer[][] image = MNISTUtil.iToIO(images[3]);
+		int prediction = model.in("image", image).out("classes").run().getInt("classes");
+		Assert.assertEquals(label, prediction);
+	}
+
+	// java.lang.IllegalArgumentException: cannot create non-scalar Tensors from
+	// arrays of boxed values
+	// @Test(expected = IllegalArgumentException.class)
+	@Test
+	public void testClassesPredictionInputFloatObjectArray() {
+		int label = labels[4];
+		Float[][] image = MNISTUtil.iToFO(images[4]);
+		int prediction = model.in("image", image).out("classes").run().getInt("classes");
 		Assert.assertEquals(label, prediction);
 	}
 

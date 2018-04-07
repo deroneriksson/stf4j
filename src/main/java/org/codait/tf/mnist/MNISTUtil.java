@@ -131,6 +131,23 @@ public class MNISTUtil {
 	}
 
 	/**
+	 * Convert 2-dimensional int array to a 2-dimensional Integer object array.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional int array
+	 * @return MNIST image as a 2-dimensional Integer object array
+	 */
+	public static Integer[][] iToIO(int[][] image) {
+		Integer[][] iImage = new Integer[image.length][image[0].length];
+		for (int r = 0; r < image.length; r++) {
+			for (int c = 0; c < image[0].length; c++) {
+				iImage[r][c] = image[r][c];
+			}
+		}
+		return iImage;
+	}
+
+	/**
 	 * Convert 2-dimensional float array to a 2-dimensional int array.
 	 * 
 	 * @param image
@@ -145,6 +162,23 @@ public class MNISTUtil {
 			}
 		}
 		return iImage;
+	}
+
+	/**
+	 * Convert 2-dimensional int array to a 2-dimensional Float object array.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional int array
+	 * @return MNIST image as a 2-dimensional Float object array
+	 */
+	public static Float[][] iToFO(int[][] image) {
+		Float[][] fImage = new Float[image.length][image[0].length];
+		for (int r = 0; r < image.length; r++) {
+			for (int c = 0; c < image[0].length; c++) {
+				fImage[r][c] = (float) image[r][c];
+			}
+		}
+		return fImage;
 	}
 
 	/**
