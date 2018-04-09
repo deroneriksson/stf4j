@@ -91,63 +91,6 @@ public class MNISTUtil {
 	}
 
 	/**
-	 * Obtain an MNIST image as text int values from 0 to 255, where 0
-	 * represents white and 255 represents black.
-	 * 
-	 * @param image
-	 *            MNIST image as a 2-dimensional float array
-	 */
-	public static String imageAsText(float[][] image) {
-		int[][] iImage = fToI(image);
-		return imageAsText(iImage);
-	}
-
-	/**
-	 * Display an MNIST image as text int values from 0 to 255, where 0
-	 * represents white and 255 represents black.
-	 * 
-	 * @param image
-	 *            MNIST image as a 2-dimensional float array
-	 */
-	public static void displayImageAsText(float[][] image) {
-		System.out.println(imageAsText(image));
-	}
-
-	/**
-	 * Convert 2-dimensional int array to a 2-dimensional float array.
-	 * 
-	 * @param image
-	 *            MNIST image as a 2-dimensional int array
-	 * @return MNIST image as a 2-dimensional float array
-	 */
-	public static float[][] iToF(int[][] image) {
-		float[][] fImage = new float[image.length][image[0].length];
-		for (int r = 0; r < image.length; r++) {
-			for (int c = 0; c < image[0].length; c++) {
-				fImage[r][c] = image[r][c];
-			}
-		}
-		return fImage;
-	}
-
-	/**
-	 * Convert 2-dimensional float array to a 2-dimensional int array.
-	 * 
-	 * @param image
-	 *            MNIST image as a 2-dimensional float array
-	 * @return MNIST image as a 2-dimensional int array
-	 */
-	public static int[][] fToI(float[][] image) {
-		int[][] iImage = new int[image.length][image[0].length];
-		for (int r = 0; r < image.length; r++) {
-			for (int c = 0; c < image[0].length; c++) {
-				iImage[r][c] = (int) image[r][c];
-			}
-		}
-		return iImage;
-	}
-
-	/**
 	 * Convert a 2-dimensional float array to a 3-dimensional float array, where
 	 * the first dimension has a size of 1.
 	 * 
@@ -175,17 +118,6 @@ public class MNISTUtil {
 	public static void displayImage(int[][] image) {
 		BufferedImage bi = iToBuff(image);
 		displayBufferedImage(bi);
-	}
-
-	/**
-	 * Display an MNIST image to the screen as an image.
-	 * 
-	 * @param image
-	 *            MNIST image as a 2-dimensional float array
-	 */
-	public static void displayImage(float[][] image) {
-		int[][] iImage = fToI(image);
-		displayImage(iImage);
 	}
 
 	/**

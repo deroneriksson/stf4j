@@ -52,7 +52,7 @@ public class MNISTTest {
 	public void testClassesPredictionInputFloatArray() {
 		log.debug("MNIST classes prediction - input image as 2d primitive float array");
 		int label = labels[1];
-		float[][] image = MNISTUtil.iToF(images[1]);
+		float[][] image = (float[][]) ArrayUtil.convertArrayType(images[1], float.class);
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");
 		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		Assert.assertEquals(label, prediction);
@@ -62,7 +62,7 @@ public class MNISTTest {
 	public void testClassesPredictionInputTensor() {
 		log.debug("MNIST classes prediction - input image as Tensor (from 2d primitive float array)");
 		int label = labels[2];
-		float[][] image = MNISTUtil.iToF(images[2]);
+		float[][] image = (float[][]) ArrayUtil.convertArrayType(images[2], float.class);
 		Tensor<Float> tensor = Tensor.create(image, Float.class);
 		int prediction = model.in("image", tensor).out("classes").run().getInt("classes");
 		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
