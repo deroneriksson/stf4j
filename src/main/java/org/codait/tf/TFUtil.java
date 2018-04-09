@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Tensor;
 import org.tensorflow.framework.DataType;
@@ -170,6 +170,7 @@ public class TFUtil {
 			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
 			if (inputsMap.containsKey(key)) {
 				TensorInfo tensorInfo = inputsMap.get(key);
+				log.debug("Retrieved TensorInfo '" + tensorInfo.getName() + "' for key '" + key + "'");
 				return tensorInfo;
 			}
 		}

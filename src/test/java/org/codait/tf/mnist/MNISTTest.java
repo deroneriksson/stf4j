@@ -2,6 +2,8 @@ package org.codait.tf.mnist;
 
 import java.io.IOException;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.codait.tf.TFModel;
 import org.junit.After;
 import org.junit.Assert;
@@ -10,6 +12,8 @@ import org.junit.Test;
 import org.tensorflow.Tensor;
 
 public class MNISTTest {
+
+	protected static Logger log = LogManager.getLogger(MNISTTest.class);
 
 	public static final String MNIST_DATA_DIR = "./mnist_data/";
 	public static final String TRAIN_IMAGES = "train-images-idx3-ubyte";
