@@ -96,7 +96,7 @@ public class TFUtil {
 
 	// perhaps key should be used instead of name, since 'Placeholder:0' is a
 	// bit confusing in error message
-	public static Tensor<?> convertToTensor(String name, Object value, TensorInfo ti) {
+	public static Tensor<?> convertToTensor(String key, String name, Object value, TensorInfo ti) {
 		DataType dtype = ti.getDtype();
 		Tensor<?> tensor = null;
 		if (DataType.DT_FLOAT == dtype && isFloatType(value)) {
@@ -140,7 +140,7 @@ public class TFUtil {
 			}
 		}
 		if (tensor == null) {
-			throw new TFException("Could not convert input '" + name + "' to Tensor");
+			throw new TFException("Could not convert input key '" + key + "' (value: '" + name + "') to Tensor");
 		}
 		return tensor;
 	}

@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.codait.tf.ArrayUtil;
+import org.codait.tf.TFException;
 import org.codait.tf.TFModel;
 import org.junit.After;
 import org.junit.Assert;
@@ -127,6 +128,12 @@ public class MNISTTest {
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");
 		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		Assert.assertEquals(label, prediction);
+	}
+
+	@Test(expected = TFException.class)
+	public void testBadInputKey() {
+		log.debug("MNIST classes prediction - bad input key");
+		model.in("badInputKey", null);
 	}
 
 }

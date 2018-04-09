@@ -58,6 +58,9 @@ public class TFModel {
 	}
 
 	public TFModel in(String key, Object value) {
+		if (value == null) {
+			throw new TFException("Input value cannot be null");
+		}
 		log.debug("Register input key '" + key + "' with object type " + value.getClass().getName());
 		if (value instanceof Tensor) {
 			String name = TFUtil.inputKeyToName(key, metaGraphDef());
@@ -65,7 +68,7 @@ public class TFModel {
 		} else {
 			TensorInfo ti = TFUtil.inputKeyToTensorInfo(key, metaGraphDef());
 			String name = ti.getName();
-			Tensor<?> tensor = TFUtil.convertToTensor(name, value, ti);
+			Tensor<?> tensor = TFUtil.convertToTensor(key, name, value, ti);
 			inputs.put(name, tensor);
 		}
 		return this;
