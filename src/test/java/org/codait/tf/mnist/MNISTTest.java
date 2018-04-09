@@ -119,4 +119,14 @@ public class MNISTTest {
 		Assert.assertEquals(label, prediction);
 	}
 
+	@Test
+	public void testClassesPredictionInputDoubleObjectArray() {
+		log.debug("MNIST classes prediction - input image as 2d Double object array");
+		int label = labels[7];
+		Double[][] image = (Double[][]) ArrayUtil.convertArrayType(images[7], Double.class);
+		int prediction = model.in("image", image).out("classes").run().getInt("classes");
+		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
+		Assert.assertEquals(label, prediction);
+	}
+
 }

@@ -52,9 +52,9 @@ public class ArrayUtil {
 					Array.set(dest, i, Long.valueOf((int) v));
 				} else if ("int".equals(o) && "Float".equals(d)) {
 					Array.set(dest, i, Float.valueOf((int) v));
-				} else if ("int".equals(o) && "double".equals(d)) {
+				} else if ("int".equals(o) && "double".equalsIgnoreCase(d)) {
 					Array.set(dest, i, Double.valueOf((int) v));
-				} else if ("double".equals(o) && "float".equals(d)) {
+				} else if ("double".equalsIgnoreCase(o) && "float".equals(d)) {
 					Array.set(dest, i, Float.valueOf((float) (double) v));
 				} else {
 					Array.set(dest, i, v);
