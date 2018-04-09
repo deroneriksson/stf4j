@@ -136,4 +136,10 @@ public class MNISTTest {
 		model.in("badInputKey", null);
 	}
 
+	@Test(expected = TFException.class)
+	public void testNullInputValue() {
+		log.debug("MNIST classes prediction - null input value");
+		model.in("image", null);
+	}
+
 }
