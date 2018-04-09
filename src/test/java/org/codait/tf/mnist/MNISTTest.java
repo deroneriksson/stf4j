@@ -40,6 +40,7 @@ public class MNISTTest {
 
 	@Test
 	public void testClassesPredictionInputIntArray() {
+		log.debug("MNIST classes prediction - input image as 2d int array");
 		int label = labels[0];
 		int prediction = model.in("image", images[0]).out("classes").run().getInt("classes");
 		Assert.assertEquals(label, prediction);
@@ -47,6 +48,7 @@ public class MNISTTest {
 
 	@Test
 	public void testClassesPredictionInputFloatArray() {
+		log.debug("MNIST classes prediction - input image as 2d float array");
 		int label = labels[1];
 		float[][] image = MNISTUtil.iToF(images[1]);
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");
@@ -55,6 +57,7 @@ public class MNISTTest {
 
 	@Test
 	public void testClassesPredictionInputTensor() {
+		log.debug("MNIST classes prediction - input image as Tensor (from 2d float array)");
 		int label = labels[2];
 		float[][] image = MNISTUtil.iToF(images[2]);
 		Tensor<Float> tensor = Tensor.create(image, Float.class);
@@ -64,6 +67,7 @@ public class MNISTTest {
 
 	@Test
 	public void testClassesPredictionInputIntegerObjectArray() {
+		log.debug("MNIST classes prediction - input image as 2d Integer array");
 		int label = labels[3];
 		Integer[][] image = MNISTUtil.iToIO(images[3]);
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");
@@ -75,6 +79,7 @@ public class MNISTTest {
 	// @Test(expected = IllegalArgumentException.class)
 	@Test
 	public void testClassesPredictionInputFloatObjectArray() {
+		log.debug("MNIST classes prediction - input image as 2d Float array");
 		int label = labels[4];
 		Float[][] image = MNISTUtil.iToFO(images[4]);
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");

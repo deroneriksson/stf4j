@@ -31,6 +31,7 @@ public class TFModel {
 	Map<String, Object> outputs = new LinkedHashMap<>();
 
 	public TFModel(String modelDir, String... metaGraphDefTags) {
+		log.debug("Creating TFModel object");
 		savedModelDir = modelDir;
 		savedModel = SavedModelBundle.load(modelDir, metaGraphDefTags);
 	}
@@ -56,6 +57,7 @@ public class TFModel {
 	}
 
 	public TFModel in(String key, Object value) {
+		log.debug("Register input key '" + key + "' with object type " + value.getClass().getName());
 		if (value instanceof Tensor) {
 			String name = TFUtil.inputKeyToName(key, metaGraphDef());
 			inputs.put(name, value);
@@ -69,6 +71,7 @@ public class TFModel {
 	}
 
 	public TFModel out(String key) {
+		log.debug("Register output key '" + key + "'");
 		outputs.put(key, null);
 		return this;
 	}
@@ -81,6 +84,7 @@ public class TFModel {
 	}
 
 	public TFResults run() {
+		log.debug("Running model");
 		Runner runner = runner();
 		Set<Entry<String, Object>> iEntries = inputs.entrySet();
 		for (Entry<String, Object> iEntry : iEntries) {
@@ -99,6 +103,7 @@ public class TFModel {
 			outputs.put(oKey, res.get(i++));
 		}
 		TFResults results = new TFResults(this);
+		log.debug("Model results:\n" + results);
 		return results;
 	}
 
