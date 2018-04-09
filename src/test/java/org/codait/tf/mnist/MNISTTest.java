@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codait.tf.ArrayUtil;
 import org.codait.tf.TFModel;
 import org.junit.After;
 import org.junit.Assert;
@@ -43,6 +44,7 @@ public class MNISTTest {
 		log.debug("MNIST classes prediction - input image as 2d primitive int array");
 		int label = labels[0];
 		int prediction = model.in("image", images[0]).out("classes").run().getInt("classes");
+		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		Assert.assertEquals(label, prediction);
 	}
 
@@ -52,6 +54,7 @@ public class MNISTTest {
 		int label = labels[1];
 		float[][] image = MNISTUtil.iToF(images[1]);
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");
+		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		Assert.assertEquals(label, prediction);
 	}
 
@@ -62,6 +65,7 @@ public class MNISTTest {
 		float[][] image = MNISTUtil.iToF(images[2]);
 		Tensor<Float> tensor = Tensor.create(image, Float.class);
 		int prediction = model.in("image", tensor).out("classes").run().getInt("classes");
+		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		Assert.assertEquals(label, prediction);
 	}
 
@@ -71,6 +75,7 @@ public class MNISTTest {
 		int label = labels[3];
 		Integer[][] image = MNISTUtil.iToIO(images[3]);
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");
+		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		Assert.assertEquals(label, prediction);
 	}
 
@@ -80,6 +85,27 @@ public class MNISTTest {
 		int label = labels[4];
 		Float[][] image = MNISTUtil.iToFO(images[4]);
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");
+		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
+		Assert.assertEquals(label, prediction);
+	}
+
+	@Test
+	public void testClassesPredictionInputLongArray() {
+		log.debug("MNIST classes prediction - input image as 2d primitive long array");
+		int label = labels[5];
+		long[][] image = (long[][]) ArrayUtil.convertArrayType(images[5], long.class);
+		int prediction = model.in("image", image).out("classes").run().getInt("classes");
+		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
+		Assert.assertEquals(label, prediction);
+	}
+
+	@Test
+	public void testClassesPredictionInputLongObjectArray() {
+		log.debug("MNIST classes prediction - input image as 2d Long object array");
+		int label = labels[6];
+		Long[][] image = (Long[][]) ArrayUtil.convertArrayType(images[6], Long.class);
+		int prediction = model.in("image", image).out("classes").run().getInt("classes");
+		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		Assert.assertEquals(label, prediction);
 	}
 

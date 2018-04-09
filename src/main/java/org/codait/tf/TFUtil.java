@@ -120,11 +120,32 @@ public class TFUtil {
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
 			}
+		} else if (DataType.DT_FLOAT == dtype && isLongType(value)) {
+			if (value instanceof Long) {
+				float val = (float) value;
+				tensor = Tensor.create(val, Float.class);
+			} else {
+				log.warn("Implicitly converting long array to float array");
+				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
+				tensor = Tensor.create(floatArray, Float.class);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input '" + name + "' to Tensor");
 		}
 		return tensor;
+	}
+
+	public static boolean isLongType(Object value) {
+		if (value instanceof Long) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("long[") || typeName.startsWith("java.lang.Long[")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public static boolean isIntType(Object value) {

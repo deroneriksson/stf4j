@@ -40,13 +40,19 @@ public class ArrayUtil {
 	}
 
 	public static void copyArrayVals(Object orig, Object dest) {
+		String o = orig.getClass().getComponentType().getSimpleName();
+		String d = dest.getClass().getComponentType().getSimpleName();
 		for (int i = 0; i < Array.getLength(orig); i++) {
 			Object v = Array.get(orig, i);
 			Object vd = Array.get(dest, i);
 			if (v.getClass().isArray()) {
 				copyArrayVals(v, vd);
 			} else {
-				Array.set(dest, i, v);
+				if ("int".equals(o) && "Long".equals(d)) {
+					Array.set(dest, i, Long.valueOf((int) v));
+				} else {
+					Array.set(dest, i, v);
+				}
 			}
 		}
 	}
