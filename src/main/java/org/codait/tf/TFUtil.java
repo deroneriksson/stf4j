@@ -129,6 +129,15 @@ public class TFUtil {
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
 			}
+		} else if (DataType.DT_FLOAT == dtype && isDoubleType(value)) {
+			if (value instanceof Double) {
+				double val = (double) value;
+				tensor = Tensor.create(val, Double.class);
+			} else {
+				log.warn("Implicitly converting double array to float array");
+				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
+				tensor = Tensor.create(floatArray, Float.class);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input '" + name + "' to Tensor");
@@ -171,6 +180,17 @@ public class TFUtil {
 		}
 		String typeName = value.getClass().getTypeName();
 		if (typeName.startsWith("float[") || typeName.startsWith("java.lang.Float[")) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isDoubleType(Object value) {
+		if (value instanceof Double) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("double[") || typeName.startsWith("java.lang.Double[")) {
 			return true;
 		}
 		return false;
