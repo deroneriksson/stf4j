@@ -97,17 +97,20 @@ public class TFUtil {
 	// perhaps key should be used instead of name, since 'Placeholder:0' is a
 	// bit confusing in error message
 	public static Tensor<?> convertToTensor(String name, Object value, TensorInfo ti) {
-		// System.out.println("class:" + value.getClass().toString());
-		// System.out.println("typename:" + value.getClass().getTypeName());
-		// System.out.println("componentType:" +
-		// value.getClass().getComponentType());
-		// String typeName = value.getClass().getTypeName();
-		// Class<?> componentType = value.getClass().getComponentType();
 		DataType dtype = ti.getDtype();
-		// System.out.println("dtype:" + dtype);
 		Tensor<?> tensor = null;
 		if (DataType.DT_FLOAT == dtype && isFloatType(value)) {
-			tensor = Tensor.create(value, Float.class);
+			if (value instanceof Float) {
+				tensor = Tensor.create(value, Float.class);
+			} else if (isFloatObjectArray(value)) {
+				// to avoid: "cannot create non-scalar Tensors from arrays of
+				// boxed values"
+				log.warn("Implicitly converting Float object array to primitive float array");
+				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
+				tensor = Tensor.create(floatArray, Float.class);
+			} else { // primitive float array
+				tensor = Tensor.create(value, Float.class);
+			}
 		} else if (DataType.DT_FLOAT == dtype && isIntType(value)) {
 			if (value instanceof Integer) {
 				float val = (float) value;
@@ -134,6 +137,11 @@ public class TFUtil {
 		} else {
 			return false;
 		}
+	}
+
+	public static boolean isFloatObjectArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		return typeName.startsWith("java.lang.Float[");
 	}
 
 	public static boolean isFloatType(Object value) {

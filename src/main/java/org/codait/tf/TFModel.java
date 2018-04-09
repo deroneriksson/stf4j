@@ -25,6 +25,7 @@ public class TFModel {
 	protected static Logger log = LogManager.getLogger(TFModel.class);
 
 	SavedModelBundle savedModel;
+	MetaGraphDef metaGraphDef;
 	String savedModelDir;
 
 	Map<String, Object> inputs = new LinkedHashMap<>();
@@ -108,9 +109,12 @@ public class TFModel {
 	}
 
 	public MetaGraphDef metaGraphDef() {
+		if (metaGraphDef != null) {
+			return metaGraphDef;
+		}
 		try {
 			byte[] b = savedModel.metaGraphDef();
-			MetaGraphDef metaGraphDef = MetaGraphDef.parseFrom(b);
+			metaGraphDef = MetaGraphDef.parseFrom(b);
 			return metaGraphDef;
 		} catch (InvalidProtocolBufferException e) {
 			throw new TFException("Exception obtaining MetaGraphDef from saved model", e);
