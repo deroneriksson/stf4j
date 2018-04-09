@@ -73,7 +73,7 @@ public class MNISTTest {
 	public void testClassesPredictionInputIntegerObjectArray() {
 		log.debug("MNIST classes prediction - input image as 2d Integer object array");
 		int label = labels[3];
-		Integer[][] image = MNISTUtil.iToIO(images[3]);
+		Integer[][] image = (Integer[][]) ArrayUtil.convertArrayType(images[3], Integer.class);
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");
 		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		Assert.assertEquals(label, prediction);
@@ -83,7 +83,7 @@ public class MNISTTest {
 	public void testClassesPredictionInputFloatObjectArray() {
 		log.debug("MNIST classes prediction - input image as 2d Float object array");
 		int label = labels[4];
-		Float[][] image = MNISTUtil.iToFO(images[4]);
+		Float[][] image = (Float[][]) ArrayUtil.convertArrayType(images[4], Float.class);
 		int prediction = model.in("image", image).out("classes").run().getInt("classes");
 		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		Assert.assertEquals(label, prediction);

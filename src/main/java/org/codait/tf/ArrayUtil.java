@@ -50,6 +50,8 @@ public class ArrayUtil {
 			} else {
 				if ("int".equals(o) && "Long".equals(d)) {
 					Array.set(dest, i, Long.valueOf((int) v));
+				} else if ("int".equals(o) && "Float".equals(d)) {
+					Array.set(dest, i, Float.valueOf((int) v));
 				} else {
 					Array.set(dest, i, v);
 				}
