@@ -152,11 +152,7 @@ public class MNISTTest {
 		float[][][] fImages = (float[][][]) ArrayUtil.convertArrayType(iImages, float.class);
 		Tensor<Float> tensor = Tensor.create(fImages, Float.class);
 		long[] predictions = model.in("image", tensor).out("classes").run().getLongArray("classes");
-		for (int i = 0; i < lbls.length; i++) {
-			long label = lbls[i];
-			long prediction = predictions[i];
-			log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
-		}
+		displayDebugLongLabelsAndPredictions(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
 	}
 
@@ -171,11 +167,7 @@ public class MNISTTest {
 		Tensor<Float> tensor = Tensor.create(fImages, Float.class);
 		long[] predictions = (long[]) model.in("image", tensor).out("classes").run()
 				.getLongArrayMultidimensional("classes");
-		for (int i = 0; i < lbls.length; i++) {
-			long label = lbls[i];
-			long prediction = predictions[i];
-			log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
-		}
+		displayDebugLongLabelsAndPredictions(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
 	}
 
@@ -186,11 +178,7 @@ public class MNISTTest {
 
 		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[13], images[14]);
 		long[] predictions = model.in("image", iImages).out("classes").run().getLongArray("classes");
-		for (int i = 0; i < lbls.length; i++) {
-			long label = lbls[i];
-			long prediction = predictions[i];
-			log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
-		}
+		displayDebugLongLabelsAndPredictions(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
 	}
 
@@ -202,11 +190,15 @@ public class MNISTTest {
 		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[15], images[16]);
 		float[][][] fImages = (float[][][]) ArrayUtil.convertArrayType(iImages, float.class);
 		long[] predictions = model.in("image", fImages).out("classes").run().getLongArray("classes");
-		for (int i = 0; i < lbls.length; i++) {
-			long label = lbls[i];
+		displayDebugLongLabelsAndPredictions(lbls, predictions);
+		Assert.assertArrayEquals(lbls, predictions);
+	}
+
+	private void displayDebugLongLabelsAndPredictions(long[] labels, long[] predictions) {
+		for (int i = 0; i < labels.length; i++) {
+			long label = labels[i];
 			long prediction = predictions[i];
 			log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
 		}
-		Assert.assertArrayEquals(lbls, predictions);
 	}
 }
