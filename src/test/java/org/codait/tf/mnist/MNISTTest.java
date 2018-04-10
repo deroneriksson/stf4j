@@ -179,4 +179,34 @@ public class MNISTTest {
 		Assert.assertArrayEquals(lbls, predictions);
 	}
 
+	@Test
+	public void testClassesPredictionInputIntArrayMultipleImages() {
+		log.debug("MNIST classes prediction - input images as 3d primitive int array, output long array");
+		long[] lbls = new long[] { labels[13], labels[14] };
+
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[13], images[14]);
+		long[] predictions = model.in("image", iImages).out("classes").run().getLongArray("classes");
+		for (int i = 0; i < lbls.length; i++) {
+			long label = lbls[i];
+			long prediction = predictions[i];
+			log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
+		}
+		Assert.assertArrayEquals(lbls, predictions);
+	}
+
+	@Test
+	public void testClassesPredictionInputFloatArrayMultipleImages() {
+		log.debug("MNIST classes prediction - input images as 3d primitive float array, output long array");
+		long[] lbls = new long[] { labels[15], labels[16] };
+
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[15], images[16]);
+		float[][][] fImages = (float[][][]) ArrayUtil.convertArrayType(iImages, float.class);
+		long[] predictions = model.in("image", fImages).out("classes").run().getLongArray("classes");
+		for (int i = 0; i < lbls.length; i++) {
+			long label = lbls[i];
+			long prediction = predictions[i];
+			log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
+		}
+		Assert.assertArrayEquals(lbls, predictions);
+	}
 }
