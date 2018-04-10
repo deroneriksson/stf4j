@@ -140,7 +140,7 @@ public class TFUtil {
 			}
 		}
 		if (tensor == null) {
-			throw new TFException("Could not convert input key '" + key + "' (value: '" + name + "') to Tensor");
+			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
 		}
 		return tensor;
 	}
