@@ -142,4 +142,41 @@ public class MNISTTest {
 		model.in("image", null);
 	}
 
+	@Test
+	public void testClassesPredictionInputTensorMultipleImages() {
+		log.debug("MNIST classes prediction - input images as Tensor, output long array");
+
+		long[] lbls = new long[] { labels[9], labels[10] };
+
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[9], images[10]);
+		float[][][] fImages = (float[][][]) ArrayUtil.convertArrayType(iImages, float.class);
+		Tensor<Float> tensor = Tensor.create(fImages, Float.class);
+		long[] predictions = model.in("image", tensor).out("classes").run().getLongArray("classes");
+		for (int i = 0; i < lbls.length; i++) {
+			long label = lbls[i];
+			long prediction = predictions[i];
+			log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
+		}
+		Assert.assertArrayEquals(lbls, predictions);
+	}
+
+	@Test
+	public void testClassesPredictionInputTensorOutputMultidimensionalLongArray() {
+		log.debug("MNIST classes prediction - input images as Tensor, output multidimensional long array");
+
+		long[] lbls = new long[] { labels[11], labels[12] };
+
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[11], images[12]);
+		float[][][] fImages = (float[][][]) ArrayUtil.convertArrayType(iImages, float.class);
+		Tensor<Float> tensor = Tensor.create(fImages, Float.class);
+		long[] predictions = (long[]) model.in("image", tensor).out("classes").run()
+				.getLongArrayMultidimensional("classes");
+		for (int i = 0; i < lbls.length; i++) {
+			long label = lbls[i];
+			long prediction = predictions[i];
+			log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
+		}
+		Assert.assertArrayEquals(lbls, predictions);
+	}
+
 }

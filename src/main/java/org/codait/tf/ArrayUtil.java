@@ -6,6 +6,13 @@ import java.util.List;
 
 public class ArrayUtil {
 
+	/**
+	 * Obtain a list of array dimensions based on an input array.
+	 * 
+	 * @param array
+	 *            Input array as as object
+	 * @return List of array dimensions
+	 */
 	public static List<Integer> getArrayDimensionsList(Object array) {
 		if (array.getClass().isArray()) {
 			List<Integer> dim = new ArrayList<Integer>();
@@ -23,6 +30,13 @@ public class ArrayUtil {
 
 	}
 
+	/**
+	 * Obtain dimensions of an array.
+	 * 
+	 * @param array
+	 *            Input array as an object
+	 * @return Array dimensions as an array
+	 */
 	public static int[] getArrayDimensions(Object array) {
 		List<Integer> dimList = getArrayDimensionsList(array);
 		int[] dimensions = new int[dimList.size()];
@@ -32,6 +46,17 @@ public class ArrayUtil {
 		return dimensions;
 	}
 
+	/**
+	 * Convert an array from one type to another, where the destination type is
+	 * specified by the destType parameter.
+	 * 
+	 * @param orig
+	 *            the original array
+	 * @param destType
+	 *            the type (class) that the original array should be converted
+	 *            to
+	 * @return the resulting array
+	 */
 	public static Object convertArrayType(Object orig, Class<?> destType) {
 		int[] dimensions = getArrayDimensions(orig);
 		Object dest = Array.newInstance(destType, dimensions);
@@ -61,6 +86,42 @@ public class ArrayUtil {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Convert individual 2d int arrays with same dimensions to a single 3d int
+	 * array.
+	 * 
+	 * @param arrays
+	 *            2d int arrays of the same dimensions
+	 * @return 3d int array that combines the individual 2d int arrays
+	 */
+	public static int[][][] convert2dIntArraysTo3dIntArray(int[][]... arrays) {
+		int[][][] array = new int[arrays.length][arrays[0].length][arrays[0][0].length];
+		for (int i = 0; i < arrays.length; i++) {
+			int[][] ar = arrays[i];
+			for (int r = 0; r < ar.length; r++) {
+				for (int c = 0; c < ar[0].length; c++) {
+					array[i][r][c] = ar[r][c];
+				}
+			}
+		}
+		return array;
+	}
+
+	/**
+	 * Convert 1d long array to int array.
+	 * 
+	 * @param lArray
+	 *            long array
+	 * @return int array
+	 */
+	public static int[] lToI(long[] lArray) {
+		int[] iArray = new int[lArray.length];
+		for (int i = 0; i < lArray.length; i++) {
+			iArray[i] = (int) lArray[i];
+		}
+		return iArray;
 	}
 
 }

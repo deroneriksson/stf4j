@@ -1,5 +1,6 @@
 package org.codait.tf;
 
+import java.lang.reflect.Array;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -56,6 +57,24 @@ public class TFResults {
 		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
 		long l = tensor.copyTo(new long[1])[0];
 		return l;
+	}
+
+	public long[] getLongArray(String outputName) {
+		checkKey(outputName);
+		@SuppressWarnings("unchecked")
+		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
+		long[] l = tensor.copyTo(new long[(int) tensor.shape()[0]]);
+		return l;
+	}
+
+	public Object getLongArrayMultidimensional(String outputName) {
+		checkKey(outputName);
+		@SuppressWarnings("unchecked")
+		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
+		int[] shape = ArrayUtil.lToI(tensor.shape());
+		Object dest = Array.newInstance(long.class, shape);
+		tensor.copyTo(dest);
+		return dest;
 	}
 
 	public int getInt(String outputName) {
