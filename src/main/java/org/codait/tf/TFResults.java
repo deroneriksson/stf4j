@@ -5,13 +5,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.tensorflow.Tensor;
+import org.tensorflow.framework.DataType;
+import org.tensorflow.framework.TensorInfo;
 
 public class TFResults {
 
+	TFModel model;
 	Map<String, Object> outputs;
 
 	public TFResults(TFModel model) {
-		outputs = model.outputs;
+		this.model = model;
+		this.outputs = model.outputs;
 	}
 
 	@Override
@@ -79,9 +83,15 @@ public class TFResults {
 
 	public int getInt(String outputName) {
 		checkKey(outputName);
-		@SuppressWarnings("unchecked")
-		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
-		int i = (int) tensor.copyTo(new long[1])[0];
-		return i;
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(outputName, model.metaGraphDef());
+		if (ti.getDtype() == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
+			int i = (int) tensor.copyTo(new long[1])[0];
+			return i;
+		} else {
+			throw new TFException("getInt not implemented for '" + outputName + "' data type: " + ti.getDtype());
+		}
+
 	}
 }
