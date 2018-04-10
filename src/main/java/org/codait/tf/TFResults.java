@@ -63,10 +63,15 @@ public class TFResults {
 
 	public long getLong(String key) {
 		checkKey(key);
-		@SuppressWarnings("unchecked")
-		Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
-		long l = tensor.copyTo(new long[1])[0];
-		return l;
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		if (ti.getDtype() == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			long l = tensor.copyTo(new long[1])[0];
+			return l;
+		} else {
+			throw new TFException("getLong not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
 	}
 
 	public long[] getLongArray(String key) {
@@ -98,6 +103,5 @@ public class TFResults {
 		} else {
 			throw new TFException("getInt not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
-
 	}
 }

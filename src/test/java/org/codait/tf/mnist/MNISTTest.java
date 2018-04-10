@@ -273,4 +273,13 @@ public class MNISTTest {
 		displayDebugLongLabelsAndPredictions(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
 	}
+
+	@Test
+	public void testClassesPredictionInputIntArrayOutputLong() {
+		log.debug("MNIST classes prediction - input image as 2d primitive int array, output long");
+		long label = labels[29];
+		long prediction = model.in("image", images[29]).out("classes").run().getLong("classes");
+		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
+		Assert.assertEquals(label, prediction);
+	}
 }
