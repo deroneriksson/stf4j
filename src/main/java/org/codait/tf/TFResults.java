@@ -11,30 +11,36 @@ import org.tensorflow.framework.TensorInfo;
 public class TFResults {
 
 	TFModel model;
-	Map<String, Object> outputs;
+	Map<String, String> outputKeyToName;
+	Map<String, Object> outputNameToValue;
 
 	public TFResults(TFModel model) {
 		this.model = model;
-		this.outputs = model.outputs;
+		this.outputKeyToName = model.outputKeyToName;
+		this.outputNameToValue = model.outputNameToValue;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		if (outputs == null || outputs.isEmpty()) {
+		if (outputKeyToName == null || outputKeyToName.isEmpty()) {
 			sb.append("None\n");
 		} else {
 			int count = 0;
-			for (Entry<String, Object> entry : outputs.entrySet()) {
+			for (Entry<String, String> entry : outputKeyToName.entrySet()) {
 				sb.append("  [");
 				sb.append(++count);
 				sb.append("] ");
 
-				String name = entry.getKey();
-				Object value = entry.getValue();
+				String key = entry.getKey();
+				String name = entry.getValue();
+				sb.append(key);
+				sb.append(" (");
 				sb.append(name);
+				sb.append(")");
 				sb.append(": ");
+				Object value = outputNameToValue.get(name);
 				sb.append(value);
 
 				sb.append("\n");
@@ -44,53 +50,53 @@ public class TFResults {
 		return sb.toString();
 	}
 
-	protected void checkKey(String outputName) {
-		if (!outputs.containsKey(outputName)) {
-			throw new TFException("Output '" + outputName + "' not found in results");
+	protected void checkKey(String key) {
+		if (!outputKeyToName.containsKey(key)) {
+			throw new TFException("Output '" + key + "' not found in results");
 		}
 	}
 
-	public Tensor<?> getTensor(String outputName) {
-		checkKey(outputName);
-		return (Tensor<?>) outputs.get(outputName);
+	public Tensor<?> getTensor(String key) {
+		checkKey(key);
+		return (Tensor<?>) outputNameToValue.get(outputKeyToName.get(key));
 	}
 
-	public long getLong(String outputName) {
-		checkKey(outputName);
+	public long getLong(String key) {
+		checkKey(key);
 		@SuppressWarnings("unchecked")
-		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
+		Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
 		long l = tensor.copyTo(new long[1])[0];
 		return l;
 	}
 
-	public long[] getLongArray(String outputName) {
-		checkKey(outputName);
+	public long[] getLongArray(String key) {
+		checkKey(key);
 		@SuppressWarnings("unchecked")
-		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
+		Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
 		long[] l = tensor.copyTo(new long[(int) tensor.shape()[0]]);
 		return l;
 	}
 
-	public Object getLongArrayMultidimensional(String outputName) {
-		checkKey(outputName);
+	public Object getLongArrayMultidimensional(String key) {
+		checkKey(key);
 		@SuppressWarnings("unchecked")
-		Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
+		Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
 		int[] shape = ArrayUtil.lToI(tensor.shape());
 		Object dest = Array.newInstance(long.class, shape);
 		tensor.copyTo(dest);
 		return dest;
 	}
 
-	public int getInt(String outputName) {
-		checkKey(outputName);
-		TensorInfo ti = TFUtil.outputKeyToTensorInfo(outputName, model.metaGraphDef());
+	public int getInt(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
-			Tensor<Long> tensor = (Tensor<Long>) outputs.get(outputName);
+			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
 			int i = (int) tensor.copyTo(new long[1])[0];
 			return i;
 		} else {
-			throw new TFException("getInt not implemented for '" + outputName + "' data type: " + ti.getDtype());
+			throw new TFException("getInt not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
 
 	}

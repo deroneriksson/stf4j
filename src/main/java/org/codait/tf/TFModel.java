@@ -28,8 +28,10 @@ public class TFModel {
 	MetaGraphDef metaGraphDef;
 	String savedModelDir;
 
-	Map<String, Object> inputs = new LinkedHashMap<>();
-	Map<String, Object> outputs = new LinkedHashMap<>();
+	Map<String, Object> inputNameToValue = new LinkedHashMap<>();
+	Map<String, Object> outputNameToValue = new LinkedHashMap<>();
+	Map<String, String> inputKeyToName = new LinkedHashMap<>();
+	Map<String, String> outputKeyToName = new LinkedHashMap<>();
 
 	public TFModel(String modelDir, String... metaGraphDefTags) {
 		log.debug("Creating TFModel object");
@@ -64,25 +66,29 @@ public class TFModel {
 		log.debug("Register input key '" + key + "' with object type " + value.getClass().getName());
 		if (value instanceof Tensor) {
 			String name = TFUtil.inputKeyToName(key, metaGraphDef());
-			inputs.put(name, value);
+			inputNameToValue.put(name, value);
+			inputKeyToName.put(key, name);
 		} else {
 			TensorInfo ti = TFUtil.inputKeyToTensorInfo(key, metaGraphDef());
 			String name = ti.getName();
 			Tensor<?> tensor = TFUtil.convertToTensor(key, name, value, ti);
-			inputs.put(name, tensor);
+			inputNameToValue.put(name, tensor);
+			inputKeyToName.put(key, name);
 		}
 		return this;
 	}
 
 	public TFModel out(String key) {
 		log.debug("Register output key '" + key + "'");
-		outputs.put(key, null);
+		String name = TFUtil.outputKeyToName(key, metaGraphDef());
+		outputKeyToName.put(key, name);
+		outputNameToValue.put(name, null);
 		return this;
 	}
 
 	public TFModel out(String... keys) {
 		for (String key : keys) {
-			outputs.put(key, null);
+			out(key);
 		}
 		return this;
 	}
@@ -90,21 +96,20 @@ public class TFModel {
 	public TFResults run() {
 		log.debug("Running model");
 		Runner runner = runner();
-		Set<Entry<String, Object>> iEntries = inputs.entrySet();
+		Set<Entry<String, Object>> iEntries = inputNameToValue.entrySet();
 		for (Entry<String, Object> iEntry : iEntries) {
-			String key = iEntry.getKey();
+			String name = iEntry.getKey();
 			Object value = iEntry.getValue();
-			runner.feed(key, (Tensor<?>) value);
+			runner.feed(name, (Tensor<?>) value);
 		}
-		Set<String> oKeys = outputs.keySet();
-		for (String oKey : oKeys) {
-			String oName = TFUtil.outputKeyToName(oKey, metaGraphDef());
+		Set<String> oNames = outputNameToValue.keySet();
+		for (String oName : oNames) {
 			runner.fetch(oName);
 		}
 		List<Tensor<?>> res = runner.run();
 		int i = 0;
-		for (String oKey : oKeys) {
-			outputs.put(oKey, res.get(i++));
+		for (String oName : oNames) {
+			outputNameToValue.put(oName, res.get(i++));
 		}
 		TFResults results = new TFResults(this);
 		log.debug("Model results:\n" + results);
