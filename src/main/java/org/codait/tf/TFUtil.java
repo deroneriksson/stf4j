@@ -24,74 +24,74 @@ public class TFUtil {
 	 */
 	protected static Logger log = LogManager.getLogger(TFUtil.class);
 
-	public static void displaySignatureDefInfo(SavedModelBundle savedModelBundle)
-			throws InvalidProtocolBufferException {
-		displaySignatureDefInfo(savedModelBundle.metaGraphDef());
+	public static String signatureDefInfo(SavedModelBundle savedModelBundle) throws InvalidProtocolBufferException {
+		return signatureDefInfo(savedModelBundle.metaGraphDef());
 	}
 
-	public static void displaySignatureDefInfo(byte[] metaGraphDefBytes) throws InvalidProtocolBufferException {
+	public static String signatureDefInfo(byte[] metaGraphDefBytes) throws InvalidProtocolBufferException {
 		MetaGraphDef mgd = MetaGraphDef.parseFrom(metaGraphDefBytes);
-		displaySignatureDefInfo(mgd);
+		return signatureDefInfo(mgd);
 	}
 
-	public static void displaySignatureDefInfo(MetaGraphDef mgd) throws InvalidProtocolBufferException {
+	public static String signatureDefInfo(MetaGraphDef mgd) throws InvalidProtocolBufferException {
+		StringBuilder sb = new StringBuilder();
 		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
 		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
 		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
-			System.out.println("\nSignatureDef key: " + sdmEntry.getKey());
+			sb.append("\nSignatureDef key: " + sdmEntry.getKey());
 			SignatureDef sigDef = sdmEntry.getValue();
 			String methodName = sigDef.getMethodName();
-			System.out.println("method name: " + methodName);
+			sb.append("\nmethod name: " + methodName);
 
-			System.out.println("inputs:");
+			sb.append("\ninputs:");
 			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
 			Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
 			for (Entry<String, TensorInfo> inputEntry : inputEntries) {
-				System.out.println("  input key: " + inputEntry.getKey());
+				sb.append("\n  input key: " + inputEntry.getKey());
 				TensorInfo inputTensorInfo = inputEntry.getValue();
 				DataType inputTensorDtype = inputTensorInfo.getDtype();
-				System.out.println("    dtype: " + inputTensorDtype);
-				System.out.print("    shape: (");
+				sb.append("\n    dtype: " + inputTensorDtype);
+				sb.append("\n    shape: (");
 				TensorShapeProto inputTensorShape = inputTensorInfo.getTensorShape();
 				int dimCount = inputTensorShape.getDimCount();
 				for (int i = 0; i < dimCount; i++) {
 					Dim dim = inputTensorShape.getDim(i);
 					long dimSize = dim.getSize();
 					if (i > 0) {
-						System.out.print(", ");
+						sb.append(", ");
 					}
-					System.out.print(dimSize);
+					sb.append(dimSize);
 				}
-				System.out.println(")");
+				sb.append(")");
 				String inputTensorName = inputTensorInfo.getName();
-				System.out.println("    name: " + inputTensorName);
+				sb.append("\n    name: " + inputTensorName);
 			}
 
-			System.out.println("outputs:");
+			sb.append("\noutputs:");
 			Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
 			Set<Entry<String, TensorInfo>> outputEntries = outputsMap.entrySet();
 			for (Entry<String, TensorInfo> outputEntry : outputEntries) {
-				System.out.println("  output key: " + outputEntry.getKey());
+				sb.append("\n  output key: " + outputEntry.getKey());
 				TensorInfo outputTensorInfo = outputEntry.getValue();
 				DataType outputTensorDtype = outputTensorInfo.getDtype();
-				System.out.println("    dtype: " + outputTensorDtype);
-				System.out.print("    shape: (");
+				sb.append("\n    dtype: " + outputTensorDtype);
+				sb.append("\n    shape: (");
 				TensorShapeProto outputTensorShape = outputTensorInfo.getTensorShape();
 				int dimCount = outputTensorShape.getDimCount();
 				for (int i = 0; i < dimCount; i++) {
 					Dim dim = outputTensorShape.getDim(i);
 					long dimSize = dim.getSize();
 					if (i > 0) {
-						System.out.print(", ");
+						sb.append(", ");
 					}
-					System.out.print(dimSize);
+					sb.append(dimSize);
 				}
-				System.out.println(")");
+				sb.append(")");
 				String inputTensorName = outputTensorInfo.getName();
-				System.out.println("    name: " + inputTensorName);
+				sb.append("\n    name: " + inputTensorName);
 			}
 		}
-
+		return sb.toString();
 	}
 
 	public static Tensor<?> convertToTensor(String key, String name, Object value, TensorInfo ti) {

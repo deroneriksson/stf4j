@@ -129,9 +129,9 @@ public class TFModel {
 		}
 	}
 
-	public void displayMetaGraphDefInfo() {
+	public String signatureDefInfo() {
 		try {
-			TFUtil.displaySignatureDefInfo(metaGraphDef());
+			return TFUtil.signatureDefInfo(metaGraphDef());
 		} catch (InvalidProtocolBufferException e) {
 			throw new TFException("Exception displaying MetaGraphDef", e);
 		}
@@ -143,6 +143,14 @@ public class TFModel {
 
 		sb.append("Model directory: ");
 		sb.append(modelDir());
+
+		if ((inputKeyToName == null || inputKeyToName.isEmpty())
+				&& (outputKeyToName == null || outputKeyToName.isEmpty())) {
+			sb.append("\n");
+			sb.append(signatureDefInfo());
+			sb.append("\nNote: SignatureDef info can be obtained by calling TFModel's signatureDefInfo() method.\n");
+			return sb.toString();
+		}
 
 		sb.append("\nInputs:\n");
 		if (inputKeyToName == null || inputKeyToName.isEmpty()) {
