@@ -137,4 +137,62 @@ public class TFModel {
 		}
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Model directory: ");
+		sb.append(modelDir());
+
+		sb.append("\nInputs:\n");
+		if (inputKeyToName == null || inputKeyToName.isEmpty()) {
+			sb.append("  None\n");
+		} else {
+			int count = 0;
+			for (Entry<String, String> entry : inputKeyToName.entrySet()) {
+				sb.append("  [");
+				sb.append(++count);
+				sb.append("] ");
+
+				String key = entry.getKey();
+				String name = entry.getValue();
+				sb.append(key);
+				sb.append(" (");
+				sb.append(name);
+				sb.append(")");
+				sb.append(": ");
+				Object value = inputNameToValue.get(name);
+				sb.append(value);
+
+				sb.append("\n");
+			}
+		}
+
+		sb.append("Outputs:\n");
+		if (outputKeyToName == null || outputKeyToName.isEmpty()) {
+			sb.append("  None\n");
+		} else {
+			int count = 0;
+			for (Entry<String, String> entry : outputKeyToName.entrySet()) {
+				sb.append("  [");
+				sb.append(++count);
+				sb.append("] ");
+
+				String key = entry.getKey();
+				String name = entry.getValue();
+				sb.append(key);
+				sb.append(" (");
+				sb.append(name);
+				sb.append(")");
+				sb.append(": ");
+				Object value = outputNameToValue.get(name);
+				sb.append(value);
+
+				sb.append("\n");
+			}
+		}
+
+		return sb.toString();
+	}
+
 }
