@@ -124,4 +124,15 @@ public class ArrayUtil {
 		return iArray;
 	}
 
+	public static int maxIndex(float[] f) {
+		int maxIndex = 0;
+		float maxValue = 0.0f;
+		for (int i = 0; i < f.length; i++) {
+			if (f[i] > maxValue) {
+				maxIndex = i;
+				maxValue = f[i];
+			}
+		}
+		return maxIndex;
+	}
 }

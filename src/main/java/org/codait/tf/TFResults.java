@@ -1,6 +1,7 @@
 package org.codait.tf;
 
 import java.lang.reflect.Array;
+import java.nio.FloatBuffer;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -90,6 +91,20 @@ public class TFResults {
 		Object dest = Array.newInstance(long.class, shape);
 		tensor.copyTo(dest);
 		return dest;
+	}
+
+	public float[] getFloatArray(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		if (ti.getDtype() == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
+			FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
+			tensor.writeTo(fb);
+			return fb.array();
+		} else {
+			throw new TFException("getFloatArray not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
 	}
 
 	public int getInt(String key) {
