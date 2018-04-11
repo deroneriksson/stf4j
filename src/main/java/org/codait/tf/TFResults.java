@@ -107,6 +107,16 @@ public class TFResults {
 		}
 	}
 
+	public Object getFloatArrayMultidimensional(String key) {
+		checkKey(key);
+		@SuppressWarnings("unchecked")
+		Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
+		int[] shape = ArrayUtil.lToI(tensor.shape());
+		Object dest = Array.newInstance(float.class, shape);
+		tensor.copyTo(dest);
+		return dest;
+	}
+
 	public int getInt(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());

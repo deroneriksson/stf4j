@@ -135,4 +135,12 @@ public class ArrayUtil {
 		}
 		return maxIndex;
 	}
+
+	public static int[] maxIndices(float[][] f) {
+		int[] maxIndices = new int[f.length];
+		for (int i = 0; i < f.length; i++) {
+			maxIndices[i] = maxIndex(f[i]);
+		}
+		return maxIndices;
+	}
 }
