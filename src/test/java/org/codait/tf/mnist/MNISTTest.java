@@ -482,4 +482,52 @@ public class MNISTTest {
 		displayDebug(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
 	}
+
+	@Test
+	public void testProbabilitiesPredictionInputDoubleArray() {
+		log.debug("MNIST probabilities prediction - input image as primitive 2d double array");
+		int label = labels[50];
+		double[][] image = (double[][]) ArrayUtil.convertArrayType(images[50], double.class);
+		float[] probabilities = model.in("image", image).out("probabilities").run().getFloatArray("probabilities");
+		int prediction = ArrayUtil.maxIndex(probabilities);
+		displayDebug(label, prediction);
+		Assert.assertEquals(label, prediction);
+	}
+
+	@Test
+	public void testProbabilitiesPredictionInputDoubleArrayMultipleImages() {
+		log.debug("MNIST probabilities prediction - input images as 3d primitive double array");
+		int[] lbls = new int[] { labels[51], labels[52] };
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[51], images[52]);
+		double[][][] imgs = (double[][][]) ArrayUtil.convertArrayType(iImages, double.class);
+		float[][] probabilities = (float[][]) model.in("image", imgs).out("probabilities").run()
+				.getFloatArrayMultidimensional("probabilities");
+		int[] predictions = ArrayUtil.maxIndices(probabilities);
+		displayDebug(lbls, predictions);
+		Assert.assertArrayEquals(lbls, predictions);
+	}
+
+	@Test
+	public void testProbabilitiesPredictionInputDoubleObjectArray() {
+		log.debug("MNIST probabilities prediction - input image as 2d Double object array");
+		int label = labels[53];
+		Double[][] image = (Double[][]) ArrayUtil.convertArrayType(images[53], Double.class);
+		float[] probabilities = model.in("image", image).out("probabilities").run().getFloatArray("probabilities");
+		int prediction = ArrayUtil.maxIndex(probabilities);
+		displayDebug(label, prediction);
+		Assert.assertEquals(label, prediction);
+	}
+
+	@Test
+	public void testProbabilitiesPredictionInputDoubleObjectArrayMultipleImages() {
+		log.debug("MNIST probabilities prediction - input images as 3d Double object array");
+		int[] lbls = new int[] { labels[54], labels[55] };
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[54], images[55]);
+		Double[][][] imgs = (Double[][][]) ArrayUtil.convertArrayType(iImages, Double.class);
+		float[][] probabilities = (float[][]) model.in("image", imgs).out("probabilities").run()
+				.getFloatArrayMultidimensional("probabilities");
+		int[] predictions = ArrayUtil.maxIndices(probabilities);
+		displayDebug(lbls, predictions);
+		Assert.assertArrayEquals(lbls, predictions);
+	}
 }
