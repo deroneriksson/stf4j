@@ -106,6 +106,19 @@ public class TFResults {
 		}
 	}
 
+	public float getFloat(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		if (ti.getDtype() == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			float f = (float) tensor.copyTo(new long[1])[0];
+			return f;
+		} else {
+			throw new TFException("getFloat not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
+	}
+
 	public float[] getFloatArray(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
