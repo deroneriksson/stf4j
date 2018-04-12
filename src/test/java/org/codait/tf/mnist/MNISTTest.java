@@ -567,4 +567,17 @@ public class MNISTTest {
 		displayDebug(label, prediction);
 		Assert.assertEquals(label, prediction);
 	}
+
+	@Test
+	public void testProbabilitiesPredictionInputIntArrayMultipleImagesOutputDoubleArrayMultidimensional() {
+		log.debug(
+				"MNIST probabilities prediction - input images as 3d primitive int array, output double array multidimensional");
+		int[] lbls = new int[] { labels[35], labels[36] };
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[35], images[36]);
+		double[][] probabilities = (double[][]) model.in("image", iImages).out("probabilities").run()
+				.getDoubleArrayMultidimensional("probabilities");
+		int[] predictions = ArrayUtil.maxIndices(probabilities);
+		displayDebug(lbls, predictions);
+		Assert.assertArrayEquals(lbls, predictions);
+	}
 }

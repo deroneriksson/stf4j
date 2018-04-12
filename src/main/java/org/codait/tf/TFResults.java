@@ -217,7 +217,24 @@ public class TFResults {
 			double[] d = (double[]) ArrayUtil.convertArrayType(fb.array(), double.class);
 			return d;
 		} else {
-			throw new TFException("getFloatArray not implemented for '" + key + "' data type: " + ti.getDtype());
+			throw new TFException("getDoubleArray not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
+	}
+
+	public Object getDoubleArrayMultidimensional(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		if (ti.getDtype() == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
+			int[] shape = ArrayUtil.lToI(tensor.shape());
+			Object f = Array.newInstance(float.class, shape);
+			tensor.copyTo(f);
+			Object d = ArrayUtil.convertArrayType(f, double.class);
+			return d;
+		} else {
+			throw new TFException(
+					"getDoubleArrayMultidimensional not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
 	}
 }
