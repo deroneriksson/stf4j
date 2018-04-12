@@ -588,11 +588,40 @@ public class MNISTTest {
 	}
 
 	@Test
-	public void testClassesProbabilityPredictionInputIntArray() {
-		log.debug("MNIST classes prediction - input image as 2d primitive int array");
+	public void testClassesProbabilitiesPredictionInputIntArray() {
+		log.debug("MNIST classes prediction - input image as 2d primitive int array, output classes and probabilities");
 		int label = labels[0];
 		int[][] image = images[0];
 		TFResults results = model.in("image", image).out("classes", "probabilities").run();
+		int cPrediction = results.getInt("classes");
+		float[] probabilities = results.getFloatArray("probabilities");
+		int pPrediction = ArrayUtil.maxIndex(probabilities);
+		displayDebug(label, cPrediction, pPrediction);
+		Assert.assertEquals(label, cPrediction);
+		Assert.assertEquals(label, pPrediction);
+	}
+
+	@Test
+	public void testClassesProbabilitiesPredictionInputIntArraySeparateOutCalls() {
+		log.debug(
+				"MNIST classes prediction - input image as 2d primitive int array, output classes and probabilities (separate out calls)");
+		int label = labels[0];
+		int[][] image = images[0];
+		TFResults results = model.in("image", image).out("classes").out("probabilities").run();
+		int cPrediction = results.getInt("classes");
+		float[] probabilities = results.getFloatArray("probabilities");
+		int pPrediction = ArrayUtil.maxIndex(probabilities);
+		displayDebug(label, cPrediction, pPrediction);
+		Assert.assertEquals(label, cPrediction);
+		Assert.assertEquals(label, pPrediction);
+	}
+
+	@Test
+	public void testClassesProbabilitiesPredictionInputIntArrayReverseOutOrder() {
+		log.debug("MNIST classes prediction - input image as 2d primitive int array, output probabilities and classes");
+		int label = labels[0];
+		int[][] image = images[0];
+		TFResults results = model.in("image", image).out("probabilities", "classes").run();
 		int cPrediction = results.getInt("classes");
 		float[] probabilities = results.getFloatArray("probabilities");
 		int pPrediction = ArrayUtil.maxIndex(probabilities);
