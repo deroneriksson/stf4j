@@ -228,6 +228,12 @@ public class MNISTTest {
 				pPrediction));
 	}
 
+	private void displayDebug(int[] labels, int[] cPredictions, int[] pPredictions) {
+		for (int i = 0; i < labels.length; i++) {
+			displayDebug(labels[i], cPredictions[i], pPredictions[i]);
+		}
+	}
+
 	@Test
 	public void testClassesPredictionInputIntegerObjectArrayMultipleImages() {
 		log.debug("MNIST classes prediction - input images as 3d Integer object array, output long array");
@@ -589,7 +595,8 @@ public class MNISTTest {
 
 	@Test
 	public void testClassesProbabilitiesPredictionInputIntArray() {
-		log.debug("MNIST classes prediction - input image as 2d primitive int array, output classes and probabilities");
+		log.debug(
+				"MNIST classes and probabilities prediction - input image as 2d primitive int array, output classes and probabilities");
 		int label = labels[0];
 		int[][] image = images[0];
 		TFResults results = model.in("image", image).out("classes", "probabilities").run();
@@ -604,7 +611,7 @@ public class MNISTTest {
 	@Test
 	public void testClassesProbabilitiesPredictionInputIntArraySeparateOutCalls() {
 		log.debug(
-				"MNIST classes prediction - input image as 2d primitive int array, output classes and probabilities (separate out calls)");
+				"MNIST classes and probabilities prediction - input image as 2d primitive int array, output classes and probabilities (separate out calls)");
 		int label = labels[0];
 		int[][] image = images[0];
 		TFResults results = model.in("image", image).out("classes").out("probabilities").run();
@@ -618,7 +625,8 @@ public class MNISTTest {
 
 	@Test
 	public void testClassesProbabilitiesPredictionInputIntArrayReverseOutOrder() {
-		log.debug("MNIST classes prediction - input image as 2d primitive int array, output probabilities and classes");
+		log.debug(
+				"MNIST classes and probabilities prediction - input image as 2d primitive int array, output probabilities and classes");
 		int label = labels[0];
 		int[][] image = images[0];
 		TFResults results = model.in("image", image).out("probabilities", "classes").run();
@@ -630,4 +638,34 @@ public class MNISTTest {
 		Assert.assertEquals(label, pPrediction);
 	}
 
+	@Test
+	public void testClassesProbabilitiesPredictionInputIntArrayOutputLongAndDoubleArray() {
+		log.debug(
+				"MNIST classes and probabilities prediction - input image as 2d primitive int array, output classes (long) and probabilities (double)");
+		long label = labels[0];
+		int[][] image = images[0];
+		TFResults results = model.in("image", image).out("classes", "probabilities").run();
+		long cPrediction = results.getLong("classes");
+		double[] probabilities = results.getDoubleArray("probabilities");
+		long pPrediction = ArrayUtil.maxIndex(probabilities);
+		displayDebug(label, cPrediction, pPrediction);
+		Assert.assertEquals(label, cPrediction);
+		Assert.assertEquals(label, pPrediction);
+	}
+
+	@Test
+	public void testClassesProbabilitiesPredictionInputMultipleImagesOutputIntArrayAnd2dFloatArray() {
+		log.debug(
+				"MNIST classes and probabilities prediction - input images as 3d primitive int array, output int array and 2d float array");
+		int[] lbls = new int[] { labels[0], labels[1] };
+
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[0], images[1]);
+		TFResults results = model.in("image", iImages).out("classes", "probabilities").run();
+		int[] cPredictions = results.getIntArray("classes");
+		float[][] probabilities = (float[][]) results.getFloatArrayMultidimensional("probabilities");
+		int[] pPredictions = ArrayUtil.maxIndices(probabilities);
+		displayDebug(lbls, cPredictions, pPredictions);
+		Assert.assertArrayEquals(lbls, cPredictions);
+		Assert.assertArrayEquals(lbls, pPredictions);
+	}
 }
