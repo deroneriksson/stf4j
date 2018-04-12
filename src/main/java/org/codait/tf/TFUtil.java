@@ -194,6 +194,10 @@ public class TFUtil {
 		return false;
 	}
 
+	public static String inputKeyToName(String key, TFModel model) {
+		return inputKeyToName(key, model.metaGraphDef());
+	}
+
 	public static String inputKeyToName(String key, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
 		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
@@ -207,6 +211,10 @@ public class TFUtil {
 			}
 		}
 		throw new TFException("Input key '" + key + "' not found in MetaGraphDef");
+	}
+
+	public static TensorInfo inputKeyToTensorInfo(String key, TFModel model) {
+		return inputKeyToTensorInfo(key, model.metaGraphDef());
 	}
 
 	public static TensorInfo inputKeyToTensorInfo(String key, MetaGraphDef metaGraphDef) {
@@ -224,6 +232,10 @@ public class TFUtil {
 		throw new TFException("Input key '" + key + "' not found in MetaGraphDef");
 	}
 
+	public static String outputKeyToName(String key, TFModel model) {
+		return outputKeyToName(key, model.metaGraphDef());
+	}
+
 	public static String outputKeyToName(String key, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
 		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
@@ -237,6 +249,10 @@ public class TFUtil {
 			}
 		}
 		throw new TFException("Output key '" + key + "' not found in MetaGraphDef");
+	}
+
+	public static TensorInfo outputKeyToTensorInfo(String key, TFModel model) {
+		return outputKeyToTensorInfo(key, model.metaGraphDef());
 	}
 
 	public static TensorInfo outputKeyToTensorInfo(String key, MetaGraphDef metaGraphDef) {

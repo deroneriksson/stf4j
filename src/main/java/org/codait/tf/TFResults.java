@@ -65,7 +65,7 @@ public class TFResults {
 
 	public long getLong(String key) {
 		checkKey(key);
-		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
@@ -78,7 +78,7 @@ public class TFResults {
 
 	public long[] getLongArray(String key) {
 		checkKey(key);
-		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
@@ -92,7 +92,7 @@ public class TFResults {
 
 	public Object getLongArrayMultidimensional(String key) {
 		checkKey(key);
-		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
@@ -108,7 +108,7 @@ public class TFResults {
 
 	public float[] getFloatArray(String key) {
 		checkKey(key);
-		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
@@ -122,7 +122,7 @@ public class TFResults {
 
 	public Object getFloatArrayMultidimensional(String key) {
 		checkKey(key);
-		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
@@ -138,7 +138,7 @@ public class TFResults {
 
 	public int getInt(String key) {
 		checkKey(key);
-		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
@@ -151,7 +151,7 @@ public class TFResults {
 
 	public int[] getIntArray(String key) {
 		checkKey(key);
-		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
