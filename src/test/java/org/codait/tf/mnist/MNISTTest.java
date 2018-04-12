@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.codait.tf.ArrayUtil;
 import org.codait.tf.TFException;
 import org.codait.tf.TFModel;
+import org.codait.tf.TFResults;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -220,6 +221,11 @@ public class MNISTTest {
 
 	private void displayDebug(double label, double prediction) {
 		log.debug(String.format("Label: %f, Prediction: %f", label, prediction));
+	}
+
+	private void displayDebug(long label, long cPrediction, long pPrediction) {
+		log.debug(String.format("Label: %d, Classes Prediction: %d, Probabilities Prediction: %d", label, cPrediction,
+				pPrediction));
 	}
 
 	@Test
@@ -580,4 +586,19 @@ public class MNISTTest {
 		displayDebug(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
 	}
+
+	@Test
+	public void testClassesProbabilityPredictionInputIntArray() {
+		log.debug("MNIST classes prediction - input image as 2d primitive int array");
+		int label = labels[0];
+		int[][] image = images[0];
+		TFResults results = model.in("image", image).out("classes", "probabilities").run();
+		int cPrediction = results.getInt("classes");
+		float[] probabilities = results.getFloatArray("probabilities");
+		int pPrediction = ArrayUtil.maxIndex(probabilities);
+		displayDebug(label, cPrediction, pPrediction);
+		Assert.assertEquals(label, cPrediction);
+		Assert.assertEquals(label, pPrediction);
+	}
+
 }
