@@ -362,4 +362,28 @@ public class MNISTTest {
 		displayDebug(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
 	}
+
+	@Test
+	public void testProbabilitiesPredictionInputIntegerObjectArray() {
+		log.debug("MNIST probabilities prediction - input image as 2d Integer object array");
+		int label = labels[41];
+		Integer[][] image = (Integer[][]) ArrayUtil.convertArrayType(images[41], Integer.class);
+		float[] probabilities = model.in("image", image).out("probabilities").run().getFloatArray("probabilities");
+		int prediction = ArrayUtil.maxIndex(probabilities);
+		displayDebug(label, prediction);
+		Assert.assertEquals(label, prediction);
+	}
+
+	@Test
+	public void testProbabilitiesPredictionInputIntegerObjectArrayMultipleImages() {
+		log.debug("MNIST probabilities prediction - input images as 3d Integer object array");
+		int[] lbls = new int[] { labels[42], labels[43] };
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[42], images[43]);
+		Integer[][][] imgs = (Integer[][][]) ArrayUtil.convertArrayType(iImages, Integer.class);
+		float[][] probabilities = (float[][]) model.in("image", imgs).out("probabilities").run()
+				.getFloatArrayMultidimensional("probabilities");
+		int[] predictions = ArrayUtil.maxIndices(probabilities);
+		displayDebug(lbls, predictions);
+		Assert.assertArrayEquals(lbls, predictions);
+	}
 }
