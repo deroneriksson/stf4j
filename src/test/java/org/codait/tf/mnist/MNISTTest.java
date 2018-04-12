@@ -338,4 +338,15 @@ public class MNISTTest {
 		displayDebug(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
 	}
+
+	@Test
+	public void testClassesPredictionInputIntArrayMultipleImagesOutputIntArray() {
+		log.debug("MNIST classes prediction - input images as 3d primitive int array, output int array");
+		int[] lbls = new int[] { labels[37], labels[38] };
+
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[37], images[38]);
+		int[] predictions = model.in("image", iImages).out("classes").run().getIntArray("classes");
+		displayDebug(lbls, predictions);
+		Assert.assertArrayEquals(lbls, predictions);
+	}
 }

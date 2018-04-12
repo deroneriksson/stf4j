@@ -2,6 +2,7 @@ package org.codait.tf;
 
 import java.lang.reflect.Array;
 import java.nio.FloatBuffer;
+import java.nio.LongBuffer;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -139,6 +140,20 @@ public class TFResults {
 			return i;
 		} else {
 			throw new TFException("getInt not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
+	}
+
+	public int[] getIntArray(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		if (ti.getDtype() == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			LongBuffer lb = LongBuffer.allocate(tensor.numElements());
+			tensor.writeTo(lb);
+			return ArrayUtil.lToI(lb.array());
+		} else {
+			throw new TFException("getIntArray not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
 	}
 }
