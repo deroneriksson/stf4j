@@ -556,4 +556,15 @@ public class MNISTTest {
 		displayDebug(label, prediction);
 		Assert.assertEquals(label, prediction, 0d);
 	}
+
+	@Test
+	public void testProbabilitiesPredictionInputIntArrayOutputDoubleArray() {
+		log.debug("MNIST probabilities prediction - input image as 2d primitive int array, output double array");
+		int label = labels[34];
+		double[] probabilities = model.in("image", images[34]).out("probabilities").run()
+				.getDoubleArray("probabilities");
+		int prediction = ArrayUtil.maxIndex(probabilities);
+		displayDebug(label, prediction);
+		Assert.assertEquals(label, prediction);
+	}
 }

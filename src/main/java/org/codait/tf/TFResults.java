@@ -205,4 +205,19 @@ public class TFResults {
 			throw new TFException("getDouble not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
 	}
+
+	public double[] getDoubleArray(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		if (ti.getDtype() == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
+			FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
+			tensor.writeTo(fb);
+			double[] d = (double[]) ArrayUtil.convertArrayType(fb.array(), double.class);
+			return d;
+		} else {
+			throw new TFException("getFloatArray not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
+	}
 }

@@ -145,4 +145,16 @@ public class ArrayUtil {
 		}
 		return maxIndices;
 	}
+
+	public static int maxIndex(double[] d) {
+		int maxIndex = 0;
+		double maxValue = 0.0d;
+		for (int i = 0; i < d.length; i++) {
+			if (d[i] > maxValue) {
+				maxIndex = i;
+				maxValue = d[i];
+			}
+		}
+		return maxIndex;
+	}
 }
