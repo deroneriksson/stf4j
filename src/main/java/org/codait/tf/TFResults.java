@@ -60,7 +60,7 @@ public class TFResults {
 
 	public Tensor<?> getTensor(String key) {
 		checkKey(key);
-		return (Tensor<?>) outputNameToValue.get(outputKeyToName.get(key));
+		return (Tensor<?>) keyToOutput(key);
 	}
 
 	public long getLong(String key) {
@@ -68,7 +68,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
-			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			long l = tensor.copyTo(new long[1])[0];
 			return l;
 		} else {
@@ -81,7 +81,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
-			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			LongBuffer lb = LongBuffer.allocate(tensor.numElements());
 			tensor.writeTo(lb);
 			return lb.array();
@@ -95,7 +95,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
-			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int[] shape = ArrayUtil.lToI(tensor.shape());
 			Object dest = Array.newInstance(long.class, shape);
 			tensor.copyTo(dest);
@@ -111,7 +111,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
-			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			float f = (float) tensor.copyTo(new long[1])[0];
 			return f;
 		} else {
@@ -124,7 +124,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
-			Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
 			tensor.writeTo(fb);
 			return fb.array();
@@ -138,7 +138,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
-			Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			int[] shape = ArrayUtil.lToI(tensor.shape());
 			Object dest = Array.newInstance(float.class, shape);
 			tensor.copyTo(dest);
@@ -154,7 +154,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
-			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int i = (int) tensor.copyTo(new long[1])[0];
 			return i;
 		} else {
@@ -167,7 +167,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
-			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			LongBuffer lb = LongBuffer.allocate(tensor.numElements());
 			tensor.writeTo(lb);
 			return ArrayUtil.lToI(lb.array());
@@ -181,7 +181,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
-			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int[] shape = ArrayUtil.lToI(tensor.shape());
 			Object l = Array.newInstance(long.class, shape);
 			tensor.copyTo(l);
@@ -198,7 +198,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
-			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			double d = (double) tensor.copyTo(new long[1])[0];
 			return d;
 		} else {
@@ -211,7 +211,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
-			Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
 			tensor.writeTo(fb);
 			double[] d = (double[]) ArrayUtil.convertArrayType(fb.array(), double.class);
@@ -226,7 +226,7 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		if (ti.getDtype() == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
-			Tensor<Float> tensor = (Tensor<Float>) outputNameToValue.get(outputKeyToName.get(key));
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			int[] shape = ArrayUtil.lToI(tensor.shape());
 			Object f = Array.newInstance(float.class, shape);
 			tensor.copyTo(f);
@@ -236,5 +236,16 @@ public class TFResults {
 			throw new TFException(
 					"getDoubleArrayMultidimensional not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
+	}
+
+	/**
+	 * Obtain the corresponding output value (Tensor) for an output key.
+	 * 
+	 * @param key
+	 *            The output key.
+	 * @return The output value (Tensor) corresponding to an output key.
+	 */
+	private Object keyToOutput(String key) {
+		return outputNameToValue.get(outputKeyToName.get(key));
 	}
 }
