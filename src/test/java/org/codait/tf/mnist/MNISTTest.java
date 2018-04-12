@@ -349,4 +349,18 @@ public class MNISTTest {
 		displayDebug(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
 	}
+
+	@Test
+	public void testClassesPredictionInputTensorOutputMultidimensionalIntArray() {
+		log.debug(
+				"MNIST classes prediction - input images as 3d primitive int array, output multidimensional int array");
+
+		int[] lbls = new int[] { labels[39], labels[40] };
+
+		int[][][] iImages = ArrayUtil.convert2dIntArraysTo3dIntArray(images[39], images[40]);
+		int[] predictions = (int[]) model.in("image", iImages).out("classes").run()
+				.getIntArrayMultidimensional("classes");
+		displayDebug(lbls, predictions);
+		Assert.assertArrayEquals(lbls, predictions);
+	}
 }

@@ -162,4 +162,21 @@ public class TFResults {
 			throw new TFException("getIntArray not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
 	}
+
+	public Object getIntArrayMultidimensional(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		if (ti.getDtype() == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			int[] shape = ArrayUtil.lToI(tensor.shape());
+			Object l = Array.newInstance(long.class, shape);
+			tensor.copyTo(l);
+			Object i = ArrayUtil.convertArrayType(l, int.class);
+			return i;
+		} else {
+			throw new TFException(
+					"getIntArrayMultidimensional not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
+	}
 }
