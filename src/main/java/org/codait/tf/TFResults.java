@@ -78,10 +78,16 @@ public class TFResults {
 
 	public long[] getLongArray(String key) {
 		checkKey(key);
-		@SuppressWarnings("unchecked")
-		Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
-		long[] l = tensor.copyTo(new long[(int) tensor.shape()[0]]);
-		return l;
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		if (ti.getDtype() == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			LongBuffer lb = LongBuffer.allocate(tensor.numElements());
+			tensor.writeTo(lb);
+			return lb.array();
+		} else {
+			throw new TFException("getLongArray not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
 	}
 
 	public Object getLongArrayMultidimensional(String key) {
