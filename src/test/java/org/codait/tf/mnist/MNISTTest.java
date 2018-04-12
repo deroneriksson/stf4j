@@ -218,6 +218,10 @@ public class MNISTTest {
 		log.debug(String.format("Label: %f, Prediction: %f", label, prediction));
 	}
 
+	private void displayDebug(double label, double prediction) {
+		log.debug(String.format("Label: %f, Prediction: %f", label, prediction));
+	}
+
 	@Test
 	public void testClassesPredictionInputIntegerObjectArrayMultipleImages() {
 		log.debug("MNIST classes prediction - input images as 3d Integer object array, output long array");
@@ -540,8 +544,16 @@ public class MNISTTest {
 		log.debug("MNIST classes prediction - input image as 2d primitive int array, output float");
 		float label = labels[0];
 		float prediction = model.in("image", images[0]).out("classes").run().getFloat("classes");
-		System.out.println("prediction:" + prediction);
 		displayDebug(label, prediction);
 		Assert.assertEquals(label, prediction, 0f);
+	}
+
+	@Test
+	public void testClassesPredictionInputIntArrayOutputDouble() {
+		log.debug("MNIST classes prediction - input image as 2d primitive int array, output double");
+		double label = labels[0];
+		double prediction = model.in("image", images[0]).out("classes").run().getDouble("classes");
+		displayDebug(label, prediction);
+		Assert.assertEquals(label, prediction, 0d);
 	}
 }

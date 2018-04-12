@@ -192,4 +192,17 @@ public class TFResults {
 					"getIntArrayMultidimensional not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
 	}
+
+	public double getDouble(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		if (ti.getDtype() == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) outputNameToValue.get(outputKeyToName.get(key));
+			double d = (double) tensor.copyTo(new long[1])[0];
+			return d;
+		} else {
+			throw new TFException("getDouble not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
+	}
 }
