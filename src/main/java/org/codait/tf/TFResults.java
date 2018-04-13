@@ -10,6 +10,11 @@ import org.tensorflow.Tensor;
 import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.TensorInfo;
 
+/**
+ * Representation of the results of running a TensorFlow model, which primarily
+ * consists of a map of Tensor values.
+ *
+ */
 public class TFResults {
 
 	TFModel model;
@@ -52,17 +57,37 @@ public class TFResults {
 		return sb.toString();
 	}
 
+	/**
+	 * If output key does not exist, throw TFException.
+	 * 
+	 * @param key
+	 *            The output key
+	 */
 	protected void checkKey(String key) {
 		if (!outputKeyToName.containsKey(key)) {
 			throw new TFException("Output '" + key + "' not found in results");
 		}
 	}
 
+	/**
+	 * Obtain the output Tensor corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The output Tensor
+	 */
 	public Tensor<?> getTensor(String key) {
 		checkKey(key);
 		return (Tensor<?>) keyToOutput(key);
 	}
 
+	/**
+	 * Obtain the long value corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The long value
+	 */
 	public long getLong(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -76,6 +101,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the long array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The long array
+	 */
 	public long[] getLongArray(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -90,6 +122,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the multidimensional long array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The multidimensional long array
+	 */
 	public Object getLongArrayMultidimensional(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -106,6 +145,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the float value corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The float value
+	 */
 	public float getFloat(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -119,6 +165,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the float array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The float array
+	 */
 	public float[] getFloatArray(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -133,6 +186,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the multidimensional float array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The multidimensional float array
+	 */
 	public Object getFloatArrayMultidimensional(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -149,6 +209,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the int value corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The int value
+	 */
 	public int getInt(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -162,6 +229,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the int array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The int array
+	 */
 	public int[] getIntArray(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -176,6 +250,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the multidimensional int array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The multidimensional int array
+	 */
 	public Object getIntArrayMultidimensional(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
@@ -193,6 +274,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the double value corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The double value
+	 */
 	public double getDouble(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -206,6 +294,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the double array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The double array
+	 */
 	public double[] getDoubleArray(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
@@ -221,6 +316,13 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the multidimensional double array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The multidimensional double array
+	 */
 	public Object getDoubleArrayMultidimensional(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
