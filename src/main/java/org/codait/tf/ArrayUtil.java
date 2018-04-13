@@ -51,11 +51,11 @@ public class ArrayUtil {
 	 * specified by the destType parameter.
 	 * 
 	 * @param orig
-	 *            the original array
+	 *            The original array
 	 * @param destType
-	 *            the type (class) that the original array should be converted
+	 *            The type (class) that the original array should be converted
 	 *            to
-	 * @return the resulting array
+	 * @return The resulting array
 	 */
 	public static Object convertArrayType(Object orig, Class<?> destType) {
 		int[] dimensions = getArrayDimensions(orig);
@@ -64,6 +64,15 @@ public class ArrayUtil {
 		return dest;
 	}
 
+	/**
+	 * Copy values from one array to another array with the same shape and
+	 * perform needed type conversions.
+	 * 
+	 * @param orig
+	 *            The original array
+	 * @param dest
+	 *            The destination array
+	 */
 	public static void copyArrayVals(Object orig, Object dest) {
 		String o = orig.getClass().getComponentType().getSimpleName();
 		String d = dest.getClass().getComponentType().getSimpleName();
@@ -115,8 +124,8 @@ public class ArrayUtil {
 	 * Convert 1d long array to int array.
 	 * 
 	 * @param lArray
-	 *            long array
-	 * @return int array
+	 *            Primitive long array
+	 * @return Primitive int array
 	 */
 	public static int[] lToI(long[] lArray) {
 		int[] iArray = new int[lArray.length];
@@ -126,9 +135,16 @@ public class ArrayUtil {
 		return iArray;
 	}
 
+	/**
+	 * Obtain the index at which the maximum value occurs in an array.
+	 * 
+	 * @param f
+	 *            The float array
+	 * @return The index at which the maximum value occurs
+	 */
 	public static int maxIndex(float[] f) {
 		int maxIndex = 0;
-		float maxValue = 0.0f;
+		float maxValue = Float.MIN_VALUE;
 		for (int i = 0; i < f.length; i++) {
 			if (f[i] > maxValue) {
 				maxIndex = i;
@@ -138,6 +154,14 @@ public class ArrayUtil {
 		return maxIndex;
 	}
 
+	/**
+	 * Obtain the indices at which the maximum values occur in the rows of a 2d
+	 * array.
+	 * 
+	 * @param f
+	 *            The float array
+	 * @return The indices at which the maximum row values occur
+	 */
 	public static int[] maxIndices(float[][] f) {
 		int[] maxIndices = new int[f.length];
 		for (int i = 0; i < f.length; i++) {
@@ -146,9 +170,16 @@ public class ArrayUtil {
 		return maxIndices;
 	}
 
+	/**
+	 * Obtain the index at which the maximum value occurs in an array.
+	 * 
+	 * @param d
+	 *            The double array
+	 * @return The index at which the maximum value occurs
+	 */
 	public static int maxIndex(double[] d) {
 		int maxIndex = 0;
-		double maxValue = 0.0d;
+		double maxValue = Double.MIN_VALUE;
 		for (int i = 0; i < d.length; i++) {
 			if (d[i] > maxValue) {
 				maxIndex = i;
@@ -158,6 +189,14 @@ public class ArrayUtil {
 		return maxIndex;
 	}
 
+	/**
+	 * Obtain the indices at which the maximum values occur in the rows of a 2d
+	 * array.
+	 * 
+	 * @param d
+	 *            The double array
+	 * @return The indices at which the maximum row values occur
+	 */
 	public static int[] maxIndices(double[][] d) {
 		int[] maxIndices = new int[d.length];
 		for (int i = 0; i < d.length; i++) {
