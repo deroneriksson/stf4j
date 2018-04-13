@@ -1,5 +1,9 @@
 package org.codait.tf;
 
+/**
+ * RuntimeException representing that a problem occurred in the API.
+ *
+ */
 public class TFException extends RuntimeException {
 
 	private static final long serialVersionUID = -6854658830095644446L;
