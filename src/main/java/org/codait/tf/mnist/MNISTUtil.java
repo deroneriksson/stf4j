@@ -91,25 +91,6 @@ public class MNISTUtil {
 	}
 
 	/**
-	 * Convert a 2-dimensional float array to a 3-dimensional float array, where
-	 * the first dimension has a size of 1.
-	 * 
-	 * @param image
-	 *            MNIST image as a 2-dimensional float array
-	 * @return MNIST image as a 3-dimensional float array, where the first
-	 *         dimension has a size of 1
-	 */
-	public static float[][][] f2ToF3(float[][] image) {
-		float[][][] fImage = new float[1][image.length][image[0].length];
-		for (int r = 0; r < image.length; r++) {
-			for (int c = 0; c < image[0].length; c++) {
-				fImage[0][r][c] = image[r][c];
-			}
-		}
-		return fImage;
-	}
-
-	/**
 	 * Display an MNIST image to the screen as an image.
 	 * 
 	 * @param image
