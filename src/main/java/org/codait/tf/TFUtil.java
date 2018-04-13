@@ -17,6 +17,10 @@ import org.tensorflow.framework.TensorShapeProto.Dim;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+/**
+ * Utility class for various TF API functionality.
+ *
+ */
 public class TFUtil {
 
 	/**
@@ -24,15 +28,42 @@ public class TFUtil {
 	 */
 	protected static Logger log = LogManager.getLogger(TFUtil.class);
 
+	/**
+	 * Obtain SignatureDef information from SavedModelBundle.
+	 * 
+	 * @param savedModelBundle
+	 *            The SavedModelBundle object
+	 * @return SignatureDef information as a String
+	 * @throws InvalidProtocolBufferException
+	 *             If problem occurred reading protobuf object
+	 */
 	public static String signatureDefInfo(SavedModelBundle savedModelBundle) throws InvalidProtocolBufferException {
 		return signatureDefInfo(savedModelBundle.metaGraphDef());
 	}
 
+	/**
+	 * Obtain SignatureDef information from MetaGraphDef bytes.
+	 * 
+	 * @param metaGraphDefBytes
+	 *            Byte array representing MetaGraphDef object
+	 * @return SignatureDef information as a String
+	 * @throws InvalidProtocolBufferException
+	 *             If problem occurred reading protobuf object
+	 */
 	public static String signatureDefInfo(byte[] metaGraphDefBytes) throws InvalidProtocolBufferException {
 		MetaGraphDef mgd = MetaGraphDef.parseFrom(metaGraphDefBytes);
 		return signatureDefInfo(mgd);
 	}
 
+	/**
+	 * Obtain SignatureDef information from MetaGraphDef object.
+	 * 
+	 * @param mgd
+	 *            The MetaGraphDef object
+	 * @return SignatureDef information as a String
+	 * @throws InvalidProtocolBufferException
+	 *             If problem occurred reading protobuf object
+	 */
 	public static String signatureDefInfo(MetaGraphDef mgd) throws InvalidProtocolBufferException {
 		StringBuilder sb = new StringBuilder();
 		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
@@ -94,6 +125,19 @@ public class TFUtil {
 		return sb.toString();
 	}
 
+	/**
+	 * Convert a Java object to its corresponding Tensor object.
+	 * 
+	 * @param key
+	 *            The input key
+	 * @param name
+	 *            The input name
+	 * @param value
+	 *            The Java object to convert
+	 * @param ti
+	 *            The TensorInfo object
+	 * @return Data stored in a Tensor object
+	 */
 	public static Tensor<?> convertToTensor(String key, String name, Object value, TensorInfo ti) {
 		DataType dtype = ti.getDtype();
 		Tensor<?> tensor = null;
@@ -143,6 +187,13 @@ public class TFUtil {
 		return tensor;
 	}
 
+	/**
+	 * Return true if the object is a Long instance or a long/Long array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Long type, false otherwise
+	 */
 	public static boolean isLongType(Object value) {
 		if (value instanceof Long) {
 			return true;
@@ -155,6 +206,13 @@ public class TFUtil {
 		}
 	}
 
+	/**
+	 * Return true if the object is an Integer instance or an int/Integer array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is an Integer type, false otherwise
+	 */
 	public static boolean isIntType(Object value) {
 		if (value instanceof Integer) {
 			return true;
@@ -167,11 +225,25 @@ public class TFUtil {
 		}
 	}
 
+	/**
+	 * Return true if the object is a Float array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Float Object array, false otherwise
+	 */
 	public static boolean isFloatObjectArray(Object value) {
 		String typeName = value.getClass().getTypeName();
 		return typeName.startsWith("java.lang.Float[");
 	}
 
+	/**
+	 * Return true if the object is a Float instance or a float/Float array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Float type, false otherwise
+	 */
 	public static boolean isFloatType(Object value) {
 		if (value instanceof Float) {
 			return true;
@@ -183,6 +255,13 @@ public class TFUtil {
 		return false;
 	}
 
+	/**
+	 * Return true if the object is a Double instance or a double/Double array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Double type, false otherwise
+	 */
 	public static boolean isDoubleType(Object value) {
 		if (value instanceof Double) {
 			return true;
@@ -194,10 +273,28 @@ public class TFUtil {
 		return false;
 	}
 
+	/**
+	 * Obtain the input name corresponding to an input key.
+	 * 
+	 * @param key
+	 *            The input key
+	 * @param model
+	 *            The TFModel object
+	 * @return The input name corresponding to the input key
+	 */
 	public static String inputKeyToName(String key, TFModel model) {
 		return inputKeyToName(key, model.metaGraphDef());
 	}
 
+	/**
+	 * Obtain the input name corresponding to an input key.
+	 * 
+	 * @param key
+	 *            The input key
+	 * @param metaGraphDef
+	 *            The MetaGraphDef object
+	 * @return The input name corresponding to the input key
+	 */
 	public static String inputKeyToName(String key, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
 		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
@@ -213,10 +310,28 @@ public class TFUtil {
 		throw new TFException("Input key '" + key + "' not found in MetaGraphDef");
 	}
 
+	/**
+	 * Obtain the TensorInfo object corresponding to an input key.
+	 * 
+	 * @param key
+	 *            The input key
+	 * @param model
+	 *            The TFModel object
+	 * @return The TensorInfo object corresponding to the input key
+	 */
 	public static TensorInfo inputKeyToTensorInfo(String key, TFModel model) {
 		return inputKeyToTensorInfo(key, model.metaGraphDef());
 	}
 
+	/**
+	 * Obtain the TensorInfo object corresponding to an input key.
+	 * 
+	 * @param key
+	 *            The input key
+	 * @param metaGraphDef
+	 *            The MetaGraphDef object
+	 * @return The TensorInfo object corresponding to the input key
+	 */
 	public static TensorInfo inputKeyToTensorInfo(String key, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
 		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
@@ -232,10 +347,28 @@ public class TFUtil {
 		throw new TFException("Input key '" + key + "' not found in MetaGraphDef");
 	}
 
+	/**
+	 * Obtain the output name corresponding to an output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @param model
+	 *            The TFModel object
+	 * @return The output name corresponding to the output key
+	 */
 	public static String outputKeyToName(String key, TFModel model) {
 		return outputKeyToName(key, model.metaGraphDef());
 	}
 
+	/**
+	 * Obtain the output name corresponding to an output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @param metaGraphDef
+	 *            The MetaGraphDef object
+	 * @return The output name corresponding to the output key
+	 */
 	public static String outputKeyToName(String key, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
 		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
@@ -251,10 +384,28 @@ public class TFUtil {
 		throw new TFException("Output key '" + key + "' not found in MetaGraphDef");
 	}
 
+	/**
+	 * Obtain the TensorInfo object corresponding to an output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @param model
+	 *            The TFModel object
+	 * @return The TensorInfo object corresponding to the output key
+	 */
 	public static TensorInfo outputKeyToTensorInfo(String key, TFModel model) {
 		return outputKeyToTensorInfo(key, model.metaGraphDef());
 	}
 
+	/**
+	 * Obtain the TensorInfo object corresponding to an output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @param metaGraphDef
+	 *            The MetaGraphDef object
+	 * @return The TensorInfo object corresponding to the output key
+	 */
 	public static TensorInfo outputKeyToTensorInfo(String key, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
 		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
