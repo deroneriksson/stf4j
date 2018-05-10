@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 
 public class CIFAR10Util {
 
-	public static final String TEST_BATCH_BIN = "/tmp/cifar10_data/cifar-10-batches-bin/test_batch.bin";
+	public static final String TEST_BATCH_BIN = "./cifar10_data/cifar-10-batches-bin/test_batch.bin";
 
 	public static final String[] classes = new String[] { "airplane", "automobile", "bird", "cat", "deer", "dog",
 			"frog", "horse", "ship", "truck" };
