@@ -83,14 +83,14 @@ public class CIFAR10Util {
 			images = new int[b.length / 3073][3][32][32];
 			for (int i = 0; i < images.length; i++) {
 				for (int j = 0; j < 3072; j++) {
-					images[i][j / 1024][j % 1024 / 32][j % 1024 % 32] = b[i * 3073 + j] & 0xFF;
+					images[i][j / 1024][j % 1024 / 32][j % 1024 % 32] = b[i * 3073 + j + 1] & 0xFF;
 				}
 			}
 		} else {
 			images = new int[b.length / 3073][32][32][3];
 			for (int i = 0; i < images.length; i++) {
 				for (int j = 0; j < 3072; j++) {
-					images[i][j % 1024 / 32][j % 1024 % 32][j / 1024] = b[i * 3073 + j] & 0xFF;
+					images[i][j % 1024 / 32][j % 1024 % 32][j / 1024] = b[i * 3073 + j + 1] & 0xFF;
 				}
 			}
 		}
