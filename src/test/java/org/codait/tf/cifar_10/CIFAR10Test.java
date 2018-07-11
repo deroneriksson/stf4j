@@ -45,11 +45,8 @@ public class CIFAR10Test {
 		Assert.assertTrue(isClassificationCorrect(label, prediction, imageNum));
 	}
 
-	@Test
-	public void cifarMultiImageInputClassesOutput() {
-		log.debug("CIFAR10 - input images as 4d primitive float array, output classes");
-		int index = 0;
-		int size = 128;
+	public void cifarMultiImageInputClassesOutput(int index, int size) {
+		log.debug("CIFAR10 - input images (" + size + ") as 4d primitive float array, output classes");
 		log.debug(String.format("Image batch index: %d, size: %d", index, size));
 		float[][][][] imageBatch = getImageBatch(index, size);
 		int[] labels = getLabelBatch(index, size);
@@ -58,21 +55,40 @@ public class CIFAR10Test {
 		int[] predictions = model.in("input", imageBatch).out("classes").run().getIntArray("classes");
 
 		float accuracy = computeAccuracy(labels, predictions, imageNums);
-		evaluateAccuracy(accuracy, 0.80f);
-
+		evaluateAccuracy(accuracy, 0.80f, predictions.length);
 	}
 
-	private void evaluateAccuracy(float accuracy, float acceptableAccuracy) {
+	@Test
+	public void cifarMultipleImage1InputClassesOutput() {
+		cifarMultiImageInputClassesOutput(0, 1);
+	}
+
+	@Test
+	public void cifarMultipleImage10InputClassesOutput() {
+		cifarMultiImageInputClassesOutput(0, 10);
+	}
+
+	@Test
+	public void cifarMultipleImage100InputClassesOutput() {
+		cifarMultiImageInputClassesOutput(0, 100);
+	}
+
+	@Test
+	public void cifarMultipleImage1000InputClassesOutput() {
+		cifarMultiImageInputClassesOutput(0, 1000);
+	}
+
+	private void evaluateAccuracy(float accuracy, float acceptableAccuracy, int numPredictions) {
 		if (accuracy < acceptableAccuracy) {
 			String message = String.format(
-					"Failure, accuracy (%5.2f%%) must be greater or equal to acceptable accuracy (%5.2f%%)",
-					accuracy * 100, acceptableAccuracy * 100);
+					"Failure, for %d predictions, accuracy (%5.2f%%) must be greater or equal to acceptable accuracy (%5.2f%%)",
+					numPredictions, accuracy * 100, acceptableAccuracy * 100);
 			log.debug(message);
 			Assert.fail(message);
 		} else {
 			String message = String.format(
-					"Success, accuracy (%5.2f%%) great than or equal to acceptable accuracy (%5.2f%%)", accuracy * 100,
-					acceptableAccuracy * 100);
+					"Success, for %d predictions, accuracy (%5.2f%%) is greater than or equal to acceptable accuracy (%5.2f%%)",
+					numPredictions, accuracy * 100, acceptableAccuracy * 100);
 			log.debug(message);
 		}
 	}
