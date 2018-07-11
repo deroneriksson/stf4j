@@ -29,12 +29,13 @@ public class CIFAR10Util {
 		System.out.println("class: " + classes[labels[8]]);
 		System.out.println("class: " + classes[labels[9]]);
 		System.out.println("class: " + classes[labels[10]]);
-		// float[][][][] images = getImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
-		// displayImage(images[6]);
-		// displayImage(images[7]);
-		// displayImage(images[8]);
-		// displayImage(images[9]);
-		// displayImage(images[10]);
+
+		float[][][][] images = getImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
+		displayImage(images[6]);
+		displayImage(images[7]);
+		displayImage(images[8]);
+		displayImage(images[9]);
+		displayImage(images[10]);
 
 		float[][][][] preprocessedImages = getPreprocessedImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
 		float[][][] preprocessedImage = preprocessedImages[0];
@@ -95,21 +96,6 @@ public class CIFAR10Util {
 			}
 		}
 		return images;
-	}
-
-	/**
-	 * Obtain images from CIFAR-10 binary data file. The images are returned as a 4-dimensional float array, where
-	 * dimension 1 is the image number, dimension 2 is the channel (0=R, 1=G, 2=B), dimension 3 is the rows, and
-	 * dimension 4 is the columns.
-	 * 
-	 * @param batchBinFile
-	 *            CIFAR-10 binary data file
-	 * @return Images as a 4-dimensional float array
-	 * @throws IOException
-	 *             if problem occurs reading binary data file
-	 */
-	public static float[][][][] getImages(String batchBinFile) throws IOException {
-		return getImages(batchBinFile, DimOrder.CHANNELS_ROWS_COLS);
 	}
 
 	/**
