@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -24,13 +25,16 @@ public class CIFAR10Util {
 		System.out.println("class: " + classes[labels[8]]);
 		System.out.println("class: " + classes[labels[9]]);
 		System.out.println("class: " + classes[labels[10]]);
-		float[][][][] images = getImages(TEST_BATCH_BIN, true);
-		displayImage(images[6]);
-		displayImage(images[7]);
-		displayImage(images[8]);
-		displayImage(images[9]);
-		displayImage(images[10]);
+		float[][][][] images = getImages(TEST_BATCH_BIN, false);
+//		displayImage(images[6]);
+//		displayImage(images[7]);
+//		displayImage(images[8]);
+//		displayImage(images[9]);
+//		displayImage(images[10]);
 
+		float[][][] preprocessedImage = preprocessImage(images[0]);
+		System.out.println(Arrays.deepToString(preprocessedImage));
+		
 	}
 
 	/**
@@ -198,4 +202,52 @@ public class CIFAR10Util {
 		jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
+	/**
+	 * Preprocess the image, as in the preprocess_image function in cifar10_main.py, which calls
+	 * tf.image.per_image_standardization(image). The average is subtracted and this is divided by the adjusted standard
+	 * deviation.
+	 * 
+	 * @param f
+	 *            Image as a 3-dimensional float array
+	 * @return Preprocessed image as a 3-dimensional float array
+	 */
+	public static float[][][] preprocessImage(float[][][] f) {
+		int x = f.length;
+		int y = f[0].length;
+		int z = f[0][0].length;
+		int numElements = x * y * z;
+
+		// find average
+		double sum = 0;
+		for (int a = 0; a < x; a++) {
+			for (int b = 0; b < y; b++) {
+				for (int c = 0; c < z; c++) {
+					sum += f[a][b][c];
+				}
+			}
+		}
+		double avg = sum / numElements;
+
+		// find std deviation and adjusted std deviation
+		double tmp = 0;
+		for (int a = 0; a < x; a++) {
+			for (int b = 0; b < y; b++) {
+				for (int c = 0; c < z; c++) {
+					tmp += (Math.pow(f[a][b][c] - avg, 2));
+				}
+			}
+		}
+		double stdDev = Math.sqrt(tmp / numElements);
+		double adjStdDev = Math.max(stdDev, 1.0 / Math.sqrt(numElements));
+
+		float[][][] f2 = new float[f.length][f[0].length][f[0][0].length];
+		for (int a = 0; a < x; a++) {
+			for (int b = 0; b < y; b++) {
+				for (int c = 0; c < z; c++) {
+					f2[a][b][c] = (float) ((f[a][b][c] - avg) / adjStdDev);
+				}
+			}
+		}
+		return f2;
+	}
 }
