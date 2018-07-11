@@ -24,19 +24,13 @@ public class CIFAR10Util {
 		System.out.println("class: " + classes[labels[8]]);
 		System.out.println("class: " + classes[labels[9]]);
 		System.out.println("class: " + classes[labels[10]]);
-		int[][][][] images = getImages(TEST_BATCH_BIN);
+		float[][][][] images = getImages(TEST_BATCH_BIN, true);
 		displayImage(images[6]);
 		displayImage(images[7]);
 		displayImage(images[8]);
 		displayImage(images[9]);
 		displayImage(images[10]);
 
-		// int[][][][] images = getImages(TEST_BATCH_BIN, false);
-		// displayImageRowsColsChannel(images[6]);
-		// displayImageRowsColsChannel(images[7]);
-		// displayImageRowsColsChannel(images[8]);
-		// displayImageRowsColsChannel(images[9]);
-		// displayImageRowsColsChannel(images[10]);
 	}
 
 	/**
@@ -58,36 +52,33 @@ public class CIFAR10Util {
 	}
 
 	/**
-	 * Obtain images from CIFAR-10 binary data file. If channelRowsCols is true,
-	 * the images are returned as a 4-dimensional int array, where dimension 1
-	 * is the image number, dimension 2 is the channel (0=R, 1=G, 2=B),
-	 * dimension 3 is the rows, and dimension 4 is the columns. If
-	 * channelRowsCols is false the images are returned as a 4-dimensional int
-	 * array, where dimension 1 is the image number, dimension 2 is the rows,
-	 * dimension 3 is the columns, and dimension 4 is the channel (0=R, 1=G,
-	 * 2=B).
+	 * Obtain images from CIFAR-10 binary data file. If channelRowsCols is true, the images are returned as a
+	 * 4-dimensional float array, where dimension 1 is the image number, dimension 2 is the channel (0=R, 1=G, 2=B),
+	 * dimension 3 is the rows, and dimension 4 is the columns. If channelRowsCols is false the images are returned as a
+	 * 4-dimensional float array, where dimension 1 is the image number, dimension 2 is the rows, dimension 3 is the
+	 * columns, and dimension 4 is the channel (0=R, 1=G, 2=B).
 	 * 
 	 * @param batchBinFile
 	 *            CIFAR-10 binary data file
 	 * @param channelRowsCols
-	 *            if true, return images[numImages][channel][rows][cols]. if
-	 *            false, return images[numImages][rows][cols][channel].
-	 * @return Images as a 4-dimensional int array
+	 *            if true, return images[numImages][channel][rows][cols]. if false, return
+	 *            images[numImages][rows][cols][channel].
+	 * @return Images as a 4-dimensional float array
 	 * @throws IOException
 	 *             if problem occurs reading binary data file
 	 */
-	public static int[][][][] getImages(String batchBinFile, boolean channelRowsCols) throws IOException {
+	public static float[][][][] getImages(String batchBinFile, boolean channelRowsCols) throws IOException {
 		byte[] b = Files.readAllBytes(Paths.get(batchBinFile));
-		int[][][][] images = null;
+		float[][][][] images = null;
 		if (channelRowsCols) {
-			images = new int[b.length / 3073][3][32][32];
+			images = new float[b.length / 3073][3][32][32];
 			for (int i = 0; i < images.length; i++) {
 				for (int j = 0; j < 3072; j++) {
 					images[i][j / 1024][j % 1024 / 32][j % 1024 % 32] = b[i * 3073 + j + 1] & 0xFF;
 				}
 			}
 		} else {
-			images = new int[b.length / 3073][32][32][3];
+			images = new float[b.length / 3073][32][32][3];
 			for (int i = 0; i < images.length; i++) {
 				for (int j = 0; j < 3072; j++) {
 					images[i][j % 1024 / 32][j % 1024 % 32][j / 1024] = b[i * 3073 + j + 1] & 0xFF;
@@ -98,31 +89,29 @@ public class CIFAR10Util {
 	}
 
 	/**
-	 * Obtain images from CIFAR-10 binary data file. The images are returned as
-	 * a 4-dimensional int array, where dimension 1 is the image number,
-	 * dimension 2 is the channel (0=R, 1=G, 2=B), dimension 3 is the rows, and
+	 * Obtain images from CIFAR-10 binary data file. The images are returned as a 4-dimensional float array, where
+	 * dimension 1 is the image number, dimension 2 is the channel (0=R, 1=G, 2=B), dimension 3 is the rows, and
 	 * dimension 4 is the columns.
 	 * 
 	 * @param batchBinFile
 	 *            CIFAR-10 binary data file
-	 * @return Images as a 4-dimensional int array
+	 * @return Images as a 4-dimensional float array
 	 * @throws IOException
 	 *             if problem occurs reading binary data file
 	 */
-	public static int[][][][] getImages(String batchBinFile) throws IOException {
+	public static float[][][][] getImages(String batchBinFile) throws IOException {
 		return getImages(batchBinFile, true);
 	}
 
 	/**
-	 * Convert a 3-dimension int array image to a BufferedImage. For the input
-	 * array, the dimension 1 is the channel (0=R, 1=G, 2=B), dimension 2 is the
-	 * rows, and dimension 3 is the columns.
+	 * Convert a 3-dimension float array image to a BufferedImage. For the input array, the dimension 1 is the channel
+	 * (0=R, 1=G, 2=B), dimension 2 is the rows, and dimension 3 is the columns.
 	 * 
 	 * @param i
-	 *            Image as a 3-dimensional int array
+	 *            Image as a 3-dimensional float array
 	 * @return BufferedImage representation of the image
 	 */
-	public static BufferedImage i3ToBuff(int[][][] i) {
+	public static BufferedImage f3ToBuff(float[][][] i) {
 		int cols = i[0][0].length;
 		int rows = i[0].length;
 
@@ -130,7 +119,7 @@ public class CIFAR10Util {
 
 		for (int r = 0; r < rows; r++) {
 			for (int c = 0; c < cols; c++) {
-				img[r][c] = i[0][r][c] * 256 * 256 + i[1][r][c] * 256 + i[2][r][c];
+				img[r][c] = (int) (i[0][r][c] * 256 * 256 + i[1][r][c] * 256 + i[2][r][c]);
 			}
 		}
 
@@ -143,15 +132,14 @@ public class CIFAR10Util {
 	}
 
 	/**
-	 * Convert a 3-dimension int array image to a BufferedImage. For the input
-	 * array, the dimension 1 is the rows, dimension 2 is the columns, and
-	 * dimension 3 is the channel (0=R, 1=G, 2=B).
+	 * Convert a 3-dimension float array image to a BufferedImage. For the input array, the dimension 1 is the rows,
+	 * dimension 2 is the columns, and dimension 3 is the channel (0=R, 1=G, 2=B).
 	 * 
 	 * @param i
-	 *            Image as a 3-dimensional int array
+	 *            Image as a 3-dimensional float array
 	 * @return BufferedImage representation of the image
 	 */
-	public static BufferedImage i3RowsColsChannelToBuff(int[][][] i) {
+	public static BufferedImage f3RowsColsChannelToBuff(float[][][] i) {
 		int cols = i[0].length;
 		int rows = i.length;
 
@@ -159,7 +147,7 @@ public class CIFAR10Util {
 
 		for (int r = 0; r < rows; r++) {
 			for (int c = 0; c < cols; c++) {
-				img[r][c] = i[r][c][0] * 256 * 256 + i[r][c][1] * 256 + i[r][c][2];
+				img[r][c] = (int) (i[r][c][0] * 256 * 256 + i[r][c][1] * 256 + i[r][c][2]);
 			}
 		}
 
@@ -172,28 +160,26 @@ public class CIFAR10Util {
 	}
 
 	/**
-	 * Display an image to the screen. The input image has 3 dimensions, where
-	 * dimension 1 is the channel (0=R, 1=G, 2=B), dimension 2 is the rows, and
-	 * dimension 3 is the columns.
+	 * Display an image to the screen. The input image has 3 dimensions, where dimension 1 is the channel (0=R, 1=G,
+	 * 2=B), dimension 2 is the rows, and dimension 3 is the columns.
 	 * 
 	 * @param image
-	 *            Image as a 3-dimensional int array
+	 *            Image as a 3-dimensional float array
 	 */
-	public static void displayImage(int[][][] image) {
-		BufferedImage bi = i3ToBuff(image);
+	public static void displayImage(float[][][] image) {
+		BufferedImage bi = f3ToBuff(image);
 		displayBufferedImage(bi);
 	}
 
 	/**
-	 * Display an image to the screen. The input image has 3 dimensions, where
-	 * dimension 1 is the rows, dimension 2 is the columns, and dimension 3 is
-	 * the channel (0=R, 1=G, 2=B).
+	 * Display an image to the screen. The input image has 3 dimensions, where dimension 1 is the rows, dimension 2 is
+	 * the columns, and dimension 3 is the channel (0=R, 1=G, 2=B).
 	 * 
 	 * @param image
-	 *            Image as a 3-dimensional int array
+	 *            Image as a 3-dimensional float array
 	 */
-	public static void displayImageRowsColsChannel(int[][][] image) {
-		BufferedImage bi = i3RowsColsChannelToBuff(image);
+	public static void displayImageRowsColsChannel(float[][][] image) {
+		BufferedImage bi = f3RowsColsChannelToBuff(image);
 		displayBufferedImage(bi);
 	}
 
