@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -28,15 +29,16 @@ public class CIFAR10Util {
 		System.out.println("class: " + classes[labels[8]]);
 		System.out.println("class: " + classes[labels[9]]);
 		System.out.println("class: " + classes[labels[10]]);
-		float[][][][] images = getImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
-		displayImage(images[6]);
-		displayImage(images[7]);
-		displayImage(images[8]);
-		displayImage(images[9]);
-		displayImage(images[10]);
+		// float[][][][] images = getImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
+		// displayImage(images[6]);
+		// displayImage(images[7]);
+		// displayImage(images[8]);
+		// displayImage(images[9]);
+		// displayImage(images[10]);
 
-		// float[][][] preprocessedImage = preprocessImage(images[0]);
-		// System.out.println(Arrays.deepToString(preprocessedImage));
+		float[][][][] preprocessedImages = getPreprocessedImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
+		float[][][] preprocessedImage = preprocessedImages[0];
+		System.out.println(Arrays.deepToString(preprocessedImage));
 
 	}
 
@@ -59,11 +61,11 @@ public class CIFAR10Util {
 	}
 
 	/**
-	 * Obtain images from CIFAR-10 binary data file. If channelRowsCols is true, the images are returned as a
+	 * Obtain images from CIFAR-10 binary data file. If dimOrder is CHANNELS_ROWS_COLS, the images are returned as a
 	 * 4-dimensional float array, where dimension 1 is the image number, dimension 2 is the channel (0=R, 1=G, 2=B),
-	 * dimension 3 is the rows, and dimension 4 is the columns. If channelRowsCols is false the images are returned as a
-	 * 4-dimensional float array, where dimension 1 is the image number, dimension 2 is the rows, dimension 3 is the
-	 * columns, and dimension 4 is the channel (0=R, 1=G, 2=B).
+	 * dimension 3 is the rows, and dimension 4 is the columns. If dimOrder is ROWS_COLS_CHANNELS, the images are
+	 * returned as a 4-dimensional float array, where dimension 1 is the image number, dimension 2 is the rows,
+	 * dimension 3 is the columns, and dimension 4 is the channel (0=R, 1=G, 2=B).
 	 * 
 	 * @param batchBinFile
 	 *            CIFAR-10 binary data file
@@ -245,5 +247,42 @@ public class CIFAR10Util {
 			}
 		}
 		return f2;
+	}
+
+	/**
+	 * Preprocess a group of images.
+	 * 
+	 * @param images
+	 *            Images as a 4-dimensional float array, where the first dimension is the image number
+	 * 
+	 * @return The preprocessed images as a 4-dimensional float array
+	 */
+	public static float[][][][] preprocessImages(float[][][][] images) {
+		float[][][][] preprocessedImages = new float[images.length][images[0].length][images[0][0].length][images[0][0][0].length];
+		for (int i = 0; i < images.length; i++) {
+			preprocessedImages[i] = preprocessImage(images[i]);
+		}
+		return preprocessedImages;
+	}
+
+	/**
+	 * Obtain preprocessed images from CIFAR-10 binary data file. If dimOrder is CHANNELS_ROWS_COLS, the images are
+	 * returned as a 4-dimensional float array, where dimension 1 is the image number, dimension 2 is the channel (0=R,
+	 * 1=G, 2=B), dimension 3 is the rows, and dimension 4 is the columns. If dimOrder is ROWS_COLS_CHANNELS, the images
+	 * are returned as a 4-dimensional float array, where dimension 1 is the image number, dimension 2 is the rows,
+	 * dimension 3 is the columns, and dimension 4 is the channel (0=R, 1=G, 2=B).
+	 * 
+	 * @param batchBinFile
+	 *            CIFAR-10 binary data file
+	 * @param dimOrder
+	 *            if CHANNELS_ROWS_COLS, return images[numImages][channel][rows][cols]. if ROWS_COLS_CHANNELS, return
+	 *            images[numImages][rows][cols][channel].
+	 * @return The preprocessed images as a 4-dimensional float array
+	 * @throws IOException
+	 *             if problem occurs reading binary data file
+	 */
+	public static float[][][][] getPreprocessedImages(String batchBinFile, DimOrder dimOrder) throws IOException {
+		float[][][][] images = getImages(batchBinFile, dimOrder);
+		return preprocessImages(images);
 	}
 }
