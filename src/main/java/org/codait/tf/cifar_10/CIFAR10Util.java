@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -30,14 +29,14 @@ public class CIFAR10Util {
 		System.out.println("class: " + classes[labels[9]]);
 		System.out.println("class: " + classes[labels[10]]);
 		float[][][][] images = getImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
-		// displayImage(images[6]);
-		// displayImage(images[7]);
-		// displayImage(images[8]);
-		// displayImage(images[9]);
-		// displayImage(images[10]);
+		displayImage(images[6]);
+		displayImage(images[7]);
+		displayImage(images[8]);
+		displayImage(images[9]);
+		displayImage(images[10]);
 
-		float[][][] preprocessedImage = preprocessImage(images[0]);
-		System.out.println(Arrays.deepToString(preprocessedImage));
+		// float[][][] preprocessedImage = preprocessImage(images[0]);
+		// System.out.println(Arrays.deepToString(preprocessedImage));
 
 	}
 
@@ -168,26 +167,19 @@ public class CIFAR10Util {
 	}
 
 	/**
-	 * Display an image to the screen. The input image has 3 dimensions, where dimension 1 is the channel (0=R, 1=G,
-	 * 2=B), dimension 2 is the rows, and dimension 3 is the columns.
+	 * Display an image to the screen. If the first dimension has a size of 3, the image is assumed to be
+	 * [channel][rows][cols]. Otherwise it is assumed to be [rows][cols][channel].
 	 * 
 	 * @param image
 	 *            Image as a 3-dimensional float array
 	 */
 	public static void displayImage(float[][][] image) {
-		BufferedImage bi = f3RowsColsChannelToBuff(image);
-		displayBufferedImage(bi);
-	}
-
-	/**
-	 * Display an image to the screen. The input image has 3 dimensions, where dimension 1 is the rows, dimension 2 is
-	 * the columns, and dimension 3 is the channel (0=R, 1=G, 2=B).
-	 * 
-	 * @param image
-	 *            Image as a 3-dimensional float array
-	 */
-	public static void displayImageRowsColsChannel(float[][][] image) {
-		BufferedImage bi = f3RowsColsChannelToBuff(image);
+		BufferedImage bi = null;
+		if (image.length == 3) {
+			bi = f3ChannelRowsColsToBuff(image);
+		} else {
+			bi = f3RowsColsChannelToBuff(image);
+		}
 		displayBufferedImage(bi);
 	}
 
