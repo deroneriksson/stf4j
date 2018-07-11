@@ -17,6 +17,10 @@ public class CIFAR10Util {
 	public static final String[] classes = new String[] { "airplane", "automobile", "bird", "cat", "deer", "dog",
 			"frog", "horse", "ship", "truck" };
 
+	public static enum DimOrder {
+		ROWS_COLS_CHANNELS, CHANNELS_ROWS_COLS
+	};
+
 	// see https://www.cs.toronto.edu/~kriz/cifar.html for format info
 	public static void main(String[] args) throws IOException {
 		int[] labels = getLabels(TEST_BATCH_BIN);
@@ -25,16 +29,16 @@ public class CIFAR10Util {
 		System.out.println("class: " + classes[labels[8]]);
 		System.out.println("class: " + classes[labels[9]]);
 		System.out.println("class: " + classes[labels[10]]);
-		float[][][][] images = getImages(TEST_BATCH_BIN, false);
-//		displayImage(images[6]);
-//		displayImage(images[7]);
-//		displayImage(images[8]);
-//		displayImage(images[9]);
-//		displayImage(images[10]);
+		float[][][][] images = getImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
+		// displayImage(images[6]);
+		// displayImage(images[7]);
+		// displayImage(images[8]);
+		// displayImage(images[9]);
+		// displayImage(images[10]);
 
 		float[][][] preprocessedImage = preprocessImage(images[0]);
 		System.out.println(Arrays.deepToString(preprocessedImage));
-		
+
 	}
 
 	/**
@@ -64,24 +68,24 @@ public class CIFAR10Util {
 	 * 
 	 * @param batchBinFile
 	 *            CIFAR-10 binary data file
-	 * @param channelRowsCols
-	 *            if true, return images[numImages][channel][rows][cols]. if false, return
+	 * @param dimOrder
+	 *            if CHANNELS_ROWS_COLS, return images[numImages][channel][rows][cols]. if ROWS_COLS_CHANNELS, return
 	 *            images[numImages][rows][cols][channel].
 	 * @return Images as a 4-dimensional float array
 	 * @throws IOException
 	 *             if problem occurs reading binary data file
 	 */
-	public static float[][][][] getImages(String batchBinFile, boolean channelRowsCols) throws IOException {
+	public static float[][][][] getImages(String batchBinFile, DimOrder dimOrder) throws IOException {
 		byte[] b = Files.readAllBytes(Paths.get(batchBinFile));
 		float[][][][] images = null;
-		if (channelRowsCols) {
+		if (dimOrder == DimOrder.CHANNELS_ROWS_COLS) {
 			images = new float[b.length / 3073][3][32][32];
 			for (int i = 0; i < images.length; i++) {
 				for (int j = 0; j < 3072; j++) {
 					images[i][j / 1024][j % 1024 / 32][j % 1024 % 32] = b[i * 3073 + j + 1] & 0xFF;
 				}
 			}
-		} else {
+		} else if (dimOrder == DimOrder.ROWS_COLS_CHANNELS) {
 			images = new float[b.length / 3073][32][32][3];
 			for (int i = 0; i < images.length; i++) {
 				for (int j = 0; j < 3072; j++) {
@@ -104,7 +108,7 @@ public class CIFAR10Util {
 	 *             if problem occurs reading binary data file
 	 */
 	public static float[][][][] getImages(String batchBinFile) throws IOException {
-		return getImages(batchBinFile, true);
+		return getImages(batchBinFile, DimOrder.CHANNELS_ROWS_COLS);
 	}
 
 	/**
@@ -115,7 +119,7 @@ public class CIFAR10Util {
 	 *            Image as a 3-dimensional float array
 	 * @return BufferedImage representation of the image
 	 */
-	public static BufferedImage f3ToBuff(float[][][] i) {
+	public static BufferedImage f3ChannelRowsColsToBuff(float[][][] i) {
 		int cols = i[0][0].length;
 		int rows = i[0].length;
 
@@ -171,7 +175,7 @@ public class CIFAR10Util {
 	 *            Image as a 3-dimensional float array
 	 */
 	public static void displayImage(float[][][] image) {
-		BufferedImage bi = f3ToBuff(image);
+		BufferedImage bi = f3RowsColsChannelToBuff(image);
 		displayBufferedImage(bi);
 	}
 
