@@ -43,7 +43,7 @@ public class CIFAR10Test {
 
 		int prediction = model.in("input", image).out("classes").run().getInt("classes");
 
-		Assert.assertTrue(isClassificationCorrect(label, prediction, imageNum));
+		Assert.assertTrue(isClassificationCorrect(label, prediction, imageNum, true));
 	}
 
 	public void cifarMultiImageInputClassesOutput(int index, int size) {
@@ -55,7 +55,7 @@ public class CIFAR10Test {
 
 		int[] predictions = model.in("input", imageBatch).out("classes").run().getIntArray("classes");
 
-		float accuracy = computeAccuracy(labels, predictions, imageNums);
+		float accuracy = computeAccuracy(labels, predictions, imageNums, true);
 		evaluateAccuracy(accuracy, 0.80f, predictions.length);
 	}
 
@@ -87,20 +87,63 @@ public class CIFAR10Test {
 		int label = labels[imageNum];
 
 		float[] probabilities = model.in("input", image).out("probabilities").run().getFloatArray("probabilities");
-		displayProbabilities(label, probabilities);
-		int prediction = ArrayUtil.maxIndex(probabilities);
-		Assert.assertTrue(isClassificationCorrect(label, prediction, imageNum));
+		int prediction = probabilitiesToPrediction(label, probabilities, imageNum);
+		Assert.assertTrue(isClassificationCorrect(label, prediction, imageNum, true));
 	}
 
-	private void displayProbabilities(int label, float[] probabilities) {
+	public void cifarMultiImageInputProbabilitiesOutput(int index, int size) {
+		log.debug("CIFAR10 - input images (" + size + ") as 4d primitive float array, output probabilities");
+		log.debug(String.format("Image batch index: %d, size: %d", index, size));
+		float[][][][] imageBatch = getImageBatch(index, size);
+		int[] labels = getLabelBatch(index, size);
+		int[] imageNums = getImageNumBatch(index, size);
+		int[] predictions = new int[size];
+
+		float[][] allProbabilities = (float[][]) model.in("input", imageBatch).out("probabilities").run()
+				.getFloatArrayMultidimensional("probabilities");
+		for (int i = 0; i < allProbabilities.length; i++) {
+			float[] probabilities = allProbabilities[i];
+			int label = labels[i];
+			int imageNum = imageNums[i];
+			int prediction = probabilitiesToPrediction(label, probabilities, imageNum);
+			isClassificationCorrect(label, prediction, imageNum, true);
+			predictions[i] = prediction;
+		}
+
+		float accuracy = computeAccuracy(labels, predictions, imageNums, false);
+		evaluateAccuracy(accuracy, 0.80f, predictions.length);
+	}
+
+	@Test
+	public void cifarMultipleImage1InputProbabilitiesOutput() {
+		cifarMultiImageInputProbabilitiesOutput(0, 1);
+	}
+
+	@Test
+	public void cifarMultipleImage10InputProbabilitiesOutput() {
+		cifarMultiImageInputProbabilitiesOutput(0, 10);
+	}
+
+	@Test
+	public void cifarMultipleImage100InputProbabilitiesOutput() {
+		cifarMultiImageInputProbabilitiesOutput(0, 100);
+	}
+
+	@Test
+	public void cifarMultipleImage1000InputProbabilitiesOutput() {
+		cifarMultiImageInputProbabilitiesOutput(0, 1000);
+	}
+
+	private int probabilitiesToPrediction(int label, float[] probabilities, int imageNum) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\nProbabilities:\n");
+		sb.append("\nImage #" + imageNum + " probabilities:\n");
 		for (int i = 0; i < probabilities.length; i++) {
 			sb.append(String.format("  %d %-12s: %6.2f%%\n", i, "(" + CIFAR10Util.classes[i] + ")",
 					probabilities[i] * 100));
 		}
-		sb.append(String.format("Expected label: %d (%s)\n", label, CIFAR10Util.classes[label]));
 		log.debug(sb.toString());
+		int prediction = ArrayUtil.maxIndex(probabilities);
+		return prediction;
 	}
 
 	private void evaluateAccuracy(float accuracy, float acceptableAccuracy, int numPredictions) {
@@ -118,25 +161,29 @@ public class CIFAR10Test {
 		}
 	}
 
-	private boolean isClassificationCorrect(long label, long prediction, int imageNum) {
+	private boolean isClassificationCorrect(long label, long prediction, int imageNum, boolean displayDebug) {
 		if (label == prediction) {
-			log.debug(String.format("Success, image #%d label %d (%s) equals prediction %d (%s)", imageNum, label,
-					CIFAR10Util.classes[(int) label], prediction, CIFAR10Util.classes[(int) prediction]));
+			if (displayDebug) {
+				log.debug(String.format("Success, image #%d label %d (%s) equals prediction %d (%s)", imageNum, label,
+						CIFAR10Util.classes[(int) label], prediction, CIFAR10Util.classes[(int) prediction]));
+			}
 			return true;
 		} else {
-			log.debug(String.format("Failure, image #%d label %d (%s) does not equal prediction %d (%s)", imageNum,
-					label, CIFAR10Util.classes[(int) label], prediction, CIFAR10Util.classes[(int) prediction]));
+			if (displayDebug) {
+				log.debug(String.format("Failure, image #%d label %d (%s) does not equal prediction %d (%s)", imageNum,
+						label, CIFAR10Util.classes[(int) label], prediction, CIFAR10Util.classes[(int) prediction]));
+			}
 			return false;
 		}
 	}
 
-	private float computeAccuracy(int[] labels, int[] predictions, int[] imageNums) {
+	private float computeAccuracy(int[] labels, int[] predictions, int[] imageNums, boolean displayDebug) {
 		int numCorrectPredictions = 0;
 		for (int i = 0; i < labels.length; i++) {
 			long label = labels[i];
 			long prediction = predictions[i];
 			int imageNum = imageNums[i];
-			if (isClassificationCorrect(label, prediction, imageNum)) {
+			if (isClassificationCorrect(label, prediction, imageNum, displayDebug)) {
 				numCorrectPredictions++;
 			}
 		}
