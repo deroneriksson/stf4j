@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codait.tf.ArrayUtil;
 import org.codait.tf.TFModel;
 import org.codait.tf.cifar_10.CIFAR10Util.DimOrder;
 import org.junit.After;
@@ -76,6 +77,30 @@ public class CIFAR10Test {
 	@Test
 	public void cifarMultipleImage1000InputClassesOutput() {
 		cifarMultiImageInputClassesOutput(0, 1000);
+	}
+
+	@Test
+	public void cifarSingleImageInputProbabilitiesOutput() {
+		log.debug("CIFAR10 - input image as 3d primitive float array, output probabilities");
+		int imageNum = 1;
+		float[][][] image = images[imageNum];
+		int label = labels[imageNum];
+
+		float[] probabilities = model.in("input", image).out("probabilities").run().getFloatArray("probabilities");
+		displayProbabilities(label, probabilities);
+		int prediction = ArrayUtil.maxIndex(probabilities);
+		Assert.assertTrue(isClassificationCorrect(label, prediction, imageNum));
+	}
+
+	private void displayProbabilities(int label, float[] probabilities) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\nProbabilities:\n");
+		for (int i = 0; i < probabilities.length; i++) {
+			sb.append(String.format("  %d %-12s: %6.2f%%\n", i, "(" + CIFAR10Util.classes[i] + ")",
+					probabilities[i] * 100));
+		}
+		sb.append(String.format("Expected label: %d (%s)\n", label, CIFAR10Util.classes[label]));
+		log.debug(sb.toString());
 	}
 
 	private void evaluateAccuracy(float accuracy, float acceptableAccuracy, int numPredictions) {
