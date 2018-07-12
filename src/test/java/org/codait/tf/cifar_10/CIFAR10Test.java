@@ -79,13 +79,13 @@ public class CIFAR10Test {
 		cifarMultiImageInputClassesOutput(0, 1000);
 	}
 
-//	@Test
-//	public void cifarMultipleImage10000InputClassesOutput() {
-//		Date start = new Date();
-//		cifarMultiImageInputClassesOutput(0, 10000);
-//		Date end = new Date();
-//		System.out.println("Duration: " + (end.getTime() - start.getTime()) + " ms");
-//	}
+	// @Test
+	// public void cifarMultipleImage10000InputClassesOutput() {
+	// Date start = new Date();
+	// cifarMultiImageInputClassesOutput(0, 10000);
+	// Date end = new Date();
+	// System.out.println("Duration: " + (end.getTime() - start.getTime()) + " ms");
+	// }
 
 	@Test
 	public void cifarSingleImageInputProbabilitiesOutput() {
@@ -150,6 +150,26 @@ public class CIFAR10Test {
 	// System.out.println("Duration: " + (end.getTime() - start.getTime()) + " ms");
 	// }
 
+	@Test
+	public void testCat() throws IOException {
+		log.debug("CIFAR10 - input cat, output classes");
+		float[][][] image = CIFAR10Util.getScaledDownImage("images/cat.jpg", DimOrder.ROWS_COLS_CHANNELS);
+		image = CIFAR10Util.preprocessImage(image);
+		int prediction = model.in("input", image).out("classes").run().getInt("classes");
+
+		Assert.assertTrue(isClassificationCorrect(3, prediction, null, true));
+	}
+
+	@Test
+	public void testDog() throws IOException {
+		log.debug("CIFAR10 - input dog, output classes");
+		float[][][] image = CIFAR10Util.getScaledDownImage("images/dog.png", DimOrder.ROWS_COLS_CHANNELS);
+		image = CIFAR10Util.preprocessImage(image);
+		int prediction = model.in("input", image).out("classes").run().getInt("classes");
+
+		Assert.assertTrue(isClassificationCorrect(5, prediction, null, true));
+	}
+
 	private int probabilitiesToPrediction(int label, float[] probabilities, int imageNum) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\nImage #" + imageNum + " probabilities:\n");
@@ -177,17 +197,29 @@ public class CIFAR10Test {
 		}
 	}
 
-	private boolean isClassificationCorrect(long label, long prediction, int imageNum, boolean displayDebug) {
+	private boolean isClassificationCorrect(long label, long prediction, Integer imageNum, boolean displayDebug) {
 		if (label == prediction) {
 			if (displayDebug) {
-				log.debug(String.format("Success, image #%d label %d (%s) equals prediction %d (%s)", imageNum, label,
-						CIFAR10Util.classes[(int) label], prediction, CIFAR10Util.classes[(int) prediction]));
+				if (imageNum != null) {
+					log.debug(String.format("Success, image #%d label %d (%s) equals prediction %d (%s)", imageNum,
+							label, CIFAR10Util.classes[(int) label], prediction,
+							CIFAR10Util.classes[(int) prediction]));
+				} else {
+					log.debug(String.format("Success, label %d (%s) equals prediction %d (%s)", label,
+							CIFAR10Util.classes[(int) label], prediction, CIFAR10Util.classes[(int) prediction]));
+				}
 			}
 			return true;
 		} else {
 			if (displayDebug) {
-				log.debug(String.format("Failure, image #%d label %d (%s) does not equal prediction %d (%s)", imageNum,
-						label, CIFAR10Util.classes[(int) label], prediction, CIFAR10Util.classes[(int) prediction]));
+				if (imageNum != null) {
+					log.debug(String.format("Failure, image #%d label %d (%s) does not equal prediction %d (%s)",
+							imageNum, label, CIFAR10Util.classes[(int) label], prediction,
+							CIFAR10Util.classes[(int) prediction]));
+				} else {
+					log.debug(String.format("Failure, label %d (%s) does not equal prediction %d (%s)", label,
+							CIFAR10Util.classes[(int) label], prediction, CIFAR10Util.classes[(int) prediction]));
+				}
 			}
 			return false;
 		}
