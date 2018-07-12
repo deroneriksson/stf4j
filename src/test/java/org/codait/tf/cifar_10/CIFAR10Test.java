@@ -79,6 +79,14 @@ public class CIFAR10Test {
 		cifarMultiImageInputClassesOutput(0, 1000);
 	}
 
+//	@Test
+//	public void cifarMultipleImage10000InputClassesOutput() {
+//		Date start = new Date();
+//		cifarMultiImageInputClassesOutput(0, 10000);
+//		Date end = new Date();
+//		System.out.println("Duration: " + (end.getTime() - start.getTime()) + " ms");
+//	}
+
 	@Test
 	public void cifarSingleImageInputProbabilitiesOutput() {
 		log.debug("CIFAR10 - input image as 3d primitive float array, output probabilities");
@@ -133,6 +141,14 @@ public class CIFAR10Test {
 	public void cifarMultipleImage1000InputProbabilitiesOutput() {
 		cifarMultiImageInputProbabilitiesOutput(0, 1000);
 	}
+
+	// @Test
+	// public void cifarMultipleImage10000InputProbabilitiesOutput() {
+	// Date start = new Date();
+	// cifarMultiImageInputProbabilitiesOutput(0, 10000);
+	// Date end = new Date();
+	// System.out.println("Duration: " + (end.getTime() - start.getTime()) + " ms");
+	// }
 
 	private int probabilitiesToPrediction(int label, float[] probabilities, int imageNum) {
 		StringBuilder sb = new StringBuilder();
