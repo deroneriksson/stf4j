@@ -7,6 +7,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.codait.tf.TFModel;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +49,7 @@ public class HiggsBoostedTreesTest {
 	@Test
 	public void higgsInputStrings() {
 		log.debug(
-				"Higgs Boosted Trees - input data as strings, output class_ids, classes, logistic, logits, and probabilities");
+				"Higgs Boosted Trees - input data as csv strings, output class_ids, classes, logistic, logits, and probabilities");
 
 		model.in("inputs", s).out("class_ids", "classes", "logistic", "logits", "probabilities").run();
 	}
@@ -56,7 +57,7 @@ public class HiggsBoostedTreesTest {
 	@Test
 	public void higgsInputStringBytes() {
 		log.debug(
-				"Higgs Boosted Trees - input data as string bytes, output class_ids, classes, logistic, logits, and probabilities");
+				"Higgs Boosted Trees - input data as csv string bytes, output class_ids, classes, logistic, logits, and probabilities");
 
 		model.in("inputs", b).out("class_ids", "classes", "logistic", "logits", "probabilities").run();
 	}
@@ -64,9 +65,29 @@ public class HiggsBoostedTreesTest {
 	@Test
 	public void higgsInputStringByteObjects() {
 		log.debug(
-				"Higgs Boosted Trees - input data as string byte objects, output class_ids, classes, logistic, logits, and probabilities");
+				"Higgs Boosted Trees - input data as csv string byte objects, output class_ids, classes, logistic, logits, and probabilities");
 
 		model.in("inputs", bObj).out("class_ids", "classes", "logistic", "logits", "probabilities").run();
 	}
 
+	@Test
+	public void higgsInputStringsOutputClassIds() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output class_ids");
+		long[] expected = new long[] { 1, 0 };
+		long[] predictions = model.in("inputs", s).out("class_ids").run().getLongArray("class_ids");
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions);
+	}
+
+	private void displayDebug(long[] labels, long[] predictions) {
+		for (int i = 0; i < labels.length; i++) {
+			long label = labels[i];
+			long prediction = predictions[i];
+			displayDebug(label, prediction);
+		}
+	}
+
+	private void displayDebug(long expected, long prediction) {
+		log.debug(String.format("Expected: %d, Prediction: %d", expected, prediction));
+	}
 }
