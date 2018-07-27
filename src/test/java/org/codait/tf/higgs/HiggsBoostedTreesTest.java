@@ -2,6 +2,7 @@ package org.codait.tf.higgs;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -24,19 +25,15 @@ public class HiggsBoostedTreesTest {
 	static byte[][] b = new byte[2][];
 	static Byte[][] bObj = new Byte[2][];
 	static {
-		try {
-			b[0] = s[0].getBytes("UTF-8");
-			b[1] = s[1].getBytes("UTF-8");
-			bObj[0] = new Byte[b[0].length];
-			bObj[1] = new Byte[b[1].length];
-			for (int i = 0; i < b[0].length; i++) {
-				bObj[0][i] = b[0][i];
-			}
-			for (int i = 0; i < b[1].length; i++) {
-				bObj[1][i] = b[1][i];
-			}
-		} catch (UnsupportedEncodingException e) {
-			log.error("Exception encoding String to byte array", e);
+		b[0] = s[0].getBytes(StandardCharsets.UTF_8);
+		b[1] = s[1].getBytes(StandardCharsets.UTF_8);
+		bObj[0] = new Byte[b[0].length];
+		bObj[1] = new Byte[b[1].length];
+		for (int i = 0; i < b[0].length; i++) {
+			bObj[0][i] = b[0][i];
+		}
+		for (int i = 0; i < b[1].length; i++) {
+			bObj[1][i] = b[1][i];
 		}
 	}
 

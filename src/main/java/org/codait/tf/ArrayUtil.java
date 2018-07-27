@@ -2,6 +2,7 @@ package org.codait.tf;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -244,13 +245,9 @@ public class ArrayUtil {
 			if (v.getClass().isArray()) {
 				copyStringArrayToByteArrayVals(v, vd);
 			} else {
-				try {
-					String s = (String) v;
-					byte[] bytes = s.getBytes("UTF-8");
-					Array.set(dest, i, bytes);
-				} catch (UnsupportedEncodingException e) {
-					log.error("Exception encoding String to byte array", e);
-				}
+				String s = (String) v;
+				byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
+				Array.set(dest, i, bytes);
 			}
 		}
 	}
