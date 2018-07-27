@@ -188,6 +188,14 @@ public class TFUtil {
 			} else { // primitive byte array
 				tensor = Tensor.create(value, String.class);
 			}
+		} else if (DataType.DT_STRING == dtype && isStringType(value)) {
+			if (value instanceof String) {
+				// not implemented yet
+			} else {
+				log.warn("Implicitly converting String array to byte array");
+				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(value);
+				tensor = Tensor.create(byteArray, String.class);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
@@ -227,6 +235,25 @@ public class TFUtil {
 		}
 		String typeName = value.getClass().getTypeName();
 		if (typeName.startsWith("int[") || typeName.startsWith("java.lang.Integer[")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Return true if the object is a String or a String array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a String type, false otherwise
+	 */
+	public static boolean isStringType(Object value) {
+		if (value instanceof String) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("java.lang.String[")) {
 			return true;
 		} else {
 			return false;

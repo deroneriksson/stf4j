@@ -1,10 +1,20 @@
 package org.codait.tf;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 public class ArrayUtil {
+
+	/**
+	 * Logger for ArrayUtil
+	 */
+	protected static Logger log = LogManager.getLogger(ArrayUtil.class);
 
 	/**
 	 * Obtain a list of array dimensions based on an input array.
@@ -47,14 +57,12 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Convert an array from one type to another, where the destination type is
-	 * specified by the destType parameter.
+	 * Convert an array from one type to another, where the destination type is specified by the destType parameter.
 	 * 
 	 * @param orig
 	 *            The original array
 	 * @param destType
-	 *            The type (class) that the original array should be converted
-	 *            to
+	 *            The type (class) that the original array should be converted to
 	 * @return The resulting array
 	 */
 	public static Object convertArrayType(Object orig, Class<?> destType) {
@@ -65,8 +73,7 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Copy values from one array to another array with the same shape and
-	 * perform needed type conversions.
+	 * Copy values from one array to another array with the same shape and perform needed type conversions.
 	 * 
 	 * @param orig
 	 *            The original array
@@ -102,8 +109,7 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Convert individual 2d int arrays with same dimensions to a single 3d int
-	 * array.
+	 * Convert individual 2d int arrays with same dimensions to a single 3d int array.
 	 * 
 	 * @param arrays
 	 *            2d int arrays of the same dimensions
@@ -157,8 +163,7 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Obtain the indices at which the maximum values occur in the rows of a 2d
-	 * array.
+	 * Obtain the indices at which the maximum values occur in the rows of a 2d array.
 	 * 
 	 * @param f
 	 *            The float array
@@ -192,8 +197,7 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Obtain the indices at which the maximum values occur in the rows of a 2d
-	 * array.
+	 * Obtain the indices at which the maximum values occur in the rows of a 2d array.
 	 * 
 	 * @param d
 	 *            The double array
@@ -205,5 +209,49 @@ public class ArrayUtil {
 			maxIndices[i] = maxIndex(d[i]);
 		}
 		return maxIndices;
+	}
+
+	/**
+	 * Convert a multidimensional (dim) String array to a multidimensional (dim+1) byte array. The multidimensional byte
+	 * array will have 1 more dimension than the String array since a String is converted to a byte array.
+	 * 
+	 * @param s
+	 *            The multidimensional String array
+	 * @return The multidimensional (dim+1) byte array equivalent of the multidimensional (dim) String array
+	 */
+	public static Object multidimStringsToMultidimBytes(Object s) {
+		int[] sDim = getArrayDimensions(s);
+		int[] bDim = Arrays.copyOf(sDim, sDim.length + 1);
+		Object b = Array.newInstance(byte.class, bDim);
+		copyStringArrayToByteArrayVals(s, b);
+		return b;
+	}
+
+	/**
+	 * Convert String values in a multidimensional (dim) array to byte values in a multidimensional (dim+1) array. The
+	 * multidimensional byte array has 1 more dimension than the multidimensional String array since a String is
+	 * converted to a byte array.
+	 * 
+	 * @param orig
+	 *            The multidimensional (dim) String array
+	 * @param dest
+	 *            The multidimensional (dim+1) byte array
+	 */
+	public static void copyStringArrayToByteArrayVals(Object orig, Object dest) {
+		for (int i = 0; i < Array.getLength(orig); i++) {
+			Object v = Array.get(orig, i);
+			Object vd = Array.get(dest, i);
+			if (v.getClass().isArray()) {
+				copyStringArrayToByteArrayVals(v, vd);
+			} else {
+				try {
+					String s = (String) v;
+					byte[] bytes = s.getBytes("UTF-8");
+					Array.set(dest, i, bytes);
+				} catch (UnsupportedEncodingException e) {
+					log.error("Exception encoding String to byte array", e);
+				}
+			}
+		}
 	}
 }
