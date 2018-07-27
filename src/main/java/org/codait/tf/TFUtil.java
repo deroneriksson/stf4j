@@ -180,6 +180,8 @@ public class TFUtil {
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
 			}
+		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
+			tensor = Tensor.create(value);
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
@@ -268,6 +270,21 @@ public class TFUtil {
 		}
 		String typeName = value.getClass().getTypeName();
 		if (typeName.startsWith("double[") || typeName.startsWith("java.lang.Double[")) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Return true if the object is a byte/Byte array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a byte/Byte array, false otherwise
+	 */
+	public static boolean isByteArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("byte[") || typeName.startsWith("java.lang.Byte[")) {
 			return true;
 		}
 		return false;
