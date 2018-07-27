@@ -181,7 +181,13 @@ public class TFUtil {
 				tensor = Tensor.create(floatArray, Float.class);
 			}
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
-			tensor = Tensor.create(value);
+			if (isByteObjectArray(value)) {
+				log.warn("Implicitly converting Byte object array to primitive byte array");
+				Object byteArray = ArrayUtil.convertArrayType(value, byte.class);
+				tensor = Tensor.create(byteArray);
+			} else { // primitive byte array
+				tensor = Tensor.create(value);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
@@ -237,6 +243,18 @@ public class TFUtil {
 	public static boolean isFloatObjectArray(Object value) {
 		String typeName = value.getClass().getTypeName();
 		return typeName.startsWith("java.lang.Float[");
+	}
+
+	/**
+	 * Return true if the object is a Byte array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Byte Object array, false otherwise
+	 */
+	public static boolean isByteObjectArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		return typeName.startsWith("java.lang.Byte[");
 	}
 
 	/**

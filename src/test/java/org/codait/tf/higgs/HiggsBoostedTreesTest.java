@@ -22,10 +22,19 @@ public class HiggsBoostedTreesTest {
 			"0.869293,-0.635082,0.225690,0.327470,-0.689993,0.754202,-0.248573,-1.092064,0.0,1.374992,-0.653674,0.930349,1.107436,1.138904,-1.578198,-1.046985,0.0,0.657930,-0.010455,-0.045767,3.101961,1.353760,0.979563,0.978076,0.920005,0.721657,0.988751,0.876678",
 			"1.595839,-0.607811,0.007075,1.818450,-0.111906,0.847550,-0.566437,1.581239,2.173076,0.755421,0.643110,1.426367,0.0,0.921661,-1.190432,-1.615589,0.0,0.651114,-0.654227,-1.274345,3.101961,0.823761,0.938191,0.971758,0.789176,0.430553,0.961357,0.957818" };
 	static byte[][] b = new byte[2][];
+	static Byte[][] bObj = new Byte[2][];
 	static {
 		try {
 			b[0] = s[0].getBytes("UTF-8");
 			b[1] = s[1].getBytes("UTF-8");
+			bObj[0] = new Byte[b[0].length];
+			bObj[1] = new Byte[b[1].length];
+			for (int i = 0; i < b[0].length; i++) {
+				bObj[0][i] = b[0][i];
+			}
+			for (int i = 0; i < b[1].length; i++) {
+				bObj[1][i] = b[1][i];
+			}
 		} catch (UnsupportedEncodingException e) {
 			log.error("Exception encoding String to byte array", e);
 		}
@@ -54,6 +63,14 @@ public class HiggsBoostedTreesTest {
 				"Higgs Boosted Trees - input data as string bytes, output class_ids, classes, logistic, logits, and probabilities");
 
 		model.in("inputs", b).out("class_ids", "classes", "logistic", "logits", "probabilities").run();
+	}
+
+	@Test
+	public void higgsInputStringByteObjects() throws UnsupportedEncodingException {
+		log.debug(
+				"Higgs Boosted Trees - input data as string byte objects, output class_ids, classes, logistic, logits, and probabilities");
+
+		model.in("inputs", bObj).out("class_ids", "classes", "logistic", "logits", "probabilities").run();
 	}
 
 }

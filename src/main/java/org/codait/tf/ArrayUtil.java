@@ -92,6 +92,8 @@ public class ArrayUtil {
 					Array.set(dest, i, ((Long) v).intValue());
 				} else if ("double".equalsIgnoreCase(o) && "float".equals(d)) {
 					Array.set(dest, i, Float.valueOf((float) (double) v));
+				} else if ("Byte".equals(o) && "byte".equals(d)) {
+					Array.set(dest, i, v);
 				} else {
 					Array.set(dest, i, v);
 				}
