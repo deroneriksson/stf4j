@@ -1,7 +1,6 @@
 package org.codait.tf.higgs;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.log4j.LogManager;
@@ -55,7 +54,7 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
-	public void higgsInputStringBytes() throws UnsupportedEncodingException {
+	public void higgsInputStringBytes() {
 		log.debug(
 				"Higgs Boosted Trees - input data as string bytes, output class_ids, classes, logistic, logits, and probabilities");
 
@@ -63,7 +62,7 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
-	public void higgsInputStringByteObjects() throws UnsupportedEncodingException {
+	public void higgsInputStringByteObjects() {
 		log.debug(
 				"Higgs Boosted Trees - input data as string byte objects, output class_ids, classes, logistic, logits, and probabilities");
 
