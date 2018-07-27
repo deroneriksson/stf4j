@@ -184,9 +184,9 @@ public class TFUtil {
 			if (isByteObjectArray(value)) {
 				log.warn("Implicitly converting Byte object array to primitive byte array");
 				Object byteArray = ArrayUtil.convertArrayType(value, byte.class);
-				tensor = Tensor.create(byteArray);
+				tensor = Tensor.create(byteArray, String.class);
 			} else { // primitive byte array
-				tensor = Tensor.create(value);
+				tensor = Tensor.create(value, String.class);
 			}
 		}
 		if (tensor == null) {
