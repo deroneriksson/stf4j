@@ -84,6 +84,8 @@ public class HiggsBoostedTreesTest {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output classes");
 		String[] expected = new String[] { "1", "0" };
 		String[] predictions = (String[]) model.in("inputs", s).out("classes").run().getStringArray("classes");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
 		displayDebug(expected, predictions);
 		Assert.assertArrayEquals(expected, predictions);
 	}
