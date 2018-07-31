@@ -40,6 +40,7 @@ public class HiggsBoostedTreesTest {
 	@Before
 	public void init() throws IOException {
 		model = new TFModel(HIGGS_SAVED_MODEL_DIR);
+		model.sig("predict");
 	}
 
 	@After

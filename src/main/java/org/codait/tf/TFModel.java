@@ -28,10 +28,12 @@ public class TFModel {
 	MetaGraphDef metaGraphDef;
 	String savedModelDir;
 
+	String signatureDefKey;
 	Map<String, Object> inputNameToValue = new LinkedHashMap<>();
 	Map<String, Object> outputNameToValue = new LinkedHashMap<>();
 	Map<String, String> inputKeyToName = new LinkedHashMap<>();
 	Map<String, String> outputKeyToName = new LinkedHashMap<>();
+	TFResults results;
 
 	public TFModel(String modelDir, String... metaGraphDefTags) {
 		log.debug("Creating TFModel object");
@@ -59,30 +61,30 @@ public class TFModel {
 		return session().runner();
 	}
 
-	public TFModel in(String key, Object value) {
-		if (value == null) {
+	public TFModel in(String inputKey, Object inputValue) {
+		if (inputValue == null) {
 			throw new TFException("Input value cannot be null");
 		}
-		log.debug("Register input key '" + key + "' with object type " + value.getClass().getName());
-		if (value instanceof Tensor) {
-			String name = TFUtil.inputKeyToName(key, metaGraphDef());
-			inputNameToValue.put(name, value);
-			inputKeyToName.put(key, name);
+		log.debug("Register input key '" + inputKey + "' with object type " + inputValue.getClass().getName());
+		if (inputValue instanceof Tensor) {
+			String inputName = TFUtil.inputKeyToName(signatureDefKey, inputKey, metaGraphDef());
+			inputNameToValue.put(inputName, inputValue);
+			inputKeyToName.put(inputKey, inputName);
 		} else {
-			TensorInfo ti = TFUtil.inputKeyToTensorInfo(key, metaGraphDef());
-			String name = ti.getName();
-			Tensor<?> tensor = TFUtil.convertToTensor(key, name, value, ti);
-			inputNameToValue.put(name, tensor);
-			inputKeyToName.put(key, name);
+			TensorInfo ti = TFUtil.inputKeyToTensorInfo(signatureDefKey, inputKey, metaGraphDef());
+			String inputName = ti.getName();
+			Tensor<?> tensor = TFUtil.convertToTensor(inputKey, inputName, inputValue, ti);
+			inputNameToValue.put(inputName, tensor);
+			inputKeyToName.put(inputKey, inputName);
 		}
 		return this;
 	}
 
-	public TFModel out(String key) {
-		log.debug("Register output key '" + key + "'");
-		String name = TFUtil.outputKeyToName(key, metaGraphDef());
-		outputKeyToName.put(key, name);
-		outputNameToValue.put(name, null);
+	public TFModel out(String outputKey) {
+		log.debug("Register output key '" + outputKey + "'");
+		String outputName = TFUtil.outputKeyToName(signatureDefKey, outputKey, metaGraphDef());
+		outputKeyToName.put(outputKey, outputName);
+		outputNameToValue.put(outputName, null);
 		return this;
 	}
 
@@ -90,6 +92,11 @@ public class TFModel {
 		for (String key : keys) {
 			out(key);
 		}
+		return this;
+	}
+
+	public TFModel sig(String signatureDefKey) {
+		this.signatureDefKey = signatureDefKey;
 		return this;
 	}
 
@@ -111,7 +118,7 @@ public class TFModel {
 		for (String oName : oNames) {
 			outputNameToValue.put(oName, res.get(i++));
 		}
-		TFResults results = new TFResults(this);
+		results = new TFResults(this);
 		log.debug("Model results:\n" + results);
 		return results;
 	}
@@ -203,4 +210,15 @@ public class TFModel {
 		return sb.toString();
 	}
 
+	public void clear() {
+		inputKeyToName.clear();
+		inputNameToValue.clear();
+		outputKeyToName.clear();
+		outputNameToValue.clear();
+		if (results != null) {
+			results.outputKeyToName.clear();
+			results.outputNameToValue.clear();
+		}
+		signatureDefKey = null;
+	}
 }

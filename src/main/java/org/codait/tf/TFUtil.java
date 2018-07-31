@@ -336,114 +336,158 @@ public class TFUtil {
 	}
 
 	/**
-	 * Obtain the input name corresponding to an input key.
+	 * Obtain the input name corresponding to an input key. If no SignatureDef key is specified, an input key can
+	 * potentially return an unexpected name since an input key is not necessarily uniquely paired with an input name.
 	 * 
-	 * @param key
-	 *            The input key
-	 * @param model
-	 *            The TFModel object
-	 * @return The input name corresponding to the input key
-	 */
-	public static String inputKeyToName(String key, TFModel model) {
-		return inputKeyToName(key, model.metaGraphDef());
-	}
-
-	/**
-	 * Obtain the input name corresponding to an input key.
-	 * 
-	 * @param key
+	 * @param signatureDefKey
+	 *            The SignatureDef key
+	 * @param inputKey
 	 *            The input key
 	 * @param metaGraphDef
 	 *            The MetaGraphDef object
 	 * @return The input name corresponding to the input key
 	 */
-	public static String inputKeyToName(String key, MetaGraphDef metaGraphDef) {
+	public static String inputKeyToName(String signatureDefKey, String inputKey, TFModel model) {
+		return inputKeyToName(signatureDefKey, inputKey, model.metaGraphDef());
+	}
+
+	/**
+	 * Obtain the input name corresponding to an input key. If no SignatureDef key is specified, an input key can
+	 * potentially return an unexpected name since an input key is not necessarily uniquely paired with an input name.
+	 * 
+	 * @param signatureDefKey
+	 *            The SignatureDef key
+	 * @param inputKey
+	 *            The input key
+	 * @param metaGraphDef
+	 *            The MetaGraphDef object
+	 * @return The input name corresponding to the input key
+	 */
+	public static String inputKeyToName(String signatureDefKey, String inputKey, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
-		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
-		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
-			SignatureDef sigDef = sdmEntry.getValue();
+		if (signatureDefKey == null) {
+			Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
+			for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
+				SignatureDef sigDef = sdmEntry.getValue();
+				Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
+				if (inputsMap.containsKey(inputKey)) {
+					TensorInfo tensorInfo = inputsMap.get(inputKey);
+					String inputName = tensorInfo.getName();
+					return inputName;
+				}
+			}
+		} else {
+			SignatureDef sigDef = sdm.get(signatureDefKey);
 			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
-			if (inputsMap.containsKey(key)) {
-				TensorInfo tensorInfo = inputsMap.get(key);
+			if (inputsMap.containsKey(inputKey)) {
+				TensorInfo tensorInfo = inputsMap.get(inputKey);
 				String inputName = tensorInfo.getName();
 				return inputName;
 			}
 		}
-		throw new TFException("Input key '" + key + "' not found in MetaGraphDef");
+		throw new TFException("Input key '" + inputKey + "' not found in MetaGraphDef");
 	}
 
 	/**
 	 * Obtain the TensorInfo object corresponding to an input key.
 	 * 
-	 * @param key
+	 * @param signatureDefKey
+	 *            The SignatureDef key
+	 * @param inputKey
 	 *            The input key
 	 * @param model
 	 *            The TFModel object
 	 * @return The TensorInfo object corresponding to the input key
 	 */
-	public static TensorInfo inputKeyToTensorInfo(String key, TFModel model) {
-		return inputKeyToTensorInfo(key, model.metaGraphDef());
+	public static TensorInfo inputKeyToTensorInfo(String signatureDefKey, String inputKey, TFModel model) {
+		return inputKeyToTensorInfo(signatureDefKey, inputKey, model.metaGraphDef());
 	}
 
 	/**
 	 * Obtain the TensorInfo object corresponding to an input key.
-	 * 
-	 * @param key
+	 *
+	 * @param signatureDefKey
+	 *            The SignatureDef key
+	 * @param inputKey
 	 *            The input key
 	 * @param metaGraphDef
 	 *            The MetaGraphDef object
 	 * @return The TensorInfo object corresponding to the input key
 	 */
-	public static TensorInfo inputKeyToTensorInfo(String key, MetaGraphDef metaGraphDef) {
+	public static TensorInfo inputKeyToTensorInfo(String signatureDefKey, String inputKey, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
-		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
-		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
-			SignatureDef sigDef = sdmEntry.getValue();
+		if (signatureDefKey == null) {
+			Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
+			for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
+				SignatureDef sigDef = sdmEntry.getValue();
+				Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
+				if (inputsMap.containsKey(inputKey)) {
+					TensorInfo tensorInfo = inputsMap.get(inputKey);
+					log.debug("Retrieved TensorInfo '" + tensorInfo.getName() + "' for key '" + inputKey + "'");
+					return tensorInfo;
+				}
+			}
+		} else {
+			SignatureDef sigDef = sdm.get(signatureDefKey);
 			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
-			if (inputsMap.containsKey(key)) {
-				TensorInfo tensorInfo = inputsMap.get(key);
-				log.debug("Retrieved TensorInfo '" + tensorInfo.getName() + "' for key '" + key + "'");
+			if (inputsMap.containsKey(inputKey)) {
+				TensorInfo tensorInfo = inputsMap.get(inputKey);
+				log.debug("Retrieved TensorInfo '" + tensorInfo.getName() + "' for key '" + inputKey + "'");
 				return tensorInfo;
 			}
 		}
-		throw new TFException("Input key '" + key + "' not found in MetaGraphDef");
+		throw new TFException("Input key '" + inputKey + "' not found in MetaGraphDef");
 	}
 
 	/**
 	 * Obtain the output name corresponding to an output key.
 	 * 
-	 * @param key
+	 * @param signatureDefKey
+	 *            The SignatureDef key
+	 * @param outputKey
 	 *            The output key
 	 * @param model
 	 *            The TFModel object
 	 * @return The output name corresponding to the output key
 	 */
-	public static String outputKeyToName(String key, TFModel model) {
-		return outputKeyToName(key, model.metaGraphDef());
+	public static String outputKeyToName(String signatureDefKey, String outputKey, TFModel model) {
+		return outputKeyToName(signatureDefKey, outputKey, model.metaGraphDef());
 	}
 
 	/**
 	 * Obtain the output name corresponding to an output key.
 	 * 
-	 * @param key
+	 * @param signatureDefKey
+	 *            The SignatureDef key
+	 * @param outputKey
 	 *            The output key
 	 * @param metaGraphDef
 	 *            The MetaGraphDef object
 	 * @return The output name corresponding to the output key
 	 */
-	public static String outputKeyToName(String key, MetaGraphDef metaGraphDef) {
+	public static String outputKeyToName(String signatureDefKey, String outputKey, MetaGraphDef metaGraphDef) {
 		Map<String, SignatureDef> sdm = metaGraphDef.getSignatureDefMap();
-		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
-		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
-			SignatureDef sigDef = sdmEntry.getValue();
+		if (signatureDefKey == null) {
+			Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
+			for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
+				SignatureDef sigDef = sdmEntry.getValue();
+				Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
+				if (outputsMap.containsKey(outputKey)) {
+					TensorInfo tensorInfo = outputsMap.get(outputKey);
+					String outputName = tensorInfo.getName();
+					return outputName;
+				}
+			}
+		} else {
+			SignatureDef sigDef = sdm.get(signatureDefKey);
 			Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
-			if (outputsMap.containsKey(key)) {
-				TensorInfo tensorInfo = outputsMap.get(key);
+			if (outputsMap.containsKey(outputKey)) {
+				TensorInfo tensorInfo = outputsMap.get(outputKey);
 				String outputName = tensorInfo.getName();
 				return outputName;
 			}
 		}
-		throw new TFException("Output key '" + key + "' not found in MetaGraphDef");
+		throw new TFException("Output key '" + outputKey + "' not found in MetaGraphDef");
 	}
 
 	/**
