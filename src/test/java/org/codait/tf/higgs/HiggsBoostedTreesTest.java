@@ -79,15 +79,36 @@ public class HiggsBoostedTreesTest {
 		Assert.assertArrayEquals(expected, predictions);
 	}
 
-	private void displayDebug(long[] labels, long[] predictions) {
-		for (int i = 0; i < labels.length; i++) {
-			long label = labels[i];
+	@Test
+	public void higgsInputStringsOutputClasses() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output classes");
+		String[] expected = new String[] { "1", "0" };
+		String[] predictions = (String[]) model.in("inputs", s).out("classes").run().getStringArray("classes");
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions);
+	}
+
+	private void displayDebug(long[] expected, long[] predictions) {
+		for (int i = 0; i < expected.length; i++) {
+			long exp = expected[i];
 			long prediction = predictions[i];
-			displayDebug(label, prediction);
+			displayDebug(exp, prediction);
 		}
 	}
 
 	private void displayDebug(long expected, long prediction) {
 		log.debug(String.format("Expected: %d, Prediction: %d", expected, prediction));
+	}
+
+	private void displayDebug(String[] expected, String[] predictions) {
+		for (int i = 0; i < expected.length; i++) {
+			String exp = expected[i];
+			String prediction = predictions[i];
+			displayDebug(exp, prediction);
+		}
+	}
+
+	private void displayDebug(String expected, String prediction) {
+		log.debug(String.format("Expected: %s, Prediction: %s", expected, prediction));
 	}
 }

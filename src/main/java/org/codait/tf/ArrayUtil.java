@@ -237,7 +237,7 @@ public class ArrayUtil {
 	 * @param dest
 	 *            The multidimensional (dim+1) byte array
 	 */
-	public static void copyStringArrayToByteArrayVals(Object orig, Object dest) {
+	protected static void copyStringArrayToByteArrayVals(Object orig, Object dest) {
 		for (int i = 0; i < Array.getLength(orig); i++) {
 			Object v = Array.get(orig, i);
 			Object vd = Array.get(dest, i);
@@ -247,6 +247,51 @@ public class ArrayUtil {
 				String s = (String) v;
 				byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
 				Array.set(dest, i, bytes);
+			}
+		}
+	}
+
+	/**
+	 * Convert a multidimensional (dim) byte array to a multidimensional (dim-1) String array. The multidimensional
+	 * String array will have 1 less dimension than the multidimensional byte array since a 1D byte array is converted
+	 * to a String.
+	 * 
+	 * @param b
+	 *            The multidimensional byte array
+	 * @return The multidimensional (dim-1) String array equivalent of the multidimensional (dim) byte array
+	 */
+	public static Object multidimBytesToMultidimStrings(Object b) {
+		int[] bDim = getArrayDimensions(b);
+		int[] sDim = Arrays.copyOf(bDim, bDim.length - 1);
+		Object s = Array.newInstance(String.class, sDim);
+		copyByteArrayToStringArrayVals(b, s, sDim.length);
+		return s;
+	}
+
+	/**
+	 * Convert byte values in a multidimensional (dim) array to String values in a multidimensional (dim-1) array. The
+	 * multidimensional byte array has 1 more dimension than the multidimensional String array since a 1D byte array is
+	 * converted to a String.
+	 * 
+	 * @param orig
+	 *            The multidimensional (dim) byte array
+	 * @param dest
+	 *            The multidimensional (dim-1) String array
+	 * @param dimCount
+	 *            String dimension count for recursion. If greater than one, recurse through multidimensional byte
+	 *            array. Otherwise, copy 1D byte array to corresponding String and place in multidimensional String
+	 *            array.
+	 */
+	protected static void copyByteArrayToStringArrayVals(Object orig, Object dest, int dimCount) {
+		for (int i = 0; i < Array.getLength(orig); i++) {
+			Object v = Array.get(orig, i);
+			Object vd = Array.get(dest, i);
+			if (dimCount > 1) {
+				int newDim = dimCount - 1;
+				copyByteArrayToStringArrayVals(v, vd, newDim);
+			} else {
+				String s = new String((byte[]) v, StandardCharsets.UTF_8);
+				Array.set(dest, i, s);
 			}
 		}
 	}

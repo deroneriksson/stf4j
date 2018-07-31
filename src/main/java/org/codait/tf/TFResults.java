@@ -3,6 +3,7 @@ package org.codait.tf;
 import java.lang.reflect.Array;
 import java.nio.FloatBuffer;
 import java.nio.LongBuffer;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -11,8 +12,7 @@ import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.TensorInfo;
 
 /**
- * Representation of the results of running a TensorFlow model, which primarily
- * consists of a map of Tensor values.
+ * Representation of the results of running a TensorFlow model, which primarily consists of a map of Tensor values.
  *
  */
 public class TFResults {
@@ -349,5 +349,43 @@ public class TFResults {
 	 */
 	private Object keyToOutput(String key) {
 		return outputNameToValue.get(outputKeyToName.get(key));
+	}
+
+	/**
+	 * Obtain the String array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The String array
+	 */
+	public String[] getStringArray(String key) {
+		String[][] multi = (String[][]) getStringArrayMultidimensional(key);
+		String[] result = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
+		return result;
+	}
+
+	/**
+	 * Obtain the multidimensional String array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The multidimensional String array
+	 */
+	public Object getStringArrayMultidimensional(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		if (ti.getDtype() == DataType.DT_STRING) {
+			@SuppressWarnings("unchecked")
+			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
+			int[] sDim = ArrayUtil.lToI(tensor.shape());
+			int[] bDim = Arrays.copyOf(sDim, sDim.length + 1);
+			Object bDest = Array.newInstance(byte.class, bDim);
+			tensor.copyTo(bDest);
+			Object sDest = ArrayUtil.multidimBytesToMultidimStrings(bDest);
+			return sDest;
+		} else {
+			throw new TFException(
+					"getStringArrayMultidimensional not implemented for '" + key + "' data type: " + ti.getDtype());
+		}
 	}
 }
