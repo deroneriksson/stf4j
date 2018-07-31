@@ -17,6 +17,10 @@ import org.tensorflow.framework.TensorInfo;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+/**
+ * Encapsulation of a TensorFlow model for simplified TensorFlow execution from Java using SavedModels.
+ *
+ */
 public class TFModel {
 
 	/**
@@ -24,43 +28,115 @@ public class TFModel {
 	 */
 	protected static Logger log = LogManager.getLogger(TFModel.class);
 
+	/**
+	 * SavedModel loaded from a file system
+	 */
 	SavedModelBundle savedModel;
+	/**
+	 * model metadata description
+	 */
 	MetaGraphDef metaGraphDef;
+	/**
+	 * SavedModel directory
+	 */
 	String savedModelDir;
 
+	/**
+	 * SignatureDef key that allows a particular set of input keys and output keys to be mapped to the desired input
+	 * names and output names.
+	 */
 	String signatureDefKey;
-	Map<String, Object> inputNameToValue = new LinkedHashMap<>();
-	Map<String, Object> outputNameToValue = new LinkedHashMap<>();
+	/**
+	 * Mapping of input keys to names.
+	 */
 	Map<String, String> inputKeyToName = new LinkedHashMap<>();
+	/**
+	 * Mapping of output keys to names.
+	 */
 	Map<String, String> outputKeyToName = new LinkedHashMap<>();
+	/**
+	 * Mapping of input names to values.
+	 */
+	Map<String, Object> inputNameToValue = new LinkedHashMap<>();
+	/**
+	 * Mapping of output names to values.
+	 */
+	Map<String, Object> outputNameToValue = new LinkedHashMap<>();
+	/**
+	 * The results obtained from executing the model.
+	 */
 	TFResults results;
 
+	/**
+	 * Load TensorFlow model located at modelDir with specified MetaGraphDef tags.
+	 * 
+	 * @param modelDir
+	 *            SavedModel directory
+	 * @param metaGraphDefTags
+	 *            The MetaGraphDef tags
+	 */
 	public TFModel(String modelDir, String... metaGraphDefTags) {
 		log.debug("Creating TFModel object");
 		savedModelDir = modelDir;
 		savedModel = SavedModelBundle.load(modelDir, metaGraphDefTags);
 	}
 
+	/**
+	 * Load TensorFlow model located at modelDir with tag "serve".
+	 * 
+	 * @param modelDir
+	 *            SavedModel directory
+	 */
 	public TFModel(String modelDir) {
 		this(modelDir, "serve");
 	}
 
+	/**
+	 * Obtain the SavedModel.
+	 * 
+	 * @return The SavedModelBundle
+	 */
 	public SavedModelBundle model() {
 		return savedModel;
 	}
 
+	/**
+	 * Obtain the SavedModel directory.
+	 * 
+	 * @return SavedModel directory
+	 */
 	public String modelDir() {
 		return savedModelDir;
 	}
 
+	/**
+	 * Obtain a Session to allow computations to be performed on the SavedModel.
+	 * 
+	 * @return A Session to the SavedModel.
+	 */
 	public Session session() {
 		return savedModel.session();
 	}
 
+	/**
+	 * Obtain a Runner to run the TensorFlow model graph operations and retrieve the results.
+	 * 
+	 * @return A Runner to the SavedModel.
+	 */
 	public Runner runner() {
 		return session().runner();
 	}
 
+	/**
+	 * Add an input to the model by specifying an input key and the corresponding value. If a SignatureDef key has been
+	 * specified using the TFModel sig() method, the input key will be specific to the SignatureDef key.
+	 * 
+	 * @param inputKey
+	 *            The input key
+	 * @param inputValue
+	 *            The input value
+	 * @return {@code this} TFModel object to allow chaining of methods
+	 */
 	public TFModel in(String inputKey, Object inputValue) {
 		if (inputValue == null) {
 			throw new TFException("Input value cannot be null");
@@ -80,6 +156,14 @@ public class TFModel {
 		return this;
 	}
 
+	/**
+	 * Add an output from the model by specifying an output key. If a SignatureDef key has been specified using the
+	 * TFModel sig() method, the output key will be specific to the SignatureDef key.
+	 * 
+	 * @param outputKey
+	 *            The output key
+	 * @return {@code this} TFModel object to allow chaining of methods
+	 */
 	public TFModel out(String outputKey) {
 		log.debug("Register output key '" + outputKey + "'");
 		String outputName = TFUtil.outputKeyToName(signatureDefKey, outputKey, metaGraphDef());
@@ -88,18 +172,39 @@ public class TFModel {
 		return this;
 	}
 
-	public TFModel out(String... keys) {
-		for (String key : keys) {
-			out(key);
+	/**
+	 * Add outputs from the model by specifying output keys. If a SignatureDef key has been specified using the TFModel
+	 * sig() method, the output key will be specific to the SignatureDef key.
+	 * 
+	 * @param outputKeys
+	 *            The output keys
+	 * @return {@code this} TFModel object to allow chaining of methods
+	 */
+	public TFModel out(String... outputKeys) {
+		for (String outputKey : outputKeys) {
+			out(outputKey);
 		}
 		return this;
 	}
 
+	/**
+	 * Specify a particular SignatureDef key which allows for specificity in terms of inputs and outputs.
+	 * 
+	 * @param signatureDefKey
+	 *            The SignatureDef key
+	 * @return {@code this} TFModel object to allow chaining of methods
+	 */
 	public TFModel sig(String signatureDefKey) {
 		this.signatureDefKey = signatureDefKey;
 		return this;
 	}
 
+	/**
+	 * Execute the model graph operations. The results will be returned as a TFResults object, which is a mapping of
+	 * output keys to output names to output values. Specific outputs are retrieved by output keys.
+	 * 
+	 * @return The results as a TFResults object.
+	 */
 	public TFResults run() {
 		log.debug("Running model");
 		Runner runner = runner();
@@ -123,6 +228,11 @@ public class TFModel {
 		return results;
 	}
 
+	/**
+	 * Obtain the model metadata description.
+	 * 
+	 * @return The model metadata description as a MetaGraphDef object
+	 */
 	public MetaGraphDef metaGraphDef() {
 		if (metaGraphDef != null) {
 			return metaGraphDef;
@@ -136,6 +246,11 @@ public class TFModel {
 		}
 	}
 
+	/**
+	 * Obtain SignatureDef metadata as a String.
+	 * 
+	 * @return The SignatureDef metadata as a String
+	 */
 	public String signatureDefInfo() {
 		try {
 			return TFUtil.signatureDefInfo(metaGraphDef());
@@ -144,6 +259,10 @@ public class TFModel {
 		}
 	}
 
+	/**
+	 * Display information about the model, such as the model location in the file system, the SignatureDef metadata,
+	 * the inputs, and the outputs.
+	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -210,6 +329,9 @@ public class TFModel {
 		return sb.toString();
 	}
 
+	/**
+	 * Clear the SignatureDef key, the input and output key-to-name-to-value mappings, and the results.
+	 */
 	public void clear() {
 		inputKeyToName.clear();
 		inputNameToValue.clear();
