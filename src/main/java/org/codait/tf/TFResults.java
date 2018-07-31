@@ -12,21 +12,42 @@ import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.TensorInfo;
 
 /**
- * Representation of the results of running a TensorFlow model, which primarily consists of a map of Tensor values.
+ * Representation of the results of running a TensorFlow model, which primarily consists of a map of Tensor values. An
+ * individual result is obtained by specifying the output key.
  *
  */
 public class TFResults {
 
+	/**
+	 * The TensorFlow model.
+	 */
 	TFModel model;
+	/**
+	 * Mapping of output keys to names.
+	 */
 	Map<String, String> outputKeyToName;
+	/**
+	 * Mapping of output names to values.
+	 */
 	Map<String, Object> outputNameToValue;
 
+	/**
+	 * Create TFResults object with TFModel. Obtain the output key-to-name and name-to-value mappings from the TFModel
+	 * object.
+	 * 
+	 * @param model
+	 *            The TensorFlow model
+	 */
 	public TFResults(TFModel model) {
 		this.model = model;
 		this.outputKeyToName = model.outputKeyToName;
 		this.outputNameToValue = model.outputNameToValue;
 	}
 
+	/**
+	 * Display the output results. This includes the output keys, the output names, and information about the tensors
+	 * such as the tensor types and shapes. This information is very useful in a REPL environment.
+	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
