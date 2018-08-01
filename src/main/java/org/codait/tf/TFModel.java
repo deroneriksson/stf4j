@@ -278,6 +278,8 @@ public class TFModel {
 			return sb.toString();
 		}
 
+		sb.append("\nSignatureDef Key: ");
+		sb.append(signatureDefKey == null ? "None" : signatureDefKey);
 		sb.append("\nInputs:\n");
 		if (inputKeyToName == null || inputKeyToName.isEmpty()) {
 			sb.append("  None\n");
