@@ -107,6 +107,72 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
+	public void higgsInputStringsOutputClassIdsDoublesMultidimensional() {
+		log.debug(
+				"Higgs Boosted Trees - input data as csv strings, output class_ids as double (multidimensional) array");
+		double[] expected = new double[] { 1, 0 };
+		double[][] predictions = (double[][]) model.in("inputs", s).out("class_ids").run()
+				.getDoubleArrayMultidimensional("class_ids");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			double pred = predictions[i][0];
+			double exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred, 0);
+		}
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassIdsFloatsMultidimensional() {
+		log.debug(
+				"Higgs Boosted Trees - input data as csv strings, output class_ids as float (multidimensional) array");
+		float[] expected = new float[] { 1f, 0f };
+		float[][] predictions = (float[][]) model.in("inputs", s).out("class_ids").run()
+				.getFloatArrayMultidimensional("class_ids");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			double pred = predictions[i][0];
+			double exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred, 0f);
+		}
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassIdsIntsMultidimensional() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output class_ids as int (multidimensional) array");
+		int[] expected = new int[] { 1, 0 };
+		int[][] predictions = (int[][]) model.in("inputs", s).out("class_ids").run()
+				.getIntArrayMultidimensional("class_ids");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			int pred = predictions[i][0];
+			int exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred, 0);
+		}
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassIdsLongsMultidimensional() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output class_ids as long (multidimensional) array");
+		long[] expected = new long[] { 1, 0 };
+		long[][] predictions = (long[][]) model.in("inputs", s).out("class_ids").run()
+				.getLongArrayMultidimensional("class_ids");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			long pred = predictions[i][0];
+			long exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred, 0);
+		}
+	}
+
+	@Test
 	public void higgsInputStringsOutputClassesStrings() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as String array");
 		String[] expected = new String[] { "1", "0" };
