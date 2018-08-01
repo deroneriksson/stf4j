@@ -140,6 +140,28 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
+	public void higgsInputStringsOutputClassesFloats() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as float array");
+		float[] expected = new float[] { 1f, 0f };
+		float[] predictions = (float[]) model.in("inputs", s).out("classes").run().getFloatArray("classes");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions, 0f);
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassesDoubles() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as double array");
+		double[] expected = new double[] { 1f, 0f };
+		double[] predictions = (double[]) model.in("inputs", s).out("classes").run().getDoubleArray("classes");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions, 0);
+	}
+
+	@Test
 	public void higgsInputStringsOutputLogisticFloats() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output logistic as float array");
 		float[] expected = new float[] { 0.6440273f, 0.10902369f };

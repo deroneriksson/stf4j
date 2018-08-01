@@ -207,6 +207,10 @@ public class TFResults {
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			long[] lArray = ArrayUtil.longTensorToLongArray(tensor);
 			return ArrayUtil.lToF(lArray);
+		} else if (dtype == DataType.DT_STRING) {
+			String[] sArray = getStringArray(key);
+			float[] fArray = (float[]) ArrayUtil.convertArrayType(sArray, float.class);
+			return fArray;
 		} else {
 			throw new TFException("getFloatArray not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -342,6 +346,10 @@ public class TFResults {
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			long[] lArray = ArrayUtil.longTensorToLongArray(tensor);
 			return ArrayUtil.lToD(lArray);
+		} else if (dtype == DataType.DT_STRING) {
+			String[] sArray = getStringArray(key);
+			double[] dArray = (double[]) ArrayUtil.convertArrayType(sArray, double.class);
+			return dArray;
 		} else {
 			throw new TFException("getDoubleArray not implemented for '" + key + "' data type: " + dtype);
 		}

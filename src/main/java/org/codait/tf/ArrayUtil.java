@@ -108,6 +108,10 @@ public class ArrayUtil {
 					Array.set(dest, i, Integer.valueOf((String) v));
 				} else if ("String".equals(o) && "long".equals(d)) {
 					Array.set(dest, i, Long.valueOf((String) v));
+				} else if ("String".equals(o) && "float".equals(d)) {
+					Array.set(dest, i, Float.valueOf((String) v));
+				} else if ("String".equals(o) && "double".equals(d)) {
+					Array.set(dest, i, Double.valueOf((String) v));
 				} else {
 					Array.set(dest, i, v);
 				}
