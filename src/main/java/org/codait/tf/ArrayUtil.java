@@ -1,6 +1,7 @@
 package org.codait.tf;
 
 import java.lang.reflect.Array;
+import java.nio.FloatBuffer;
 import java.nio.LongBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -176,7 +177,7 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Convert Tensor<Long> to long array.
+	 * Convert {@code Tensor<Long>} to long array.
 	 * 
 	 * @param tensor
 	 *            The Tensor of Long values
@@ -186,6 +187,19 @@ public class ArrayUtil {
 		LongBuffer lb = LongBuffer.allocate(tensor.numElements());
 		tensor.writeTo(lb);
 		return lb.array();
+	}
+
+	/**
+	 * Convert {@code Tensor<Float>} to float array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Float values
+	 * @return Primitive float array
+	 */
+	public static float[] floatTensorToFloatArray(Tensor<Float> tensor) {
+		FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
+		tensor.writeTo(fb);
+		return fb.array();
 	}
 
 	/**

@@ -1,8 +1,6 @@
 package org.codait.tf;
 
 import java.lang.reflect.Array;
-import java.nio.FloatBuffer;
-import java.nio.LongBuffer;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -137,9 +135,7 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			LongBuffer lb = LongBuffer.allocate(tensor.numElements());
-			tensor.writeTo(lb);
-			return lb.array();
+			return ArrayUtil.longTensorToLongArray(tensor);
 		} else {
 			throw new TFException("getLongArray not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
@@ -202,9 +198,7 @@ public class TFResults {
 		if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
-			FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
-			tensor.writeTo(fb);
-			return fb.array();
+			return ArrayUtil.floatTensorToFloatArray(tensor);
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
@@ -271,9 +265,8 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			LongBuffer lb = LongBuffer.allocate(tensor.numElements());
-			tensor.writeTo(lb);
-			return ArrayUtil.lToI(lb.array());
+			long[] lArray = ArrayUtil.longTensorToLongArray(tensor);
+			return ArrayUtil.lToI(lArray);
 		} else {
 			throw new TFException("getIntArray not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
@@ -336,9 +329,8 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
-			FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
-			tensor.writeTo(fb);
-			double[] d = (double[]) ArrayUtil.convertArrayType(fb.array(), double.class);
+			float[] fArray = ArrayUtil.floatTensorToFloatArray(tensor);
+			double[] d = (double[]) ArrayUtil.convertArrayType(fArray, double.class);
 			return d;
 		} else {
 			throw new TFException("getDoubleArray not implemented for '" + key + "' data type: " + ti.getDtype());
