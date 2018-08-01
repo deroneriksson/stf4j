@@ -39,8 +39,7 @@ public class HiggsBoostedTreesTest {
 
 	@Before
 	public void init() throws IOException {
-		model = new TFModel(HIGGS_SAVED_MODEL_DIR);
-		model.sig("predict");
+		model = new TFModel(HIGGS_SAVED_MODEL_DIR).sig("predict");
 	}
 
 	@After
@@ -91,6 +90,24 @@ public class HiggsBoostedTreesTest {
 		Assert.assertArrayEquals(expected, predictions);
 	}
 
+	@Test
+	public void higgsInputStringsOutputLogisticFloats() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output logistic as float array");
+		float[] expected = new float[] { 0.6440273f, 0.10902369f };
+		float[] predictions = model.in("inputs", s).out("logistic").run().getFloatArray("logistic");
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions, 0.000005f);
+	}
+
+	@Test
+	public void higgsInputStringsOutputLogisticDoubles() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output logistic as double array");
+		double[] expected = new double[] { 0.6440273, 0.10902369 };
+		double[] predictions = model.in("inputs", s).out("logistic").run().getDoubleArray("logistic");
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions, 0.000005);
+	}
+
 	private void displayDebug(long[] expected, long[] predictions) {
 		for (int i = 0; i < expected.length; i++) {
 			long exp = expected[i];
@@ -113,5 +130,29 @@ public class HiggsBoostedTreesTest {
 
 	private void displayDebug(String expected, String prediction) {
 		log.debug(String.format("Expected: %s, Prediction: %s", expected, prediction));
+	}
+
+	private void displayDebug(float[] expected, float[] predictions) {
+		for (int i = 0; i < expected.length; i++) {
+			float exp = expected[i];
+			float prediction = predictions[i];
+			displayDebug(exp, prediction);
+		}
+	}
+
+	private void displayDebug(float expected, float prediction) {
+		log.debug(String.format("Expected: %f, Prediction: %f", expected, prediction));
+	}
+
+	private void displayDebug(double[] expected, double[] predictions) {
+		for (int i = 0; i < expected.length; i++) {
+			double exp = expected[i];
+			double prediction = predictions[i];
+			displayDebug(exp, prediction);
+		}
+	}
+
+	private void displayDebug(double expected, double prediction) {
+		log.debug(String.format("Expected: %f, Prediction: %f", expected, prediction));
 	}
 }
