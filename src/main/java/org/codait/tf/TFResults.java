@@ -51,7 +51,9 @@ public class TFResults {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-
+		sb.append("SignatureDef Key: ");
+		sb.append(model.signatureDefKey == null ? "None" : model.signatureDefKey);
+		sb.append("\nOutputs:\n");
 		if (outputKeyToName == null || outputKeyToName.isEmpty()) {
 			sb.append("None\n");
 		} else {
