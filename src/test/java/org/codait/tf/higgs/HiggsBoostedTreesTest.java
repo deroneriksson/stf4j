@@ -96,7 +96,7 @@ public class HiggsBoostedTreesTest {
 		float[] expected = new float[] { 0.6440273f, 0.10902369f };
 		float[] predictions = model.in("inputs", s).out("logistic").run().getFloatArray("logistic");
 		displayDebug(expected, predictions);
-		Assert.assertArrayEquals(expected, predictions, 0.000005f);
+		Assert.assertArrayEquals(expected, predictions, 0.00001f);
 	}
 
 	@Test
@@ -105,7 +105,25 @@ public class HiggsBoostedTreesTest {
 		double[] expected = new double[] { 0.6440273, 0.10902369 };
 		double[] predictions = model.in("inputs", s).out("logistic").run().getDoubleArray("logistic");
 		displayDebug(expected, predictions);
-		Assert.assertArrayEquals(expected, predictions, 0.000005);
+		Assert.assertArrayEquals(expected, predictions, 0.00001);
+	}
+
+	@Test
+	public void higgsInputStringsOutputLogitsFloats() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output logits as float array");
+		float[] expected = new float[] { 0.59288704f, -2.1007526f };
+		float[] predictions = model.in("inputs", s).out("logits").run().getFloatArray("logits");
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions, 0.00001f);
+	}
+
+	@Test
+	public void higgsInputStringsOutputLogitsDoubles() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output logits as double array");
+		double[] expected = new double[] { 0.59288704, -2.1007526 };
+		double[] predictions = model.in("inputs", s).out("logits").run().getDoubleArray("logits");
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions, 0.00001f);
 	}
 
 	private void displayDebug(long[] expected, long[] predictions) {
