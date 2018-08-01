@@ -320,14 +320,20 @@ public class TFResults {
 	public double[] getDoubleArray(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
-		if (ti.getDtype() == DataType.DT_FLOAT) {
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			float[] fArray = ArrayUtil.floatTensorToFloatArray(tensor);
 			double[] d = (double[]) ArrayUtil.convertArrayType(fArray, double.class);
 			return d;
+		} else if (dtype == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
+			long[] lArray = ArrayUtil.longTensorToLongArray(tensor);
+			return ArrayUtil.lToD(lArray);
 		} else {
-			throw new TFException("getDoubleArray not implemented for '" + key + "' data type: " + ti.getDtype());
+			throw new TFException("getDoubleArray not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 

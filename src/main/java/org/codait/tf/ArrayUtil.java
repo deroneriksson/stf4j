@@ -177,6 +177,21 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert 1d long array to double array.
+	 * 
+	 * @param iArray
+	 *            Primitive long array
+	 * @return Primitive double array
+	 */
+	public static double[] lToD(long[] lArray) {
+		double[] dArray = new double[lArray.length];
+		for (int i = 0; i < lArray.length; i++) {
+			dArray[i] = (double) lArray[i];
+		}
+		return dArray;
+	}
+
+	/**
 	 * Convert {@code Tensor<Long>} to long array.
 	 * 
 	 * @param tensor

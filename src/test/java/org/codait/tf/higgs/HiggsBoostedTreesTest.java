@@ -98,6 +98,15 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
+	public void higgsInputStringsOutputClassIdsDoubles() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output class_ids as double array");
+		double[] expected = new double[] { 1, 0 };
+		double[] predictions = model.in("inputs", s).out("class_ids").run().getDoubleArray("class_ids");
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions, 0);
+	}
+
+	@Test
 	public void higgsInputStringsOutputClasses() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output classes");
 		String[] expected = new String[] { "1", "0" };
