@@ -110,7 +110,7 @@ public class HiggsBoostedTreesTest {
 	public void higgsInputStringsOutputClassesStrings() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as String array");
 		String[] expected = new String[] { "1", "0" };
-		String[] predictions = (String[]) model.in("inputs", s).out("classes").run().getStringArray("classes");
+		String[] predictions = model.in("inputs", s).out("classes").run().getStringArray("classes");
 		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
 				predictions.length);
 		displayDebug(expected, predictions);
@@ -121,7 +121,7 @@ public class HiggsBoostedTreesTest {
 	public void higgsInputStringsOutputClassesInts() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as int array");
 		int[] expected = new int[] { 1, 0 };
-		int[] predictions = (int[]) model.in("inputs", s).out("classes").run().getIntArray("classes");
+		int[] predictions = model.in("inputs", s).out("classes").run().getIntArray("classes");
 		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
 				predictions.length);
 		displayDebug(expected, predictions);
@@ -129,10 +129,90 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
+	public void higgsInputStringsOutputClassesIntsMultidimensional() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as int (multidimensional) array");
+		int[] expected = new int[] { 1, 0 };
+		int[][] predictions = (int[][]) model.in("inputs", s).out("classes").run()
+				.getIntArrayMultidimensional("classes");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			int pred = predictions[i][0];
+			int exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred);
+		}
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassesLongMultidimensional() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as long (multidimensional) array");
+		long[] expected = new long[] { 1, 0 };
+		long[][] predictions = (long[][]) model.in("inputs", s).out("classes").run()
+				.getLongArrayMultidimensional("classes");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			long pred = predictions[i][0];
+			long exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred);
+		}
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassesFloatsMultidimensional() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as float (multidimensional) array");
+		float[] expected = new float[] { 1, 0 };
+		float[][] predictions = (float[][]) model.in("inputs", s).out("classes").run()
+				.getFloatArrayMultidimensional("classes");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			float pred = predictions[i][0];
+			float exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred, 0f);
+		}
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassesDoublesMultidimensional() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as double (multidimensional) array");
+		double[] expected = new double[] { 1, 0 };
+		double[][] predictions = (double[][]) model.in("inputs", s).out("classes").run()
+				.getDoubleArrayMultidimensional("classes");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			double pred = predictions[i][0];
+			double exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred, 0);
+		}
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassesStringsMultidimensional() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as String (multidimensional) array");
+		String[] expected = new String[] { "1", "0" };
+		String[][] predictions = (String[][]) model.in("inputs", s).out("classes").run()
+				.getStringArrayMultidimensional("classes");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			String pred = predictions[i][0];
+			String exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred);
+		}
+	}
+
+	@Test
 	public void higgsInputStringsOutputClassesLongs() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as long array");
 		long[] expected = new long[] { 1, 0 };
-		long[] predictions = (long[]) model.in("inputs", s).out("classes").run().getLongArray("classes");
+		long[] predictions = model.in("inputs", s).out("classes").run().getLongArray("classes");
 		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
 				predictions.length);
 		displayDebug(expected, predictions);
@@ -143,7 +223,7 @@ public class HiggsBoostedTreesTest {
 	public void higgsInputStringsOutputClassesFloats() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as float array");
 		float[] expected = new float[] { 1f, 0f };
-		float[] predictions = (float[]) model.in("inputs", s).out("classes").run().getFloatArray("classes");
+		float[] predictions = model.in("inputs", s).out("classes").run().getFloatArray("classes");
 		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
 				predictions.length);
 		displayDebug(expected, predictions);
@@ -154,7 +234,7 @@ public class HiggsBoostedTreesTest {
 	public void higgsInputStringsOutputClassesDoubles() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output classes as double array");
 		double[] expected = new double[] { 1f, 0f };
-		double[] predictions = (double[]) model.in("inputs", s).out("classes").run().getDoubleArray("classes");
+		double[] predictions = model.in("inputs", s).out("classes").run().getDoubleArray("classes");
 		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
 				predictions.length);
 		displayDebug(expected, predictions);
