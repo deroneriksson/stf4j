@@ -132,12 +132,17 @@ public class TFResults {
 	public long[] getLongArray(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
-		if (ti.getDtype() == DataType.DT_INT64) {
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			return ArrayUtil.longTensorToLongArray(tensor);
+		} else if (dtype == DataType.DT_STRING) {
+			String[] sArray = getStringArray(key);
+			long[] lArray = (long[]) ArrayUtil.convertArrayType(sArray, long.class);
+			return lArray;
 		} else {
-			throw new TFException("getLongArray not implemented for '" + key + "' data type: " + ti.getDtype());
+			throw new TFException("getLongArray not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 
@@ -258,13 +263,18 @@ public class TFResults {
 	public int[] getIntArray(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
-		if (ti.getDtype() == DataType.DT_INT64) {
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			long[] lArray = ArrayUtil.longTensorToLongArray(tensor);
 			return ArrayUtil.lToI(lArray);
+		} else if (dtype == DataType.DT_STRING) {
+			String[] sArray = getStringArray(key);
+			int[] iArray = (int[]) ArrayUtil.convertArrayType(sArray, int.class);
+			return iArray;
 		} else {
-			throw new TFException("getIntArray not implemented for '" + key + "' data type: " + ti.getDtype());
+			throw new TFException("getIntArray not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 
