@@ -154,10 +154,8 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			int[] shape = ArrayUtil.lToI(tensor.shape());
-			Object dest = Array.newInstance(long.class, shape);
-			tensor.copyTo(dest);
-			return dest;
+			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
+			return l;
 		} else {
 			throw new TFException(
 					"getLongArrayMultidimensional not implemented for '" + key + "' data type: " + ti.getDtype());
@@ -222,10 +220,8 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
-			int[] shape = ArrayUtil.lToI(tensor.shape());
-			Object dest = Array.newInstance(float.class, shape);
-			tensor.copyTo(dest);
-			return dest;
+			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
+			return f;
 		} else {
 			throw new TFException(
 					"getFloatArrayMultidimensional not implemented for '" + key + "' data type: " + ti.getDtype());
@@ -285,9 +281,7 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			int[] shape = ArrayUtil.lToI(tensor.shape());
-			Object l = Array.newInstance(long.class, shape);
-			tensor.copyTo(l);
+			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
 			Object i = ArrayUtil.convertArrayType(l, int.class);
 			return i;
 		} else {
@@ -350,9 +344,7 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
-			int[] shape = ArrayUtil.lToI(tensor.shape());
-			Object f = Array.newInstance(float.class, shape);
-			tensor.copyTo(f);
+			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
 			Object d = ArrayUtil.convertArrayType(f, double.class);
 			return d;
 		} else {

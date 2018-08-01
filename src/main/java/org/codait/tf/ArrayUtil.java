@@ -203,6 +203,34 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert {@code Tensor<Float>} to multidimensional float array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Float values
+	 * @return Multidimensional primitive float array as an Object
+	 */
+	public static Object floatTensorToMultidimensionalFloatArray(Tensor<Float> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object f = Array.newInstance(float.class, shape);
+		tensor.copyTo(f);
+		return f;
+	}
+
+	/**
+	 * Convert {@code Tensor<Long>} to multidimensional long array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Long values
+	 * @return Multidimensional primitive long array as an Object
+	 */
+	public static Object longTensorToMultidimensionalLongArray(Tensor<Long> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object l = Array.newInstance(long.class, shape);
+		tensor.copyTo(l);
+		return l;
+	}
+
+	/**
 	 * Obtain the index at which the maximum value occurs in an array.
 	 * 
 	 * @param f
