@@ -198,14 +198,20 @@ public class TFResults {
 	public float[] getFloatArray(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
-		if (ti.getDtype() == DataType.DT_FLOAT) {
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
 			tensor.writeTo(fb);
 			return fb.array();
+		} else if (dtype == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
+			long[] lArray = ArrayUtil.longTensorToLongArray(tensor);
+			return ArrayUtil.lToF(lArray);
 		} else {
-			throw new TFException("getFloatArray not implemented for '" + key + "' data type: " + ti.getDtype());
+			throw new TFException("getFloatArray not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 

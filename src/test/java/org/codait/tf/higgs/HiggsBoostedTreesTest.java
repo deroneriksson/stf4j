@@ -71,12 +71,30 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
-	public void higgsInputStringsOutputClassIds() {
-		log.debug("Higgs Boosted Trees - input data as csv strings, output class_ids");
+	public void higgsInputStringsOutputClassIdsLongs() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output class_ids as long array");
 		long[] expected = new long[] { 1, 0 };
 		long[] predictions = model.in("inputs", s).out("class_ids").run().getLongArray("class_ids");
 		displayDebug(expected, predictions);
 		Assert.assertArrayEquals(expected, predictions);
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassIdsInts() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output class_ids as int array");
+		int[] expected = new int[] { 1, 0 };
+		int[] predictions = model.in("inputs", s).out("class_ids").run().getIntArray("class_ids");
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions);
+	}
+
+	@Test
+	public void higgsInputStringsOutputClassIdsFloats() {
+		log.debug("Higgs Boosted Trees - input data as csv strings, output class_ids as float array");
+		float[] expected = new float[] { 1f, 0f };
+		float[] predictions = model.in("inputs", s).out("class_ids").run().getFloatArray("class_ids");
+		displayDebug(expected, predictions);
+		Assert.assertArrayEquals(expected, predictions, 0f);
 	}
 
 	@Test
@@ -164,6 +182,14 @@ public class HiggsBoostedTreesTest {
 
 	private void displayDebug(long expected, long prediction) {
 		log.debug(String.format("Expected: %d, Prediction: %d", expected, prediction));
+	}
+
+	private void displayDebug(int[] expected, int[] predictions) {
+		for (int i = 0; i < expected.length; i++) {
+			long exp = expected[i];
+			long prediction = predictions[i];
+			displayDebug(exp, prediction);
+		}
 	}
 
 	private void displayDebug(String[] expected, String[] predictions) {

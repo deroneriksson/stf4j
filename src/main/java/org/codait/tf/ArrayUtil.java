@@ -1,6 +1,7 @@
 package org.codait.tf;
 
 import java.lang.reflect.Array;
+import java.nio.LongBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.tensorflow.Tensor;
 
 public class ArrayUtil {
 
@@ -141,6 +143,49 @@ public class ArrayUtil {
 			iArray[i] = (int) lArray[i];
 		}
 		return iArray;
+	}
+
+	/**
+	 * Convert 1d int array to float array.
+	 * 
+	 * @param iArray
+	 *            Primitive int array
+	 * @return Primitive float array
+	 */
+	public static float[] iToF(int[] iArray) {
+		float[] fArray = new float[iArray.length];
+		for (int i = 0; i < iArray.length; i++) {
+			fArray[i] = (float) iArray[i];
+		}
+		return fArray;
+	}
+
+	/**
+	 * Convert 1d long array to float array.
+	 * 
+	 * @param iArray
+	 *            Primitive long array
+	 * @return Primitive float array
+	 */
+	public static float[] lToF(long[] lArray) {
+		float[] fArray = new float[lArray.length];
+		for (int i = 0; i < lArray.length; i++) {
+			fArray[i] = (float) lArray[i];
+		}
+		return fArray;
+	}
+
+	/**
+	 * Convert Tensor<Long> to long array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Long values
+	 * @return Primitive long array
+	 */
+	public static long[] longTensorToLongArray(Tensor<Long> tensor) {
+		LongBuffer lb = LongBuffer.allocate(tensor.numElements());
+		tensor.writeTo(lb);
+		return lb.array();
 	}
 
 	/**
