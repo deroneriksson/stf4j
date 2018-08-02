@@ -470,6 +470,18 @@ public class TFResults {
 			tensor.copyTo(bDest);
 			Object sDest = ArrayUtil.multidimBytesToMultidimStrings(bDest);
 			return sDest;
+		} else if (dtype == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
+			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
+			Object s = ArrayUtil.convertArrayType(l, String.class);
+			return s;
+		} else if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
+			Object s = ArrayUtil.convertArrayType(f, String.class);
+			return s;
 		} else {
 			throw new TFException(
 					"getStringArrayMultidimensional not implemented for '" + key + "' data type: " + dtype);

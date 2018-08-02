@@ -184,12 +184,46 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
+	public void higgsInputStringsOutputClassIdsStringsMultidimensional() {
+		log.debug(
+				"Higgs Boosted Trees - input data as csv strings, output class_ids as String (multidimensional) array");
+		String[] expected = new String[] { "1", "0" };
+		String[][] predictions = (String[][]) model.in("inputs", s).out("class_ids").run()
+				.getStringArrayMultidimensional("class_ids");
+		Assert.assertEquals("Predictions array length not equal to expected array length.", expected.length,
+				predictions.length);
+		for (int i = 0; i < predictions.length; i++) {
+			String pred = predictions[i][0];
+			String exp = expected[i];
+			displayDebug(exp, pred);
+			Assert.assertEquals(exp, pred);
+		}
+	}
+
+	@Test
 	public void higgsInputStringsOutputLogisticStrings() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output logistic as String array");
 		String[] expected = new String[] { "0.6440273", "0.10902369" };
 		String[] predictions = model.in("inputs", s).out("logistic").run().getStringArray("logistic");
 		for (int i = 0; i < expected.length; i++) {
 			String pred = predictions[i];
+			String exp = expected[i];
+			float p = Float.parseFloat(pred);
+			float e = Float.parseFloat(exp);
+			displayDebug(p, e);
+			Assert.assertEquals(p, e, 0.00001f);
+		}
+	}
+
+	@Test
+	public void higgsInputStringsOutputLogisticStringsMultidimensional() {
+		log.debug(
+				"Higgs Boosted Trees - input data as csv strings, output logistic as String (multidimensional) array");
+		String[] expected = new String[] { "0.6440273", "0.10902369" };
+		String[][] predictions = (String[][]) model.in("inputs", s).out("logistic").run()
+				.getStringArrayMultidimensional("logistic");
+		for (int i = 0; i < expected.length; i++) {
+			String pred = predictions[i][0];
 			String exp = expected[i];
 			float p = Float.parseFloat(pred);
 			float e = Float.parseFloat(exp);
