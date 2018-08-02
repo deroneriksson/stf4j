@@ -404,7 +404,7 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
-	public void higgsInputStringsOutputProbabilitiesFloats() {
+	public void higgsInputStringsOutputProbabilitiesFloatsMultidimensional() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output probabilities as 2D float array");
 		float[][] expected = new float[][] { { 0.3559727f, 0.6440273f }, { 0.8909763f, 0.1090237f } };
 		float[][] predictions = (float[][]) model.in("inputs", s).out("probabilities").run()
@@ -418,7 +418,7 @@ public class HiggsBoostedTreesTest {
 	}
 
 	@Test
-	public void higgsInputStringsOutputProbabilitiesDoubles() {
+	public void higgsInputStringsOutputProbabilitiesDoublesMultidimensional() {
 		log.debug("Higgs Boosted Trees - input data as csv strings, output probabilities as 2D double array");
 		double[][] expected = new double[][] { { 0.3559727, 0.6440273 }, { 0.8909763, 0.1090237 } };
 		double[][] predictions = (double[][]) model.in("inputs", s).out("probabilities").run()
@@ -428,6 +428,25 @@ public class HiggsBoostedTreesTest {
 			double[] preProbs = predictions[i];
 			displayDebug(expProbs, preProbs);
 			Assert.assertArrayEquals(expProbs, preProbs, 0.00001);
+		}
+	}
+
+	@Test
+	public void higgsInputStringsOutputProbabilitiesStringsMultidimensional() {
+		log.debug(
+				"Higgs Boosted Trees - input data as csv strings, output probabilities as String (multidimensional) array");
+		String[][] expected = new String[][] { { "0.3559727", "0.6440273" }, { "0.8909763", "0.1090237" } };
+		String[][] predictions = (String[][]) model.in("inputs", s).out("probabilities").run()
+				.getStringArrayMultidimensional("probabilities");
+		for (int i = 0; i < expected.length; i++) {
+			for (int j = 0; j < expected[0].length; j++) {
+				String pred = predictions[i][j];
+				String exp = expected[i][j];
+				float p = Float.parseFloat(pred);
+				float e = Float.parseFloat(exp);
+				displayDebug(p, e);
+				Assert.assertEquals(p, e, 0.00001f);
+			}
 		}
 	}
 
