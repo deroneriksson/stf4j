@@ -114,7 +114,7 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			long l = tensor.copyTo(new long[1])[0];
+			long l = tensor.longValue();
 			return l;
 		} else {
 			throw new TFException("getLong not implemented for '" + key + "' data type: " + ti.getDtype());
