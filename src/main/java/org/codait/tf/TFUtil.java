@@ -211,6 +211,14 @@ public class TFUtil {
 				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
 						+ "') to Tensor - conversion not implemented yet.");
 			}
+		} else if (DataType.DT_INT64 == dtype && isStringType(value)) {
+			if (value instanceof String) {
+				long val = Long.parseLong((String) value);
+				tensor = Tensor.create(val, Long.class);
+			} else {
+				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
+						+ "') to Tensor - conversion not implemented yet.");
+			}
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
 			if (isByteObjectArray(value)) {
 				log.warn("Implicitly converting Byte object array to primitive byte array");

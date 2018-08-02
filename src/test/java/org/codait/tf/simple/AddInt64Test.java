@@ -51,4 +51,10 @@ public class AddInt64Test {
 		Assert.assertTrue(3L == result);
 	}
 
+	@Test
+	public void inputStringsOutputLong() {
+		long result = model.in("input1", "1").in("input2", "2").out("output").run().getLong("output");
+		Assert.assertTrue(3L == result);
+	}
+
 }
