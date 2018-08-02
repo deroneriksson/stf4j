@@ -1,6 +1,5 @@
 package org.codait.tf;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -138,9 +137,9 @@ public class TFResults {
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			return ArrayUtil.longTensorToLongArray(tensor);
 		} else if (dtype == DataType.DT_STRING) {
-			String[] sArray = getStringArray(key);
-			long[] lArray = (long[]) ArrayUtil.convertArrayType(sArray, long.class);
-			return lArray;
+			String[] s = getStringArray(key);
+			long[] l = (long[]) ArrayUtil.convertArrayType(s, long.class);
+			return l;
 		} else {
 			throw new TFException("getLongArray not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -164,8 +163,8 @@ public class TFResults {
 			return l;
 		} else if (dtype == DataType.DT_STRING) {
 			Object s = getStringArrayMultidimensional(key);
-			Object i = ArrayUtil.convertArrayType(s, long.class);
-			return i;
+			Object l = ArrayUtil.convertArrayType(s, long.class);
+			return l;
 		} else {
 			throw new TFException("getLongArrayMultidimensional not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -209,12 +208,12 @@ public class TFResults {
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			long[] lArray = ArrayUtil.longTensorToLongArray(tensor);
-			return ArrayUtil.lToF(lArray);
+			long[] l = ArrayUtil.longTensorToLongArray(tensor);
+			return ArrayUtil.lToF(l);
 		} else if (dtype == DataType.DT_STRING) {
-			String[] sArray = getStringArray(key);
-			float[] fArray = (float[]) ArrayUtil.convertArrayType(sArray, float.class);
-			return fArray;
+			String[] s = getStringArray(key);
+			float[] f = (float[]) ArrayUtil.convertArrayType(s, float.class);
+			return f;
 		} else {
 			throw new TFException("getFloatArray not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -286,12 +285,12 @@ public class TFResults {
 		if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			long[] lArray = ArrayUtil.longTensorToLongArray(tensor);
-			return ArrayUtil.lToI(lArray);
+			long[] l = ArrayUtil.longTensorToLongArray(tensor);
+			return ArrayUtil.lToI(l);
 		} else if (dtype == DataType.DT_STRING) {
-			String[] sArray = getStringArray(key);
-			int[] iArray = (int[]) ArrayUtil.convertArrayType(sArray, int.class);
-			return iArray;
+			String[] s = getStringArray(key);
+			int[] i = (int[]) ArrayUtil.convertArrayType(s, int.class);
+			return i;
 		} else {
 			throw new TFException("getIntArray not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -357,18 +356,18 @@ public class TFResults {
 		if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
-			float[] fArray = ArrayUtil.floatTensorToFloatArray(tensor);
-			double[] d = (double[]) ArrayUtil.convertArrayType(fArray, double.class);
+			float[] f = ArrayUtil.floatTensorToFloatArray(tensor);
+			double[] d = (double[]) ArrayUtil.convertArrayType(f, double.class);
 			return d;
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			long[] lArray = ArrayUtil.longTensorToLongArray(tensor);
-			return ArrayUtil.lToD(lArray);
+			long[] l = ArrayUtil.longTensorToLongArray(tensor);
+			return ArrayUtil.lToD(l);
 		} else if (dtype == DataType.DT_STRING) {
-			String[] sArray = getStringArray(key);
-			double[] dArray = (double[]) ArrayUtil.convertArrayType(sArray, double.class);
-			return dArray;
+			String[] s = getStringArray(key);
+			double[] d = (double[]) ArrayUtil.convertArrayType(s, double.class);
+			return d;
 		} else {
 			throw new TFException("getDoubleArray not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -399,8 +398,8 @@ public class TFResults {
 			return d;
 		} else if (dtype == DataType.DT_STRING) {
 			Object s = getStringArrayMultidimensional(key);
-			Object i = ArrayUtil.convertArrayType(s, double.class);
-			return i;
+			Object d = ArrayUtil.convertArrayType(s, double.class);
+			return d;
 		} else {
 			throw new TFException(
 					"getDoubleArrayMultidimensional not implemented for '" + key + "' data type: " + dtype);
@@ -431,8 +430,8 @@ public class TFResults {
 		DataType dtype = ti.getDtype();
 		if (dtype == DataType.DT_STRING) {
 			String[][] multi = (String[][]) getStringArrayMultidimensional(key);
-			String[] result = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
-			return result;
+			String[] s = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
+			return s;
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
@@ -464,12 +463,8 @@ public class TFResults {
 		if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
 			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
-			int[] sDim = ArrayUtil.lToI(tensor.shape());
-			int[] bDim = Arrays.copyOf(sDim, sDim.length + 1);
-			Object bDest = Array.newInstance(byte.class, bDim);
-			tensor.copyTo(bDest);
-			Object sDest = ArrayUtil.multidimBytesToMultidimStrings(bDest);
-			return sDest;
+			Object s = ArrayUtil.stringTensorToMultidimensionalStringArray(tensor);
+			return s;
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);

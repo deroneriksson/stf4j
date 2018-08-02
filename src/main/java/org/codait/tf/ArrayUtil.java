@@ -258,6 +258,22 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert {@code Tensor<String>} to multidimensional String array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of String values
+	 * @return Multidimensional String array as an Object
+	 */
+	public static Object stringTensorToMultidimensionalStringArray(Tensor<String> tensor) {
+		int[] sShape = lToI(tensor.shape());
+		int[] bShape = Arrays.copyOf(sShape, sShape.length + 1);
+		Object b = Array.newInstance(byte.class, bShape);
+		tensor.copyTo(b);
+		Object s = multidimBytesToMultidimStrings(b);
+		return s;
+	}
+
+	/**
 	 * Obtain the index at which the maximum value occurs in an array.
 	 * 
 	 * @param f
