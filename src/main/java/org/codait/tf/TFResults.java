@@ -189,8 +189,14 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			float f = (float) tensor.copyTo(new long[1])[0];
-			return f;
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				float f = (float) tensor.longValue();
+				return f;
+			} else {
+				float f = (float) tensor.copyTo(new long[1])[0];
+				return f;
+			}
 		} else {
 			throw new TFException("getFloat not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
@@ -270,8 +276,14 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			int i = (int) tensor.copyTo(new long[1])[0];
-			return i;
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				int i = (int) tensor.longValue();
+				return i;
+			} else {
+				int i = (int) tensor.copyTo(new long[1])[0];
+				return i;
+			}
 		} else {
 			throw new TFException("getInt not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
@@ -341,8 +353,14 @@ public class TFResults {
 		if (ti.getDtype() == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			double d = (double) tensor.copyTo(new long[1])[0];
-			return d;
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				double d = (double) tensor.longValue();
+				return d;
+			} else {
+				double d = (double) tensor.copyTo(new long[1])[0];
+				return d;
+			}
 		} else {
 			throw new TFException("getDouble not implemented for '" + key + "' data type: " + ti.getDtype());
 		}
