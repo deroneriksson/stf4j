@@ -39,4 +39,16 @@ public class AddInt64Test {
 		Assert.assertTrue(3L == result);
 	}
 
+	@Test
+	public void inputFloatsOutputLong() {
+		long result = model.in("input1", 1.0f).in("input2", 2.0f).out("output").run().getLong("output");
+		Assert.assertTrue(3L == result);
+	}
+
+	@Test
+	public void inputDoublesOutputLong() {
+		long result = model.in("input1", 1.0d).in("input2", 2.0d).out("output").run().getLong("output");
+		Assert.assertTrue(3L == result);
+	}
+
 }
