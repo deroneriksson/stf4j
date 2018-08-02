@@ -180,6 +180,13 @@ public class TFUtil {
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
 			}
+		} else if (DataType.DT_INT64 == dtype && isLongType(value)) {
+			if (value instanceof Long) {
+				tensor = Tensor.create(value, Long.class);
+			} else {
+				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
+						+ "') to Tensor - conversion not implemented yet.");
+			}
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
 			if (isByteObjectArray(value)) {
 				log.warn("Implicitly converting Byte object array to primitive byte array");
@@ -190,7 +197,8 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_STRING == dtype && isStringType(value)) {
 			if (value instanceof String) {
-				// not implemented yet
+				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
+						+ "') to Tensor - conversion not implemented yet.");
 			} else {
 				log.warn("Implicitly converting String array to byte array");
 				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(value);
