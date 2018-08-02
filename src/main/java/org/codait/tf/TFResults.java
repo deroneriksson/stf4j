@@ -426,9 +426,28 @@ public class TFResults {
 	 * @return The String array
 	 */
 	public String[] getStringArray(String key) {
-		String[][] multi = (String[][]) getStringArrayMultidimensional(key);
-		String[] result = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
-		return result;
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_STRING) {
+			String[][] multi = (String[][]) getStringArrayMultidimensional(key);
+			String[] result = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
+			return result;
+		} else if (dtype == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
+			long[] l = ArrayUtil.longTensorToLongArray(tensor);
+			String[] s = (String[]) ArrayUtil.convertArrayType(l, String.class);
+			return s;
+		} else if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			float[] f = ArrayUtil.floatTensorToFloatArray(tensor);
+			String[] s = (String[]) ArrayUtil.convertArrayType(f, String.class);
+			return s;
+		} else {
+			throw new TFException("getStringArray not implemented for '" + key + "' data type: " + dtype);
+		}
 	}
 
 	/**
@@ -441,7 +460,8 @@ public class TFResults {
 	public Object getStringArrayMultidimensional(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
-		if (ti.getDtype() == DataType.DT_STRING) {
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
 			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
 			int[] sDim = ArrayUtil.lToI(tensor.shape());
@@ -452,7 +472,7 @@ public class TFResults {
 			return sDest;
 		} else {
 			throw new TFException(
-					"getStringArrayMultidimensional not implemented for '" + key + "' data type: " + ti.getDtype());
+					"getStringArrayMultidimensional not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 }
