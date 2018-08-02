@@ -506,4 +506,24 @@ public class TFResults {
 					"getStringArrayMultidimensional not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
+
+	/**
+	 * Obtain the String value corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The String value
+	 */
+	public String getString(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_INT64) {
+			@SuppressWarnings("unchecked")
+			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
+			return Long.toString(tensor.longValue());
+		} else {
+			throw new TFException("getString not implemented for '" + key + "' data type: " + dtype);
+		}
+	}
 }

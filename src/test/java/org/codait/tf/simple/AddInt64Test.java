@@ -75,4 +75,9 @@ public class AddInt64Test {
 		Assert.assertTrue(3.0d == result);
 	}
 
+	@Test
+	public void inputLongsOutputString() {
+		String result = model.in("input1", 1L).in("input2", 2L).out("output").run().getString("output");
+		Assert.assertTrue("3".equals(result));
+	}
 }
