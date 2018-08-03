@@ -184,32 +184,34 @@ public class TFUtil {
 			if (value instanceof Long) {
 				tensor = Tensor.create(value, Long.class);
 			} else {
-				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
-						+ "') to Tensor - conversion not implemented yet.");
+				tensor = Tensor.create(value, Long.class);
 			}
 		} else if (DataType.DT_INT64 == dtype && isIntType(value)) {
 			if (value instanceof Integer) {
 				long val = Long.valueOf((int) value);
 				tensor = Tensor.create(val, Long.class);
 			} else {
-				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
-						+ "') to Tensor - conversion not implemented yet.");
+				log.warn("Implicitly converting int array to long array");
+				Object longArray = ArrayUtil.convertArrayType(value, long.class);
+				tensor = Tensor.create(longArray, Long.class);
 			}
 		} else if (DataType.DT_INT64 == dtype && isFloatType(value)) {
 			if (value instanceof Float) {
 				long val = ((Float) value).longValue();
 				tensor = Tensor.create(val, Long.class);
 			} else {
-				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
-						+ "') to Tensor - conversion not implemented yet.");
+				log.warn("Implicitly converting float array to long array");
+				Object longArray = ArrayUtil.convertArrayType(value, long.class);
+				tensor = Tensor.create(longArray, Long.class);
 			}
 		} else if (DataType.DT_INT64 == dtype && isDoubleType(value)) {
 			if (value instanceof Double) {
 				long val = ((Double) value).longValue();
 				tensor = Tensor.create(val, Long.class);
 			} else {
-				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
-						+ "') to Tensor - conversion not implemented yet.");
+				log.warn("Implicitly converting double array to long array");
+				Object longArray = ArrayUtil.convertArrayType(value, long.class);
+				tensor = Tensor.create(longArray, Long.class);
 			}
 		} else if (DataType.DT_INT64 == dtype && isStringType(value)) {
 			if (value instanceof String) {
