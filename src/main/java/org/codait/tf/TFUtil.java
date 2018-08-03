@@ -470,6 +470,7 @@ public class TFUtil {
 					return tensorInfo;
 				}
 			}
+			throw new TFException("Input key '" + inputKey + "' not found in MetaGraphDef");
 		} else {
 			SignatureDef sigDef = sdm.get(signatureDefKey);
 			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
@@ -478,8 +479,8 @@ public class TFUtil {
 				log.debug("Retrieved TensorInfo '" + tensorInfo.getName() + "' for key '" + inputKey + "'");
 				return tensorInfo;
 			}
+			throw new TFException("Input key '" + inputKey + "' for SignatureDef '" + signatureDefKey + "' not found");
 		}
-		throw new TFException("Input key '" + inputKey + "' not found in MetaGraphDef");
 	}
 
 	/**
@@ -521,6 +522,7 @@ public class TFUtil {
 					return outputName;
 				}
 			}
+			throw new TFException("Output key '" + outputKey + "' not found in MetaGraphDef");
 		} else {
 			SignatureDef sigDef = sdm.get(signatureDefKey);
 			Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
@@ -529,8 +531,9 @@ public class TFUtil {
 				String outputName = tensorInfo.getName();
 				return outputName;
 			}
+			throw new TFException(
+					"Output key '" + outputKey + "' for SignatureDef '" + signatureDefKey + "' not found");
 		}
-		throw new TFException("Output key '" + outputKey + "' not found in MetaGraphDef");
 	}
 
 	/**
