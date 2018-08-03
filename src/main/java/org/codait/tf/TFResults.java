@@ -583,6 +583,10 @@ public class TFResults {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			return Long.toString(tensor.longValue());
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			return Integer.toString(tensor.intValue());
 		} else {
 			throw new TFException("getString not implemented for '" + key + "' data type: " + dtype);
 		}
