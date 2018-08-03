@@ -1,6 +1,8 @@
 package org.codait.tf;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,6 +15,7 @@ import org.tensorflow.Session;
 import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
 import org.tensorflow.framework.MetaGraphDef;
+import org.tensorflow.framework.SignatureDef;
 import org.tensorflow.framework.TensorInfo;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -49,23 +52,27 @@ public class TFModel {
 	/**
 	 * Mapping of input keys to names.
 	 */
-	Map<String, String> inputKeyToName = new LinkedHashMap<>();
+	Map<String, String> inputKeyToName = new LinkedHashMap<String, String>();
 	/**
 	 * Mapping of output keys to names.
 	 */
-	Map<String, String> outputKeyToName = new LinkedHashMap<>();
+	Map<String, String> outputKeyToName = new LinkedHashMap<String, String>();
 	/**
 	 * Mapping of input names to values.
 	 */
-	Map<String, Object> inputNameToValue = new LinkedHashMap<>();
+	Map<String, Object> inputNameToValue = new LinkedHashMap<String, Object>();
 	/**
 	 * Mapping of output names to values.
 	 */
-	Map<String, Object> outputNameToValue = new LinkedHashMap<>();
+	Map<String, Object> outputNameToValue = new LinkedHashMap<String, Object>();
 	/**
 	 * The results obtained from executing the model.
 	 */
 	TFResults results;
+	/**
+	 * The required input keys.
+	 */
+	Set<String> requiredInputKeys = new LinkedHashSet<String>();
 
 	/**
 	 * Load TensorFlow model located at modelDir with specified MetaGraphDef tags.
@@ -196,6 +203,20 @@ public class TFModel {
 	 */
 	public TFModel sig(String signatureDefKey) {
 		this.signatureDefKey = signatureDefKey;
+		requiredInputKeys.clear();
+		if (signatureDefKey == null) {
+			return this;
+		}
+
+		MetaGraphDef mgd = metaGraphDef();
+		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
+		SignatureDef signatureDef = sdm.get(signatureDefKey);
+		Map<String, TensorInfo> inputsMap = signatureDef.getInputsMap();
+		Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
+		for (Entry<String, TensorInfo> inputEntry : inputEntries) {
+			String requiredInputKey = inputEntry.getKey();
+			requiredInputKeys.add(requiredInputKey);
+		}
 		return this;
 	}
 
@@ -206,6 +227,12 @@ public class TFModel {
 	 * @return The results as a TFResults object.
 	 */
 	public TFResults run() {
+		if (signatureDefKey == null) {
+			log.warn(
+					"No SignatureDef key is specified. It is highly recommended that you specify the SignatureDef key using the sig() method");
+		}
+		checkInputKeys();
+
 		log.debug("Running model");
 		Runner runner = runner();
 		Set<Entry<String, Object>> iEntries = inputNameToValue.entrySet();
@@ -226,6 +253,30 @@ public class TFModel {
 		results = new TFResults(this);
 		log.debug("Model results:\n" + results);
 		return results;
+	}
+
+	/**
+	 * Check that the required input keys have been provided. If not, throw a TFException specifying the missing input
+	 * keys.
+	 */
+	protected void checkInputKeys() {
+		if (signatureDefKey == null) {
+			log.debug("No SignatureDef key specified, so won't validate input keys for SignatureDef");
+			return;
+		}
+
+		List<String> missingReqInputKeys = new ArrayList<String>();
+		Set<String> inputKeys = inputKeyToName.keySet();
+		for (String reqInputKey : requiredInputKeys) {
+			if (!inputKeys.contains(reqInputKey)) {
+				missingReqInputKeys.add(reqInputKey);
+			}
+		}
+		if (missingReqInputKeys.size() > 0) {
+			String missingInputKeys = missingReqInputKeys.toString();
+			throw new TFException(
+					"The following '" + signatureDefKey + "' required input keys are missing: " + missingInputKeys);
+		}
 	}
 
 	/**
@@ -339,6 +390,7 @@ public class TFModel {
 		inputNameToValue.clear();
 		outputKeyToName.clear();
 		outputNameToValue.clear();
+		requiredInputKeys.clear();
 		if (results != null) {
 			results.outputKeyToName.clear();
 			results.outputNameToValue.clear();
