@@ -206,7 +206,8 @@ public class TFResults {
 	public float getFloat(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
-		if (ti.getDtype() == DataType.DT_INT64) {
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int shapeLength = tensor.shape().length;
@@ -217,8 +218,19 @@ public class TFResults {
 				float f = (float) tensor.copyTo(new long[1])[0];
 				return f;
 			}
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				float f = (float) tensor.intValue();
+				return f;
+			} else {
+				float f = (float) tensor.copyTo(new int[1])[0];
+				return f;
+			}
 		} else {
-			throw new TFException("getFloat not implemented for '" + key + "' data type: " + ti.getDtype());
+			throw new TFException("getFloat not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 
@@ -387,7 +399,8 @@ public class TFResults {
 	public double getDouble(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
-		if (ti.getDtype() == DataType.DT_INT64) {
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int shapeLength = tensor.shape().length;
@@ -398,8 +411,19 @@ public class TFResults {
 				double d = (double) tensor.copyTo(new long[1])[0];
 				return d;
 			}
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				double d = (double) tensor.intValue();
+				return d;
+			} else {
+				double d = (double) tensor.copyTo(new int[1])[0];
+				return d;
+			}
 		} else {
-			throw new TFException("getDouble not implemented for '" + key + "' data type: " + ti.getDtype());
+			throw new TFException("getDouble not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 

@@ -64,6 +64,18 @@ public class AddInt32Test {
 	}
 
 	@Test
+	public void inputIntsOutputFloat() {
+		float result = model.in("input1", 1).in("input2", 2).out("output").run().getFloat("output");
+		Assert.assertTrue(3.0f == result);
+	}
+
+	@Test
+	public void inputIntsOutputDouble() {
+		double result = model.in("input1", 1).in("input2", 2).out("output").run().getDouble("output");
+		Assert.assertTrue(3.0d == result);
+	}
+
+	@Test
 	public void inputIntArraysOutputIntArray() {
 		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
 				.getIntArray("output");
