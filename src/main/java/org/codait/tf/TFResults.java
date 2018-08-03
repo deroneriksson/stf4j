@@ -533,6 +533,12 @@ public class TFResults {
 			long[] l = ArrayUtil.longTensorToLongArray(tensor);
 			String[] s = (String[]) ArrayUtil.convertArrayType(l, String.class);
 			return s;
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			int[] i = ArrayUtil.intTensorToIntArray(tensor);
+			String[] s = (String[]) ArrayUtil.convertArrayType(i, String.class);
+			return s;
 		} else if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
