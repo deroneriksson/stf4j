@@ -238,6 +238,24 @@ public class TFUtil {
 			} else {
 				tensor = Tensor.create(value, Integer.class);
 			}
+		} else if (DataType.DT_INT32 == dtype && isFloatType(value)) {
+			if (value instanceof Float) {
+				int val = ((Float) value).intValue();
+				tensor = Tensor.create(val, Integer.class);
+			} else {
+				log.warn("Implicitly converting float array to int array");
+				Object intArray = ArrayUtil.convertArrayType(value, int.class);
+				tensor = Tensor.create(intArray, Integer.class);
+			}
+		} else if (DataType.DT_INT32 == dtype && isDoubleType(value)) {
+			if (value instanceof Double) {
+				int val = ((Double) value).intValue();
+				tensor = Tensor.create(val, Integer.class);
+			} else {
+				log.warn("Implicitly converting double array to int array");
+				Object intArray = ArrayUtil.convertArrayType(value, int.class);
+				tensor = Tensor.create(intArray, Integer.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
 			if (isByteObjectArray(value)) {

@@ -111,7 +111,8 @@ public class TFResults {
 	public long getLong(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
-		if (ti.getDtype() == DataType.DT_INT64) {
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int shapeLength = tensor.shape().length;
@@ -122,8 +123,19 @@ public class TFResults {
 				long l = tensor.copyTo(new long[1])[0];
 				return l;
 			}
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				long l = (long) tensor.intValue();
+				return l;
+			} else {
+				long i = (long) tensor.copyTo(new int[1])[0];
+				return i;
+			}
 		} else {
-			throw new TFException("getLong not implemented for '" + key + "' data type: " + ti.getDtype());
+			throw new TFException("getLong not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 
