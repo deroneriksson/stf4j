@@ -264,7 +264,7 @@ public class TFUtil {
 			} else {
 				log.warn("Implicitly converting String array to int array");
 				Object intArray = ArrayUtil.convertArrayType(value, int.class);
-				tensor = Tensor.create(intArray, Long.class);
+				tensor = Tensor.create(intArray, Integer.class);
 			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {

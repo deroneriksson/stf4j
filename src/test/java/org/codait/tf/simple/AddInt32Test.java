@@ -123,4 +123,11 @@ public class AddInt32Test {
 		Assert.assertArrayEquals(new int[] { 4, 6 }, result);
 	}
 
+	@Test
+	public void inputStringArraysOutputIntArray() {
+		int[] result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { "3", "4" })
+				.out("output").run().getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 6 }, result);
+	}
+
 }
