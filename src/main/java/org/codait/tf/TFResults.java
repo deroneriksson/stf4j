@@ -142,6 +142,14 @@ public class TFResults {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			return ArrayUtil.longTensorToLongArray(tensor);
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			int[] i = ArrayUtil.intTensorToIntArray(tensor);
+			long[] l = ArrayUtil.iToL(i);
+			// alternative option
+			// long[] l = (long[]) ArrayUtil.convertArrayType(i, long.class);
+			return l;
 		} else if (dtype == DataType.DT_STRING) {
 			String[] s = getStringArray(key);
 			long[] l = (long[]) ArrayUtil.convertArrayType(s, long.class);
@@ -273,7 +281,8 @@ public class TFResults {
 	public int getInt(String key) {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
-		if (ti.getDtype() == DataType.DT_INT64) {
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int shapeLength = tensor.shape().length;
@@ -284,8 +293,19 @@ public class TFResults {
 				int i = (int) tensor.copyTo(new long[1])[0];
 				return i;
 			}
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				int i = tensor.intValue();
+				return i;
+			} else {
+				int i = tensor.copyTo(new int[1])[0];
+				return i;
+			}
 		} else {
-			throw new TFException("getInt not implemented for '" + key + "' data type: " + ti.getDtype());
+			throw new TFException("getInt not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 
@@ -305,6 +325,11 @@ public class TFResults {
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			long[] l = ArrayUtil.longTensorToLongArray(tensor);
 			return ArrayUtil.lToI(l);
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			int[] i = ArrayUtil.intTensorToIntArray(tensor);
+			return i;
 		} else if (dtype == DataType.DT_STRING) {
 			String[] s = getStringArray(key);
 			int[] i = (int[]) ArrayUtil.convertArrayType(s, int.class);
