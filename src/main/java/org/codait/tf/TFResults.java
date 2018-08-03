@@ -385,6 +385,11 @@ public class TFResults {
 			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
 			Object i = ArrayUtil.convertArrayType(l, int.class);
 			return i;
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			Object i = ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
+			return i;
 		} else if (dtype == DataType.DT_STRING) {
 			Object s = getStringArrayMultidimensional(key);
 			Object i = ArrayUtil.convertArrayType(s, int.class);

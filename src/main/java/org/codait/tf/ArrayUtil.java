@@ -312,6 +312,20 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert {@code Tensor<Integer>} to multidimensional int array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Integer values
+	 * @return Multidimensional primitive int array as an Object
+	 */
+	public static Object intTensorToMultidimensionalIntArray(Tensor<Integer> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object i = Array.newInstance(int.class, shape);
+		tensor.copyTo(i);
+		return i;
+	}
+
+	/**
 	 * Convert {@code Tensor<String>} to multidimensional String array.
 	 * 
 	 * @param tensor
