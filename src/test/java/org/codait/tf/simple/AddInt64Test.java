@@ -115,4 +115,25 @@ public class AddInt64Test {
 				.out("output").run().getLongArray("output");
 		Assert.assertArrayEquals(new long[] { 4L, 6L }, result);
 	}
+
+	@Test
+	public void inputLongArraysOutputIntArray() {
+		int[] result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 6 }, result);
+	}
+
+	@Test
+	public void inputLongArraysOutputFloatArray() {
+		float[] result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output")
+				.run().getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
+	}
+
+	@Test
+	public void inputLongArraysOutputDoubleArray() {
+		double[] result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output")
+				.run().getDoubleArray("output");
+		Assert.assertArrayEquals(new double[] { 4.0d, 6.0d }, result, 0.0d);
+	}
 }
