@@ -221,4 +221,9 @@ public class AddInt64Test {
 	public void missingInputs() {
 		model.out("output").run();
 	}
+
+	@Test(expected = TFException.class)
+	public void missingOutput() {
+		model.in("input1", 1L).in("input2", 2L).run();
+	}
 }

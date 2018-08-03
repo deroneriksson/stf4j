@@ -73,6 +73,10 @@ public class TFModel {
 	 * The required input keys.
 	 */
 	Set<String> requiredInputKeys = new LinkedHashSet<String>();
+	/**
+	 * The possible output keys.
+	 */
+	Set<String> possibleOutputKeys = new LinkedHashSet<String>();
 
 	/**
 	 * Load TensorFlow model located at modelDir with specified MetaGraphDef tags.
@@ -211,12 +215,21 @@ public class TFModel {
 		MetaGraphDef mgd = metaGraphDef();
 		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
 		SignatureDef signatureDef = sdm.get(signatureDefKey);
+
 		Map<String, TensorInfo> inputsMap = signatureDef.getInputsMap();
 		Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
 		for (Entry<String, TensorInfo> inputEntry : inputEntries) {
 			String requiredInputKey = inputEntry.getKey();
 			requiredInputKeys.add(requiredInputKey);
 		}
+
+		Map<String, TensorInfo> outputsMap = signatureDef.getOutputsMap();
+		Set<Entry<String, TensorInfo>> outputEntries = outputsMap.entrySet();
+		for (Entry<String, TensorInfo> outputEntry : outputEntries) {
+			String possibleOutputKey = outputEntry.getKey();
+			possibleOutputKeys.add(possibleOutputKey);
+		}
+
 		return this;
 	}
 
@@ -232,6 +245,7 @@ public class TFModel {
 					"No SignatureDef key is specified. It is highly recommended that you specify the SignatureDef key using the sig() method");
 		}
 		checkInputKeys();
+		checkOutputKeys();
 
 		log.debug("Running model");
 		Runner runner = runner();
@@ -276,6 +290,19 @@ public class TFModel {
 			String missingInputKeys = missingReqInputKeys.toString();
 			throw new TFException(
 					"The following '" + signatureDefKey + "' required input keys are missing: " + missingInputKeys);
+		}
+	}
+
+	/**
+	 * Check that at least one output key has been provided. If not, throw a TFException specifying the possible output
+	 * keys.
+	 */
+	protected void checkOutputKeys() {
+		Set<String> oNames = outputNameToValue.keySet();
+		if (oNames == null || oNames.isEmpty()) {
+			String possibleOutputs = possibleOutputKeys.toString();
+			throw new TFException(
+					"At least one output key needs to be specified. Possible output keys: " + possibleOutputs);
 		}
 	}
 
