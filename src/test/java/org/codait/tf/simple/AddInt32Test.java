@@ -58,6 +58,12 @@ public class AddInt32Test {
 	}
 
 	@Test
+	public void inputStringsOutputInt() {
+		int result = model.in("input1", "1").in("input2", "2").out("output").run().getInt("output");
+		Assert.assertTrue(3 == result);
+	}
+
+	@Test
 	public void inputIntArraysOutputIntArray() {
 		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
 				.getIntArray("output");

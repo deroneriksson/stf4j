@@ -180,6 +180,7 @@ public class TFUtil {
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
 			}
+			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_INT64 == dtype && isLongType(value)) {
 			if (value instanceof Long) {
 				tensor = Tensor.create(value, Long.class);
@@ -255,6 +256,15 @@ public class TFUtil {
 				log.warn("Implicitly converting double array to int array");
 				Object intArray = ArrayUtil.convertArrayType(value, int.class);
 				tensor = Tensor.create(intArray, Integer.class);
+			}
+		} else if (DataType.DT_INT32 == dtype && isStringType(value)) {
+			if (value instanceof String) {
+				int val = Integer.parseInt((String) value);
+				tensor = Tensor.create(val, Integer.class);
+			} else {
+				log.warn("Implicitly converting String array to int array");
+				Object intArray = ArrayUtil.convertArrayType(value, int.class);
+				tensor = Tensor.create(intArray, Long.class);
 			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
