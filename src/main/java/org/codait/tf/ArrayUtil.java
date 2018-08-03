@@ -121,6 +121,10 @@ public class ArrayUtil {
 					Array.set(dest, i, ((Float) v).longValue());
 				} else if ("double".equals(o) && "long".equals(d)) {
 					Array.set(dest, i, ((Double) v).longValue());
+				} else if ("float".equals(o) && "int".equals(d)) {
+					Array.set(dest, i, ((Float) v).intValue());
+				} else if ("double".equals(o) && "int".equals(d)) {
+					Array.set(dest, i, ((Double) v).intValue());
 				} else {
 					Array.set(dest, i, v);
 				}
