@@ -187,6 +187,12 @@ public class TFResults {
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
 			return l;
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			Object i = ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
+			Object l = ArrayUtil.convertArrayType(i, long.class);
+			return l;
 		} else if (dtype == DataType.DT_STRING) {
 			Object s = getStringArrayMultidimensional(key);
 			Object l = ArrayUtil.convertArrayType(s, long.class);

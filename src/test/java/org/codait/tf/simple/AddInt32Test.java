@@ -170,4 +170,16 @@ public class AddInt32Test {
 		}
 	}
 
+	@Test
+	public void inputMultiLongArraysOutputMultiLongArray() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] expected = new long[][] { { 2L, 4L }, { 6L, 8L } };
+		long[][] result = (long[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getLongArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
 }
