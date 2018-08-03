@@ -218,8 +218,9 @@ public class TFUtil {
 				long val = Long.parseLong((String) value);
 				tensor = Tensor.create(val, Long.class);
 			} else {
-				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
-						+ "') to Tensor - conversion not implemented yet.");
+				log.warn("Implicitly converting String array to long array");
+				Object longArray = ArrayUtil.convertArrayType(value, long.class);
+				tensor = Tensor.create(longArray, Long.class);
 			}
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
 			if (isByteObjectArray(value)) {

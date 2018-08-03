@@ -108,4 +108,11 @@ public class AddInt64Test {
 				.out("output").run().getLongArray("output");
 		Assert.assertArrayEquals(new long[] { 4L, 6L }, result);
 	}
+
+	@Test
+	public void inputStringArraysOutputLongArray() {
+		long[] result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { "3", "4" })
+				.out("output").run().getLongArray("output");
+		Assert.assertArrayEquals(new long[] { 4L, 6L }, result);
+	}
 }
