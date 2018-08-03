@@ -216,6 +216,11 @@ public class TFModel {
 		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
 		SignatureDef signatureDef = sdm.get(signatureDefKey);
 
+		if (signatureDef == null) {
+			Set<String> signatureDefKeys = sdm.keySet();
+			throw new TFException("SignatureDef key '" + signatureDefKey + "' not found. Possible keys: "
+					+ signatureDefKeys.toString());
+		}
 		Map<String, TensorInfo> inputsMap = signatureDef.getInputsMap();
 		Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
 		for (Entry<String, TensorInfo> inputEntry : inputEntries) {

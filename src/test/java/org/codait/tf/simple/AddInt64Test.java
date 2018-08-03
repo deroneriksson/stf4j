@@ -229,11 +229,32 @@ public class AddInt64Test {
 
 	@Test(expected = TFException.class)
 	public void badInputKey() {
-		model.in("input3", 1L).in("input2", 2L).out("output").run();
+		model.in("bad_input", 1L).in("input2", 2L).out("output").run();
 	}
 
 	@Test(expected = TFException.class)
 	public void badOutputKey() {
 		model.in("input1", 1L).in("input2", 2L).out("bad_output").run();
+	}
+
+	@Test
+	public void inputLongsOutputLongNoSignatureDefKey() {
+		long result = model.sig(null).in("input1", 1L).in("input2", 2L).out("output").run().getLong("output");
+		Assert.assertTrue(3L == result);
+	}
+
+	@Test(expected = TFException.class)
+	public void badInputNoSignatureDefKey() {
+		model.sig(null).in("bad_input", 1L).in("input2", 2L).out("output").run();
+	}
+
+	@Test(expected = TFException.class)
+	public void badOutputNoSignatureDefKey() {
+		model.sig(null).in("input1", 1L).in("input2", 2L).out("bad_output").run();
+	}
+
+	@Test(expected = TFException.class)
+	public void badSignatureDefKey() {
+		model.sig("bad_sig_def_key");
 	}
 }
