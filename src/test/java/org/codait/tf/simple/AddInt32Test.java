@@ -182,4 +182,28 @@ public class AddInt32Test {
 		}
 	}
 
+	@Test
+	public void inputMultiFloatArraysOutputMultiFloatArray() {
+		float[][] input1 = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		float[][] input2 = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		float[][] expected = new float[][] { { 2.0f, 4.0f }, { 6.0f, 8.0f } };
+		float[][] result = (float[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getFloatArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0f);
+		}
+	}
+
+	@Test
+	public void inputMultiDoubleArraysOutputMultiDoubleArray() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] input2 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] expected = new double[][] { { 2.0d, 4.0d }, { 6.0d, 8.0d } };
+		double[][] result = (double[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getDoubleArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0d);
+		}
+	}
+
 }

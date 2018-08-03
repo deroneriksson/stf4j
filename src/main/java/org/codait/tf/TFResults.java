@@ -296,6 +296,12 @@ public class TFResults {
 			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
 			Object f = ArrayUtil.convertArrayType(l, float.class);
 			return f;
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			Object i = ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
+			Object f = ArrayUtil.convertArrayType(i, float.class);
+			return f;
 		} else if (dtype == DataType.DT_STRING) {
 			Object s = getStringArrayMultidimensional(key);
 			Object f = ArrayUtil.convertArrayType(s, float.class);
@@ -501,6 +507,12 @@ public class TFResults {
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
 			Object d = ArrayUtil.convertArrayType(l, double.class);
+			return d;
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			Object i = ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
+			Object d = ArrayUtil.convertArrayType(i, double.class);
 			return d;
 		} else if (dtype == DataType.DT_STRING) {
 			Object s = getStringArrayMultidimensional(key);
