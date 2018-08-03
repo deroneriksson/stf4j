@@ -200,7 +200,7 @@ public class ArrayUtil {
 	/**
 	 * Convert 1d long array to float array.
 	 * 
-	 * @param iArray
+	 * @param lArray
 	 *            Primitive long array
 	 * @return Primitive float array
 	 */
@@ -215,7 +215,7 @@ public class ArrayUtil {
 	/**
 	 * Convert 1d long array to double array.
 	 * 
-	 * @param iArray
+	 * @param lArray
 	 *            Primitive long array
 	 * @return Primitive double array
 	 */
@@ -223,6 +223,21 @@ public class ArrayUtil {
 		double[] dArray = new double[lArray.length];
 		for (int i = 0; i < lArray.length; i++) {
 			dArray[i] = (double) lArray[i];
+		}
+		return dArray;
+	}
+
+	/**
+	 * Convert 1d int array to double array.
+	 * 
+	 * @param iArray
+	 *            Primitive int array
+	 * @return Primitive double array
+	 */
+	public static double[] iToD(int[] iArray) {
+		double[] dArray = new double[iArray.length];
+		for (int i = 0; i < iArray.length; i++) {
+			dArray[i] = (double) iArray[i];
 		}
 		return dArray;
 	}

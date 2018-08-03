@@ -130,4 +130,18 @@ public class AddInt32Test {
 		Assert.assertArrayEquals(new int[] { 4, 6 }, result);
 	}
 
+	@Test
+	public void inputIntArraysOutputFloatArray() {
+		float[] result = model.in("input1", new long[] { 1, 2 }).in("input2", new long[] { 3, 4 }).out("output").run()
+				.getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
+	}
+
+	@Test
+	public void inputIntArraysOutputDoubleArray() {
+		double[] result = model.in("input1", new long[] { 1, 2 }).in("input2", new long[] { 3, 4 }).out("output").run()
+				.getDoubleArray("output");
+		Assert.assertArrayEquals(new double[] { 4.0d, 6.0d }, result, 0.0d);
+	}
+
 }
