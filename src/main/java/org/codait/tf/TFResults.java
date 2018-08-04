@@ -595,6 +595,12 @@ public class TFResults {
 			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
 			Object s = ArrayUtil.convertArrayType(l, String.class);
 			return s;
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			Object i = ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
+			Object s = ArrayUtil.convertArrayType(i, String.class);
+			return s;
 		} else if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);

@@ -206,4 +206,15 @@ public class AddInt32Test {
 		}
 	}
 
+	@Test
+	public void inputMultiStringArraysOutputMultiStringArray() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] input2 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] expected = new String[][] { { "2", "4" }, { "6", "8" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getStringArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }
