@@ -164,7 +164,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_FLOAT == dtype && isLongType(value)) {
 			if (value instanceof Long) {
-				float val = (float) value;
+				float val = ((Long) value).floatValue();
 				tensor = Tensor.create(val, Float.class);
 			} else {
 				log.warn("Implicitly converting long array to float array");
