@@ -173,8 +173,8 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_FLOAT == dtype && isDoubleType(value)) {
 			if (value instanceof Double) {
-				double val = (double) value;
-				tensor = Tensor.create(val, Double.class);
+				float val = ((Double) value).floatValue();
+				tensor = Tensor.create(val, Float.class);
 			} else {
 				log.warn("Implicitly converting double array to float array");
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
