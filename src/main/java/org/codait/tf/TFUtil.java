@@ -180,6 +180,15 @@ public class TFUtil {
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
 			}
+		} else if (DataType.DT_FLOAT == dtype && isStringType(value)) {
+			if (value instanceof String) {
+				float val = Float.parseFloat((String) value);
+				tensor = Tensor.create(val, Float.class);
+			} else {
+				log.warn("Implicitly converting String array to float array");
+				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
+				tensor = Tensor.create(floatArray, Float.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_INT64 == dtype && isLongType(value)) {
 			if (value instanceof Long) {
