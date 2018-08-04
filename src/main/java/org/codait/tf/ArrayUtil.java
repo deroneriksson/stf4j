@@ -170,6 +170,36 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert 1d float array to int array.
+	 * 
+	 * @param fArray
+	 *            Primitive float array
+	 * @return Primitive int array
+	 */
+	public static int[] fToI(float[] fArray) {
+		int[] iArray = new int[fArray.length];
+		for (int i = 0; i < fArray.length; i++) {
+			iArray[i] = (int) fArray[i];
+		}
+		return iArray;
+	}
+
+	/**
+	 * Convert 1d float array to long array.
+	 * 
+	 * @param fArray
+	 *            Primitive float array
+	 * @return Primitive long array
+	 */
+	public static long[] fToL(float[] fArray) {
+		long[] lArray = new long[fArray.length];
+		for (int i = 0; i < fArray.length; i++) {
+			lArray[i] = (long) fArray[i];
+		}
+		return lArray;
+	}
+
+	/**
 	 * Convert 1d int array to long array.
 	 * 
 	 * @param iArray

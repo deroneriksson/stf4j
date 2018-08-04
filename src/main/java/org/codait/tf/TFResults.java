@@ -161,7 +161,12 @@ public class TFResults {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		DataType dtype = ti.getDtype();
-		if (dtype == DataType.DT_INT64) {
+		if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			float[] f = ArrayUtil.floatTensorToFloatArray(tensor);
+			return ArrayUtil.fToL(f);
+		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			return ArrayUtil.longTensorToLongArray(tensor);
@@ -394,7 +399,12 @@ public class TFResults {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		DataType dtype = ti.getDtype();
-		if (dtype == DataType.DT_INT64) {
+		if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			float[] f = ArrayUtil.floatTensorToFloatArray(tensor);
+			return ArrayUtil.fToI(f);
+		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			long[] l = ArrayUtil.longTensorToLongArray(tensor);
