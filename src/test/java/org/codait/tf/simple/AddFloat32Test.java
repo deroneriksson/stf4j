@@ -57,4 +57,10 @@ public class AddFloat32Test {
 		Assert.assertTrue(3.0f == result);
 	}
 
+	@Test
+	public void inputFloatsOutputDouble() {
+		double result = model.in("input1", 1.0f).in("input2", 2.0f).out("output").run().getDouble("output");
+		Assert.assertTrue(3.0d == result);
+	}
+
 }
