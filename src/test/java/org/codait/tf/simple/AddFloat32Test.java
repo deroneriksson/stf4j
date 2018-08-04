@@ -74,4 +74,10 @@ public class AddFloat32Test {
 		long result = model.in("input1", 1.0f).in("input2", 2.0f).out("output").run().getLong("output");
 		Assert.assertTrue(3L == result);
 	}
+
+	@Test
+	public void inputFloatsOutputString() {
+		String result = model.in("input1", 1.0f).in("input2", 2.0f).out("output").run().getString("output");
+		Assert.assertTrue("3.0".equals(result));
+	}
 }

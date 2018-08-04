@@ -668,7 +668,11 @@ public class TFResults {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		DataType dtype = ti.getDtype();
-		if (dtype == DataType.DT_INT64) {
+		if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			return Float.toString(tensor.floatValue());
+		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			return Long.toString(tensor.longValue());
