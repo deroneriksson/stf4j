@@ -155,7 +155,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_FLOAT == dtype && isIntType(value)) {
 			if (value instanceof Integer) {
-				float val = (float) value;
+				float val = ((Integer) value).floatValue();
 				tensor = Tensor.create(val, Float.class);
 			} else {
 				log.warn("Implicitly converting integer array to float array");
