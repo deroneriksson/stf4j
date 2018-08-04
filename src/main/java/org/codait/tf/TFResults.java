@@ -198,7 +198,13 @@ public class TFResults {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		DataType dtype = ti.getDtype();
-		if (dtype == DataType.DT_INT64) {
+		if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
+			Object i = ArrayUtil.convertArrayType(f, long.class);
+			return i;
+		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
@@ -434,7 +440,13 @@ public class TFResults {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
 		DataType dtype = ti.getDtype();
-		if (dtype == DataType.DT_INT64) {
+		if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
+			Object i = ArrayUtil.convertArrayType(f, int.class);
+			return i;
+		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			Object l = ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
