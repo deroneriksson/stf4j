@@ -80,4 +80,40 @@ public class AddFloat32Test {
 		String result = model.in("input1", 1.0f).in("input2", 2.0f).out("output").run().getString("output");
 		Assert.assertTrue("3.0".equals(result));
 	}
+
+	@Test
+	public void inputFloatArraysOutputFloatArray() {
+		float[] result = model.in("input1", new float[] { 1.0f, 2.0f }).in("input2", new float[] { 3.0f, 4.0f })
+				.out("output").run().getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
+	}
+
+	@Test
+	public void inputDoubleArraysOutputFloatArray() {
+		float[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
+	}
+
+	@Test
+	public void inputIntArraysOutputFloatArray() {
+		float[] result = model.in("input1", new long[] { 1, 2 }).in("input2", new long[] { 3, 4 }).out("output").run()
+				.getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
+	}
+
+	@Test
+	public void inputLongArraysOutputFloatArray() {
+		float[] result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output")
+				.run().getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
+	}
+
+	@Test
+	public void inputStringArraysOutputFloatArray() {
+		float[] result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { "3", "4" })
+				.out("output").run().getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
+	}
+
 }
