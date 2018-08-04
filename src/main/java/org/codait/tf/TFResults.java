@@ -213,7 +213,18 @@ public class TFResults {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		DataType dtype = ti.getDtype();
-		if (dtype == DataType.DT_INT64) {
+		if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				float f = tensor.floatValue();
+				return f;
+			} else {
+				float f = tensor.copyTo(new float[1])[0];
+				return f;
+			}
+		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int shapeLength = tensor.shape().length;
