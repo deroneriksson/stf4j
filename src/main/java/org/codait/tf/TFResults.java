@@ -112,7 +112,18 @@ public class TFResults {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		DataType dtype = ti.getDtype();
-		if (dtype == DataType.DT_INT64) {
+		if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				long l = (long) tensor.floatValue();
+				return l;
+			} else {
+				long l = (long) tensor.copyTo(new float[1])[0];
+				return l;
+			}
+		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int shapeLength = tensor.shape().length;
@@ -334,7 +345,18 @@ public class TFResults {
 		checkKey(key);
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		DataType dtype = ti.getDtype();
-		if (dtype == DataType.DT_INT64) {
+		if (dtype == DataType.DT_FLOAT) {
+			@SuppressWarnings("unchecked")
+			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				int i = (int) tensor.floatValue();
+				return i;
+			} else {
+				int i = (int) tensor.copyTo(new float[1])[0];
+				return i;
+			}
+		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
 			int shapeLength = tensor.shape().length;
