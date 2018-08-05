@@ -75,4 +75,39 @@ public class AddStringTest {
 				.out("output").run().getStringArray("output");
 		Assert.assertArrayEquals(new String[] { "ac", "bd" }, result);
 	}
+
+	@Test
+	public void inputStringOutputString_aaa_bbb__c_d__aaac_bbbd() {
+		String[] result = model.in("input1", new String[] { "aaa", "bbb" }).in("input2", new String[] { "c", "d" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "aaac", "bbbd" }, result);
+	}
+
+	@Test
+	public void inputStringOutputString_a_bbb__c_ddd__ac_bbbddd() {
+		String[] result = model.in("input1", new String[] { "a", "bbb" }).in("input2", new String[] { "c", "ddd" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "ac", "bbbddd" }, result);
+	}
+
+	@Test
+	public void inputStringOutputString_aaa_b__ccc_d__aaaccc_bd() {
+		String[] result = model.in("input1", new String[] { "aaa", "b" }).in("input2", new String[] { "ccc", "d" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "aaaccc", "bd" }, result);
+	}
+
+	@Test
+	public void inputStringOutputString_a_bbb__ccc_d__accc_bbbd() {
+		String[] result = model.in("input1", new String[] { "a", "bbb" }).in("input2", new String[] { "ccc", "d" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "accc", "bbbd" }, result);
+	}
+
+	@Test
+	public void inputStringOutputString_a_b__c_d__aaac_bddd() {
+		String[] result = model.in("input1", new String[] { "aaa", "b" }).in("input2", new String[] { "c", "ddd" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "aaac", "bddd" }, result);
+	}
 }
