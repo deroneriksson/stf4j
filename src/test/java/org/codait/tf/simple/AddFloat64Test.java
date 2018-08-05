@@ -122,4 +122,18 @@ public class AddFloat64Test {
 				.out("output").run().getFloatArray("output");
 		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
 	}
+
+	@Test
+	public void inputDoubleArraysOutputIntArray() {
+		int[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 6 }, result);
+	}
+
+	@Test
+	public void inputDoubleArraysOutputLongArray() {
+		long[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getLongArray("output");
+		Assert.assertArrayEquals(new long[] { 4L, 6L }, result);
+	}
 }
