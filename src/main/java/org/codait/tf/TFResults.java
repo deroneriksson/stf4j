@@ -123,6 +123,17 @@ public class TFResults {
 				long l = (long) tensor.copyTo(new float[1])[0];
 				return l;
 			}
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				long l = (long) tensor.doubleValue();
+				return l;
+			} else {
+				long l = (long) tensor.copyTo(new double[1])[0];
+				return l;
+			}
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
@@ -246,6 +257,17 @@ public class TFResults {
 				float f = tensor.copyTo(new float[1])[0];
 				return f;
 			}
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				float f = (float) tensor.doubleValue();
+				return f;
+			} else {
+				float f = (float) tensor.copyTo(new double[1])[0];
+				return f;
+			}
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
@@ -365,6 +387,17 @@ public class TFResults {
 				return i;
 			} else {
 				int i = (int) tensor.copyTo(new float[1])[0];
+				return i;
+			}
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				int i = (int) tensor.doubleValue();
+				return i;
+			} else {
+				int i = (int) tensor.copyTo(new double[1])[0];
 				return i;
 			}
 		} else if (dtype == DataType.DT_INT64) {
@@ -705,6 +738,10 @@ public class TFResults {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			return Float.toString(tensor.floatValue());
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			return Double.toString(tensor.doubleValue());
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);

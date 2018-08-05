@@ -57,4 +57,27 @@ public class AddFloat64Test {
 		Assert.assertTrue(3.0d == result);
 	}
 
+	@Test
+	public void inputDoublesOutputInt() {
+		int result = model.in("input1", 1.0d).in("input2", 2.0d).out("output").run().getInt("output");
+		Assert.assertTrue(3 == result);
+	}
+
+	@Test
+	public void inputDoublesOutputLong() {
+		long result = model.in("input1", 1.0d).in("input2", 2.0d).out("output").run().getLong("output");
+		Assert.assertTrue(3L == result);
+	}
+
+	@Test
+	public void inputDoublesOutputFloat() {
+		float result = model.in("input1", 1.0d).in("input2", 2.0d).out("output").run().getFloat("output");
+		Assert.assertTrue(3.0f == result);
+	}
+
+	@Test
+	public void inputDoublesOutputString() {
+		String result = model.in("input1", 1.0d).in("input2", 2.0d).out("output").run().getString("output");
+		Assert.assertTrue("3.0".equals(result));
+	}
 }
