@@ -488,6 +488,17 @@ public class TFResults {
 				double d = (double) tensor.copyTo(new float[1])[0];
 				return d;
 			}
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				double d = tensor.doubleValue();
+				return d;
+			} else {
+				double d = tensor.copyTo(new double[1])[0];
+				return d;
+			}
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);

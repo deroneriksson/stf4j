@@ -36,7 +36,7 @@ public class AddFloat32Test {
 	@Test
 	public void inputDoublesOutputFloat() {
 		float result = model.in("input1", 1.0d).in("input2", 2.0d).out("output").run().getFloat("output");
-		Assert.assertTrue(3.0d == result);
+		Assert.assertTrue(3.0f == result);
 	}
 
 	@Test

@@ -190,6 +190,49 @@ public class TFUtil {
 				tensor = Tensor.create(floatArray, Float.class);
 			}
 			//////////////////////////////////////////////////////////////////////////////
+		} else if (DataType.DT_DOUBLE == dtype && isLongType(value)) {
+			if (value instanceof Long) {
+				double val = ((Long) value).doubleValue();
+				tensor = Tensor.create(val, Double.class);
+			} else {
+				log.warn("Implicitly converting long array to double array");
+				Object doubleArray = ArrayUtil.convertArrayType(value, double.class);
+				tensor = Tensor.create(doubleArray, Double.class);
+			}
+		} else if (DataType.DT_DOUBLE == dtype && isIntType(value)) {
+			if (value instanceof Integer) {
+				double val = ((Integer) value).doubleValue();
+				tensor = Tensor.create(val, Double.class);
+			} else {
+				log.warn("Implicitly converting int array to double array");
+				Object doubleArray = ArrayUtil.convertArrayType(value, double.class);
+				tensor = Tensor.create(doubleArray, Double.class);
+			}
+		} else if (DataType.DT_DOUBLE == dtype && isFloatType(value)) {
+			if (value instanceof Float) {
+				double val = ((Float) value).doubleValue();
+				tensor = Tensor.create(val, Double.class);
+			} else {
+				log.warn("Implicitly converting float array to double array");
+				Object doubleArray = ArrayUtil.convertArrayType(value, double.class);
+				tensor = Tensor.create(doubleArray, Double.class);
+			}
+		} else if (DataType.DT_DOUBLE == dtype && isDoubleType(value)) {
+			if (value instanceof Double) {
+				tensor = Tensor.create(value, Double.class);
+			} else {
+				tensor = Tensor.create(value, Double.class);
+			}
+		} else if (DataType.DT_DOUBLE == dtype && isStringType(value)) {
+			if (value instanceof String) {
+				double val = Double.parseDouble((String) value);
+				tensor = Tensor.create(val, Double.class);
+			} else {
+				log.warn("Implicitly converting String array to double array");
+				Object doubleArray = ArrayUtil.convertArrayType(value, double.class);
+				tensor = Tensor.create(doubleArray, Double.class);
+			}
+			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_INT64 == dtype && isLongType(value)) {
 			if (value instanceof Long) {
 				tensor = Tensor.create(value, Long.class);
