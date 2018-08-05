@@ -1,6 +1,7 @@
 package org.codait.tf;
 
 import java.lang.reflect.Array;
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
@@ -311,6 +312,19 @@ public class ArrayUtil {
 		FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
 		tensor.writeTo(fb);
 		return fb.array();
+	}
+
+	/**
+	 * Convert {@code Tensor<Double>} to double array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Double values
+	 * @return Primitive double array
+	 */
+	public static double[] doubleTensorToDoubleArray(Tensor<Double> tensor) {
+		DoubleBuffer db = DoubleBuffer.allocate(tensor.numElements());
+		tensor.writeTo(db);
+		return db.array();
 	}
 
 	/**

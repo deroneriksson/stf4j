@@ -80,4 +80,40 @@ public class AddFloat64Test {
 		String result = model.in("input1", 1.0d).in("input2", 2.0d).out("output").run().getString("output");
 		Assert.assertTrue("3.0".equals(result));
 	}
+
+	@Test
+	public void inputDoubleArraysOutputDoubleArray() {
+		double[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getDoubleArray("output");
+		Assert.assertArrayEquals(new double[] { 4.0d, 6.0d }, result, 0.0d);
+	}
+
+	@Test
+	public void inputIntArraysOutputDoubleArray() {
+		double[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getDoubleArray("output");
+		Assert.assertArrayEquals(new double[] { 4.0d, 6.0d }, result, 0.0d);
+	}
+
+	@Test
+	public void inputLongArraysOutputDoubleArray() {
+		double[] result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output")
+				.run().getDoubleArray("output");
+		Assert.assertArrayEquals(new double[] { 4.0d, 6.0d }, result, 0.0d);
+	}
+
+	@Test
+	public void inputFloatArraysOutputDoubleArray() {
+		double[] result = model.in("input1", new float[] { 1.0f, 2.0f }).in("input2", new float[] { 3.0f, 4.0f })
+				.out("output").run().getDoubleArray("output");
+		Assert.assertArrayEquals(new double[] { 4.0d, 6.0d }, result, 0.0d);
+	}
+
+	@Test
+	public void inputStringArraysOutputDoubleArray() {
+		double[] result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { "3", "4" })
+				.out("output").run().getDoubleArray("output");
+		Assert.assertArrayEquals(new double[] { 4.0d, 6.0d }, result, 0.0d);
+	}
+
 }
