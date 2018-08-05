@@ -116,4 +116,10 @@ public class AddFloat64Test {
 		Assert.assertArrayEquals(new double[] { 4.0d, 6.0d }, result, 0.0d);
 	}
 
+	@Test
+	public void inputDoubleArraysOutputFloatArray() {
+		float[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
+	}
 }
