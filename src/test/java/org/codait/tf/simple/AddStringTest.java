@@ -110,4 +110,64 @@ public class AddStringTest {
 				.out("output").run().getStringArray("output");
 		Assert.assertArrayEquals(new String[] { "aaac", "bddd" }, result);
 	}
+
+	// try with a 2-byte UTF-8 character
+	@Test
+	public void inputStringOutputString_aring_b_aringb() {
+		String result = model.in("input1", "å").in("input2", "b").out("output").run().getString("output");
+		Assert.assertTrue("åb".equals(result));
+	}
+
+	// try with a 2-byte UTF-8 character
+	@Test
+	public void inputStringOutputString_aaring_bb_aaringbb() {
+		String result = model.in("input1", "åå").in("input2", "bb").out("output").run().getString("output");
+		Assert.assertTrue("ååbb".equals(result));
+	}
+
+	// try with a 2-byte UTF-8 character
+	@Test
+	public void inputStringOutputString_aaaring_b_aaaringb() {
+		String result = model.in("input1", "ååå").in("input2", "b").out("output").run().getString("output");
+		Assert.assertTrue("åååb".equals(result));
+	}
+
+	// try with a 2-byte UTF-8 character
+	@Test
+	public void inputStringOutputString_aring_bbb_aringbbb() {
+		String result = model.in("input1", "å").in("input2", "bbb").out("output").run().getString("output");
+		Assert.assertTrue("åbbb".equals(result));
+	}
+
+	// try with a 2-byte UTF-8 character
+	@Test
+	public void inputStringOutputString_aring_b__c_d__ad_bd() {
+		String[] result = model.in("input1", new String[] { "å", "b" }).in("input2", new String[] { "c", "d" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "åc", "bd" }, result);
+	}
+
+	// try with a 2-byte UTF-8 character
+	@Test
+	public void inputStringOutputString_aaaring_bbb__c_d__aaac_bbbd() {
+		String[] result = model.in("input1", new String[] { "ååå", "bbb" }).in("input2", new String[] { "c", "d" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "åååc", "bbbd" }, result);
+	}
+
+	// try with a 2-byte UTF-8 character
+	@Test
+	public void inputStringOutputString_aring_bbb__c_ddd__aringc_bbbddd() {
+		String[] result = model.in("input1", new String[] { "å", "bbb" }).in("input2", new String[] { "c", "ddd" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "åc", "bbbddd" }, result);
+	}
+
+	// try with a 2-byte UTF-8 character
+	@Test
+	public void inputStringOutputString_aaring_bbb__c_dddaaaring__aaringc_bbbdddaaaring() {
+		String[] result = model.in("input1", new String[] { "åå", "bbb" }).in("input2", new String[] { "c", "dddååå" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "ååc", "bbbdddååå" }, result);
+	}
 }
