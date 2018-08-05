@@ -28,9 +28,45 @@ public class AddStringTest {
 	}
 
 	@Test
-	public void inputStringOutputString() {
+	public void inputStringOutputString_a_b_ab() {
 		String result = model.in("input1", "a").in("input2", "b").out("output").run().getString("output");
 		Assert.assertTrue("ab".equals(result));
+	}
+
+	@Test
+	public void inputStringOutputString_aa_bb_aabb() {
+		String result = model.in("input1", "aa").in("input2", "bb").out("output").run().getString("output");
+		Assert.assertTrue("aabb".equals(result));
+	}
+
+	@Test
+	public void inputStringOutputString_aaa_b_aaab() {
+		String result = model.in("input1", "aaa").in("input2", "b").out("output").run().getString("output");
+		Assert.assertTrue("aaab".equals(result));
+	}
+
+	@Test
+	public void inputStringOutputString_a_bbb_abbb() {
+		String result = model.in("input1", "a").in("input2", "bbb").out("output").run().getString("output");
+		Assert.assertTrue("abbb".equals(result));
+	}
+
+	@Test
+	public void inputStringOutputString_blank_b_b() {
+		String result = model.in("input1", "").in("input2", "b").out("output").run().getString("output");
+		Assert.assertTrue("b".equals(result));
+	}
+
+	@Test
+	public void inputStringOutputString_a_blank_a() {
+		String result = model.in("input1", "a").in("input2", "").out("output").run().getString("output");
+		Assert.assertTrue("a".equals(result));
+	}
+
+	@Test
+	public void inputStringOutputString_blank_blank_blank() {
+		String result = model.in("input1", "").in("input2", "").out("output").run().getString("output");
+		Assert.assertTrue("".equals(result));
 	}
 
 }
