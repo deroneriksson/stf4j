@@ -136,4 +136,11 @@ public class AddFloat64Test {
 				.out("output").run().getLongArray("output");
 		Assert.assertArrayEquals(new long[] { 4L, 6L }, result);
 	}
+
+	@Test
+	public void inputDoubleArraysOutputStringArray() {
+		String[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "4.0", "6.0" }, result);
+	}
 }

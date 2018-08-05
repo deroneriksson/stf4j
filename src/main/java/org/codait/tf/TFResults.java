@@ -697,6 +697,12 @@ public class TFResults {
 			float[] f = ArrayUtil.floatTensorToFloatArray(tensor);
 			String[] s = (String[]) ArrayUtil.convertArrayType(f, String.class);
 			return s;
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			double[] d = ArrayUtil.doubleTensorToDoubleArray(tensor);
+			String[] s = (String[]) ArrayUtil.convertArrayType(d, String.class);
+			return s;
 		} else {
 			throw new TFException("getStringArray not implemented for '" + key + "' data type: " + dtype);
 		}
