@@ -69,4 +69,10 @@ public class AddStringTest {
 		Assert.assertTrue("".equals(result));
 	}
 
+	@Test
+	public void inputStringOutputString_a_b__c_d__ad_bd() {
+		String[] result = model.in("input1", new String[] { "a", "b" }).in("input2", new String[] { "c", "d" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "ac", "bd" }, result);
+	}
 }

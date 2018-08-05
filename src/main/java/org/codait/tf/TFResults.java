@@ -699,9 +699,17 @@ public class TFResults {
 		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
 		DataType dtype = ti.getDtype();
 		if (dtype == DataType.DT_STRING) {
-			String[][] multi = (String[][]) getStringArrayMultidimensional(key);
-			String[] s = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
-			return s;
+			@SuppressWarnings("unchecked")
+			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
+			int length = tensor.shape().length;
+			if (length == 1) {
+				String[] s = (String[]) getStringArrayMultidimensional(key);
+				return s;
+			} else {
+				String[][] multi = (String[][]) getStringArrayMultidimensional(key);
+				String[] s = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
+				return s;
+			}
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
