@@ -132,21 +132,21 @@ public class AddInt32Test {
 
 	@Test
 	public void inputIntArraysOutputFloatArray() {
-		float[] result = model.in("input1", new long[] { 1, 2 }).in("input2", new long[] { 3, 4 }).out("output").run()
+		float[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
 				.getFloatArray("output");
 		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
 	}
 
 	@Test
 	public void inputIntArraysOutputDoubleArray() {
-		double[] result = model.in("input1", new long[] { 1, 2 }).in("input2", new long[] { 3, 4 }).out("output").run()
+		double[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
 				.getDoubleArray("output");
 		Assert.assertArrayEquals(new double[] { 4.0d, 6.0d }, result, 0.0d);
 	}
 
 	@Test
 	public void inputIntArraysOutputStringArray() {
-		String[] result = model.in("input1", new long[] { 1, 2 }).in("input2", new long[] { 3, 4 }).out("output").run()
+		String[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
 				.getStringArray("output");
 		Assert.assertArrayEquals(new String[] { "4", "6" }, result);
 	}
