@@ -389,6 +389,20 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert {@code Tensor<Double>} to multidimensional double array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Double values
+	 * @return Multidimensional primitive double array as an Object
+	 */
+	public static Object doubleTensorToMultidimensionalDoubleArray(Tensor<Double> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object d = Array.newInstance(double.class, shape);
+		tensor.copyTo(d);
+		return d;
+	}
+
+	/**
 	 * Convert {@code Tensor<Long>} to multidimensional long array.
 	 * 
 	 * @param tensor

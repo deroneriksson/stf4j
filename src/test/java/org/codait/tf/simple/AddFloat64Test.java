@@ -143,4 +143,17 @@ public class AddFloat64Test {
 				.out("output").run().getStringArray("output");
 		Assert.assertArrayEquals(new String[] { "4.0", "6.0" }, result);
 	}
+
+	@Test
+	public void inputMultiDoubleArraysOutputMultiDoubleArray() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] input2 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] expected = new double[][] { { 2.0d, 4.0d }, { 6.0d, 8.0d } };
+		double[][] result = (double[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getDoubleArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0d);
+		}
+	}
+
 }

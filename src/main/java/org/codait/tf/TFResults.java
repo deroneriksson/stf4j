@@ -631,6 +631,11 @@ public class TFResults {
 			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
 			Object d = ArrayUtil.convertArrayType(f, double.class);
 			return d;
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			Object d = ArrayUtil.doubleTensorToMultidimensionalDoubleArray(tensor);
+			return d;
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
