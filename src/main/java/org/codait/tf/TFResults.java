@@ -218,8 +218,14 @@ public class TFResults {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
-			Object i = ArrayUtil.convertArrayType(f, long.class);
-			return i;
+			Object l = ArrayUtil.convertArrayType(f, long.class);
+			return l;
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			Object d = ArrayUtil.doubleTensorToMultidimensionalDoubleArray(tensor);
+			Object l = ArrayUtil.convertArrayType(d, long.class);
+			return l;
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
@@ -354,6 +360,12 @@ public class TFResults {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
+			return f;
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			Object d = ArrayUtil.doubleTensorToMultidimensionalDoubleArray(tensor);
+			Object f = ArrayUtil.convertArrayType(d, float.class);
 			return f;
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
@@ -493,6 +505,12 @@ public class TFResults {
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
 			Object i = ArrayUtil.convertArrayType(f, int.class);
+			return i;
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			Object d = ArrayUtil.doubleTensorToMultidimensionalDoubleArray(tensor);
+			Object i = ArrayUtil.convertArrayType(d, int.class);
 			return i;
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
@@ -746,6 +764,12 @@ public class TFResults {
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
 			Object s = ArrayUtil.convertArrayType(f, String.class);
+			return s;
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			Object d = ArrayUtil.doubleTensorToMultidimensionalDoubleArray(tensor);
+			Object s = ArrayUtil.convertArrayType(d, String.class);
 			return s;
 		} else {
 			throw new TFException(

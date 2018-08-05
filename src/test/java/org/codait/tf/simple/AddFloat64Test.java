@@ -156,4 +156,51 @@ public class AddFloat64Test {
 		}
 	}
 
+	@Test
+	public void inputMultiFloatArraysOutputMultiFloatArray() {
+		float[][] input1 = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		float[][] input2 = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		float[][] expected = new float[][] { { 2.0f, 4.0f }, { 6.0f, 8.0f } };
+		float[][] result = (float[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getFloatArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0f);
+		}
+	}
+
+	@Test
+	public void inputMultiIntArraysOutputMultiIntArray() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] expected = new int[][] { { 2, 4 }, { 6, 8 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiLongArraysOutputMultiLongArray() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] expected = new long[][] { { 2L, 4L }, { 6L, 8L } };
+		long[][] result = (long[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getLongArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiStringArraysOutputMultiStringArray() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] input2 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] expected = new String[][] { { "2.0", "4.0" }, { "6.0", "8.0" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getStringArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }
