@@ -804,6 +804,10 @@ public class TFResults {
 			@SuppressWarnings("unchecked")
 			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
 			return Integer.toString(tensor.intValue());
+		} else if (dtype == DataType.DT_STRING) {
+			@SuppressWarnings("unchecked")
+			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
+			return new String(tensor.bytesValue());
 		} else {
 			throw new TFException("getString not implemented for '" + key + "' data type: " + dtype);
 		}

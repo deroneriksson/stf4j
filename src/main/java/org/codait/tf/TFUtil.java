@@ -1,5 +1,6 @@
 package org.codait.tf;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -329,8 +330,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_STRING == dtype && isStringType(value)) {
 			if (value instanceof String) {
-				throw new TFException("Could not convert input key '" + key + "' (name: '" + name
-						+ "') to Tensor - conversion not implemented yet.");
+				tensor = Tensor.create(((String) value).getBytes(StandardCharsets.UTF_8), String.class);
 			} else {
 				log.warn("Implicitly converting String array to byte array");
 				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(value);
