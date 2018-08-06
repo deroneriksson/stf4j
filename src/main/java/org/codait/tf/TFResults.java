@@ -314,6 +314,19 @@ public class TFResults {
 				float f = (float) tensor.copyTo(new int[1])[0];
 				return f;
 			}
+		} else if (dtype == DataType.DT_STRING) {
+			@SuppressWarnings("unchecked")
+			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				float f = Float.parseFloat(new String(tensor.bytesValue()));
+				return f;
+			} else {
+				Object sArray = getStringArrayMultidimensional(key);
+				String s = (String) ArrayUtil.firstElementValueOfMultidimArray(sArray);
+				float f = Float.parseFloat(s);
+				return f;
+			}
 		} else {
 			throw new TFException("getFloat not implemented for '" + key + "' data type: " + dtype);
 		}
