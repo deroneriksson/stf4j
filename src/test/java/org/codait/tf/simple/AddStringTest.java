@@ -326,4 +326,39 @@ public class AddStringTest {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void inputStringArrayStringScalarOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "a", "b" }).in("input2", "c").out("output").run()
+				.getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "ac", "bc" }, result);
+	}
+
+	@Test
+	public void inputStringArrayIntScalarOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "a", "b" }).in("input2", 1).out("output").run()
+				.getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "a1", "b1" }, result);
+	}
+
+	@Test
+	public void inputStringArrayLongScalarOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "a", "b" }).in("input2", 1L).out("output").run()
+				.getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "a1", "b1" }, result);
+	}
+
+	@Test
+	public void inputStringArrayFloatScalarOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "a", "b" }).in("input2", 1.0f).out("output").run()
+				.getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "a1.0", "b1.0" }, result);
+	}
+
+	@Test
+	public void inputStringArrayDoubleScalarOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "a", "b" }).in("input2", 1.0d).out("output").run()
+				.getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "a1.0", "b1.0" }, result);
+	}
 }

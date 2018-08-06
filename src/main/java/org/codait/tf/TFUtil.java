@@ -346,6 +346,36 @@ public class TFUtil {
 				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(stringArray);
 				tensor = Tensor.create(byteArray, String.class);
 			}
+		} else if (DataType.DT_STRING == dtype && isLongType(value)) {
+			if (value instanceof Long) {
+				byte[] b = Long.toString((long) value).getBytes(StandardCharsets.UTF_8);
+				tensor = Tensor.create(b, String.class);
+			} else {
+				log.warn("Implicitly converting long array to String array to byte array");
+				Object stringArray = ArrayUtil.convertArrayType(value, String.class);
+				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(stringArray);
+				tensor = Tensor.create(byteArray, String.class);
+			}
+		} else if (DataType.DT_STRING == dtype && isFloatType(value)) {
+			if (value instanceof Float) {
+				byte[] b = Float.toString((float) value).getBytes(StandardCharsets.UTF_8);
+				tensor = Tensor.create(b, String.class);
+			} else {
+				log.warn("Implicitly converting float array to String array to byte array");
+				Object stringArray = ArrayUtil.convertArrayType(value, String.class);
+				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(stringArray);
+				tensor = Tensor.create(byteArray, String.class);
+			}
+		} else if (DataType.DT_STRING == dtype && isDoubleType(value)) {
+			if (value instanceof Double) {
+				byte[] b = Double.toString((double) value).getBytes(StandardCharsets.UTF_8);
+				tensor = Tensor.create(b, String.class);
+			} else {
+				log.warn("Implicitly converting double array to String array to byte array");
+				Object stringArray = ArrayUtil.convertArrayType(value, String.class);
+				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(stringArray);
+				tensor = Tensor.create(byteArray, String.class);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
