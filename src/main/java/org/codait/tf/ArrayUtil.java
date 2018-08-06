@@ -604,4 +604,21 @@ public class ArrayUtil {
 			}
 		}
 	}
+
+	/**
+	 * Obtain the value of the first element of a (multidimensional) array.
+	 * 
+	 * @param obj
+	 *            The multidimensional array
+	 * @return The value of the first element of the multidimensional array
+	 */
+	public static Object firstElementValueOfMultidimArray(Object obj) {
+		if (obj == null) {
+			return null;
+		} else if (obj.getClass().isArray()) {
+			return firstElementValueOfMultidimArray(Array.get(obj, 0));
+		} else {
+			return obj;
+		}
+	}
 }

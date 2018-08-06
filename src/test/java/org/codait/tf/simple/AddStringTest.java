@@ -421,13 +421,23 @@ public class AddStringTest {
 		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
 		int[][] input2 = new int[][] { { 5, 6 }, { 7, 8 } };
 		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
-		Assert.assertTrue(13 == result);
+		Assert.assertTrue(15 == result);
 	}
 
 	@Test
 	public void input3dIntArraysOutputInt() {
 		int[][][] input1 = new int[][][] { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } };
 		int[][][] input2 = new int[][][] { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } };
+		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
+		Assert.assertTrue(11 == result);
+	}
+
+	@Test
+	public void input4dIntArraysOutputInt() {
+		int[][][][] input1 = new int[][][][] { { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } },
+				{ { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } } };
+		int[][][][] input2 = new int[][][][] { { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } },
+				{ { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } } };
 		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
 		Assert.assertTrue(11 == result);
 	}

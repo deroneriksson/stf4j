@@ -451,21 +451,11 @@ public class TFResults {
 			if (shapeLength == 0) {
 				int i = Integer.parseInt(new String(tensor.bytesValue()));
 				return i;
-			} else if (shapeLength == 1) {
-				String[] s = (String[]) getStringArrayMultidimensional(key);
-				int i = Integer.parseInt(s[0]);
-				return i;
-			} else if (shapeLength == 2) {
-				String[][] s = (String[][]) getStringArrayMultidimensional(key);
-				int i = Integer.parseInt(s[0][0]);
-				return i;
-			} else if (shapeLength == 3) {
-				String[][][] s = (String[][][]) getStringArrayMultidimensional(key);
-				int i = Integer.parseInt(s[0][0][0]);
-				return i;
 			} else {
-				throw new TFException("getInt not implemented for '" + key + "' data type " + dtype
-						+ " with tensor shape length " + shapeLength);
+				Object sArray = getStringArrayMultidimensional(key);
+				String s = (String) ArrayUtil.firstElementValueOfMultidimArray(sArray);
+				int i = Integer.parseInt(s);
+				return i;
 			}
 		} else {
 			throw new TFException("getInt not implemented for '" + key + "' data type: " + dtype);
