@@ -626,6 +626,19 @@ public class TFResults {
 				double d = (double) tensor.copyTo(new int[1])[0];
 				return d;
 			}
+		} else if (dtype == DataType.DT_STRING) {
+			@SuppressWarnings("unchecked")
+			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				double d = Double.parseDouble(new String(tensor.bytesValue()));
+				return d;
+			} else {
+				Object sArray = getStringArrayMultidimensional(key);
+				String s = (String) ArrayUtil.firstElementValueOfMultidimArray(sArray);
+				double d = Double.parseDouble(s);
+				return d;
+			}
 		} else {
 			throw new TFException("getDouble not implemented for '" + key + "' data type: " + dtype);
 		}

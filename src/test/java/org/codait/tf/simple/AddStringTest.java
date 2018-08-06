@@ -521,4 +521,45 @@ public class AddStringTest {
 		float result = model.in("input1", input1).in("input2", input2).out("output").run().getFloat("output");
 		Assert.assertTrue(1.0f == result);
 	}
+
+	@Test
+	public void inputStringsOutputDouble() {
+		double result = model.in("input1", "1").in("input2", ".0").out("output").run().getDouble("output");
+		Assert.assertTrue(1.0d == result);
+	}
+
+	@Test
+	public void inputStringArraysOutputDouble() {
+		double result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { ".0", ".0" })
+				.out("output").run().getDouble("output");
+		Assert.assertTrue(1.0d == result);
+	}
+
+	@Test
+	public void input2dStringArraysOutputDouble() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] input2 = new String[][] { { ".0", ".0" }, { ".0", ".0" } };
+		double result = model.in("input1", input1).in("input2", input2).out("output").run().getDouble("output");
+		Assert.assertTrue(1.0d == result);
+	}
+
+	@Test
+	public void input3dStringArraysOutputDouble() {
+		String[][][] input1 = new String[][][] { { { "1", "2" }, { "3", "4" } }, { { "5", "6" }, { "7", "8" } } };
+		String[][][] input2 = new String[][][] { { { ".0", ".0" }, { ".0", ".0" } },
+				{ { ".0", ".0" }, { ".0", ".0" } } };
+		double result = model.in("input1", input1).in("input2", input2).out("output").run().getDouble("output");
+		Assert.assertTrue(1.0d == result);
+	}
+
+	@Test
+	public void input4dStringArraysOutputDouble() {
+		String[][][][] input1 = new String[][][][] { { { { "1", "2" }, { "3", "4" } }, { { "5", "6" }, { "7", "8" } } },
+				{ { { "1", "2" }, { "3", "4" } }, { { "5", "6" }, { "7", "8" } } } };
+		String[][][][] input2 = new String[][][][] {
+				{ { { ".0", ".0" }, { ".0", ".0" } }, { { ".0", ".0" }, { ".0", ".0" } } },
+				{ { { ".0", ".0" }, { ".0", ".0" } }, { { ".0", ".0" }, { ".0", ".0" } } } };
+		double result = model.in("input1", input1).in("input2", input2).out("output").run().getDouble("output");
+		Assert.assertTrue(1.0d == result);
+	}
 }
