@@ -402,4 +402,33 @@ public class AddStringTest {
 		model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d }).out("output").run()
 				.getDoubleArray("output");
 	}
+
+	@Test
+	public void inputIntsOutputInt() {
+		int result = model.in("input1", 1).in("input2", 2).out("output").run().getInt("output");
+		Assert.assertTrue(12 == result);
+	}
+
+	@Test
+	public void inputIntArraysOutputInt() {
+		int result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getInt("output");
+		Assert.assertTrue(13 == result);
+	}
+
+	@Test
+	public void input2dIntArraysOutputInt() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 5, 6 }, { 7, 8 } };
+		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
+		Assert.assertTrue(13 == result);
+	}
+
+	@Test
+	public void input3dIntArraysOutputInt() {
+		int[][][] input1 = new int[][][] { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } };
+		int[][][] input2 = new int[][][] { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } };
+		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
+		Assert.assertTrue(11 == result);
+	}
 }

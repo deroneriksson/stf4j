@@ -444,6 +444,29 @@ public class TFResults {
 				int i = tensor.copyTo(new int[1])[0];
 				return i;
 			}
+		} else if (dtype == DataType.DT_STRING) {
+			@SuppressWarnings("unchecked")
+			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				int i = Integer.parseInt(new String(tensor.bytesValue()));
+				return i;
+			} else if (shapeLength == 1) {
+				String[] s = (String[]) getStringArrayMultidimensional(key);
+				int i = Integer.parseInt(s[0]);
+				return i;
+			} else if (shapeLength == 2) {
+				String[][] s = (String[][]) getStringArrayMultidimensional(key);
+				int i = Integer.parseInt(s[0][0]);
+				return i;
+			} else if (shapeLength == 3) {
+				String[][][] s = (String[][][]) getStringArrayMultidimensional(key);
+				int i = Integer.parseInt(s[0][0][0]);
+				return i;
+			} else {
+				throw new TFException("getInt not implemented for '" + key + "' data type " + dtype
+						+ " with tensor shape length " + shapeLength);
+			}
 		} else {
 			throw new TFException("getInt not implemented for '" + key + "' data type: " + dtype);
 		}
