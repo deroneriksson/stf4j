@@ -317,4 +317,38 @@ public class AddInt64Test {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void inputIntArrayIntScalarOutputIntArray() {
+		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", 3).out("output").run().getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputLongArrayLongScalarOutputLongArray() {
+		long[] result = model.in("input1", new long[] { 1L, 2L }).in("input2", 3L).out("output").run()
+				.getLongArray("output");
+		Assert.assertArrayEquals(new long[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputFloatArrayFloatScalarOutputFloatArray() {
+		float[] result = model.in("input1", new float[] { 1.0f, 2.0f }).in("input2", 3.0f).out("output").run()
+				.getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 5.0f }, result, 0.0f);
+	}
+
+	@Test
+	public void inputDoubleArrayDoubleScalarOutputDoubleArray() {
+		double[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", 3.0d).out("output").run()
+				.getDoubleArray("output");
+		Assert.assertArrayEquals(new double[] { 4.0d, 5.0d }, result, 0.0d);
+	}
+
+	@Test
+	public void inputStringArrayStringScalarOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "1", "2" }).in("input2", "3").out("output").run()
+				.getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "4", "5" }, result);
+	}
 }
