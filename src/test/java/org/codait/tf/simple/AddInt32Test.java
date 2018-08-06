@@ -509,4 +509,39 @@ public class AddInt32Test {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void inputIntArraysOutputInt() {
+		int result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getInt("output");
+		Assert.assertTrue(4 == result);
+	}
+
+	@Test
+	public void inputIntArraysOutputLong() {
+		long result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getLong("output");
+		Assert.assertTrue(4L == result);
+	}
+
+	@Test
+	public void inputIntArraysOutputFloat() {
+		float result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getFloat("output");
+		Assert.assertTrue(4.0f == result);
+	}
+
+	@Test
+	public void inputIntArraysOutputDouble() {
+		double result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getDouble("output");
+		Assert.assertTrue(4.0d == result);
+	}
+
+	@Test
+	public void inputIntArraysOutputString() {
+		String result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getString("output");
+		Assert.assertTrue("4".equals(result));
+	}
 }

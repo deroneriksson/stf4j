@@ -153,8 +153,9 @@ public class TFResults {
 				long l = (long) tensor.intValue();
 				return l;
 			} else {
-				long i = (long) tensor.copyTo(new int[1])[0];
-				return i;
+				Object iArray = getIntArrayMultidimensional(key);
+				long l = (long) (int) ArrayUtil.firstElementValueOfMultidimArray(iArray);
+				return l;
 			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
@@ -311,7 +312,8 @@ public class TFResults {
 				float f = (float) tensor.intValue();
 				return f;
 			} else {
-				float f = (float) tensor.copyTo(new int[1])[0];
+				Object iArray = getIntArrayMultidimensional(key);
+				float f = (float) (int) ArrayUtil.firstElementValueOfMultidimArray(iArray);
 				return f;
 			}
 		} else if (dtype == DataType.DT_STRING) {
@@ -463,11 +465,13 @@ public class TFResults {
 			@SuppressWarnings("unchecked")
 			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
 			int shapeLength = tensor.shape().length;
+			System.out.println("SHAPE:" + Arrays.toString(tensor.shape()));
 			if (shapeLength == 0) {
 				int i = tensor.intValue();
 				return i;
 			} else {
-				int i = tensor.copyTo(new int[1])[0];
+				Object iArray = getIntArrayMultidimensional(key);
+				int i = (int) ArrayUtil.firstElementValueOfMultidimArray(iArray);
 				return i;
 			}
 		} else if (dtype == DataType.DT_STRING) {
@@ -623,7 +627,8 @@ public class TFResults {
 				double d = (double) tensor.intValue();
 				return d;
 			} else {
-				double d = (double) tensor.copyTo(new int[1])[0];
+				Object iArray = getIntArrayMultidimensional(key);
+				double d = (double) (int) ArrayUtil.firstElementValueOfMultidimArray(iArray);
 				return d;
 			}
 		} else if (dtype == DataType.DT_STRING) {
@@ -863,7 +868,13 @@ public class TFResults {
 		} else if (dtype == DataType.DT_INT32) {
 			@SuppressWarnings("unchecked")
 			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
-			return Integer.toString(tensor.intValue());
+			if (tensor.shape().length == 0) {
+				return Integer.toString(tensor.intValue());
+			} else {
+				Object iArray = getIntArrayMultidimensional(key);
+				int i = (int) ArrayUtil.firstElementValueOfMultidimArray(iArray);
+				return Integer.toString(i);
+			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
 			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
