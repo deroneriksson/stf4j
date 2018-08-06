@@ -544,4 +544,45 @@ public class AddInt32Test {
 				.getString("output");
 		Assert.assertTrue("4".equals(result));
 	}
+
+	@Test
+	public void inputMultiIntArraysOutputInt() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
+		Assert.assertTrue(2 == result);
+	}
+
+	@Test
+	public void inputMultiIntArraysOutputLong() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 1, 2 }, { 3, 4 } };
+		long result = model.in("input1", input1).in("input2", input2).out("output").run().getLong("output");
+		Assert.assertTrue(2L == result);
+	}
+
+	@Test
+	public void inputMultiIntArraysOutputFloat() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 1, 2 }, { 3, 4 } };
+		float result = model.in("input1", input1).in("input2", input2).out("output").run().getFloat("output");
+		Assert.assertTrue(2.0f == result);
+	}
+
+	@Test
+	public void inputMultiIntArraysOutputDouble() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 1, 2 }, { 3, 4 } };
+		double result = model.in("input1", input1).in("input2", input2).out("output").run().getDouble("output");
+		Assert.assertTrue(2.0d == result);
+	}
+
+	@Test
+	public void inputMultiIntArraysOutputString() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 1, 2 }, { 3, 4 } };
+		String result = model.in("input1", input1).in("input2", input2).out("output").run().getString("output");
+		Assert.assertTrue("2".equals(result));
+	}
+
 }
