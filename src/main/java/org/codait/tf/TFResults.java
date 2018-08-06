@@ -156,6 +156,19 @@ public class TFResults {
 				long i = (long) tensor.copyTo(new int[1])[0];
 				return i;
 			}
+		} else if (dtype == DataType.DT_STRING) {
+			@SuppressWarnings("unchecked")
+			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				long l = Long.parseLong(new String(tensor.bytesValue()));
+				return l;
+			} else {
+				Object sArray = getStringArrayMultidimensional(key);
+				String s = (String) ArrayUtil.firstElementValueOfMultidimArray(sArray);
+				long l = Long.parseLong(s);
+				return l;
+			}
 		} else {
 			throw new TFException("getLong not implemented for '" + key + "' data type: " + dtype);
 		}

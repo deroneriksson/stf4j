@@ -441,4 +441,44 @@ public class AddStringTest {
 		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
 		Assert.assertTrue(11 == result);
 	}
+
+	@Test
+	public void inputLongsOutputLong() {
+		long result = model.in("input1", 1L).in("input2", 2L).out("output").run().getLong("output");
+		Assert.assertTrue(12L == result);
+	}
+
+	@Test
+	public void inputLongArraysOutputLong() {
+		long result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output").run()
+				.getLong("output");
+		Assert.assertTrue(13L == result);
+	}
+
+	@Test
+	public void input2dLongArraysOutputLong() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 5L, 6L }, { 7L, 8L } };
+		long result = model.in("input1", input1).in("input2", input2).out("output").run().getLong("output");
+		Assert.assertTrue(15L == result);
+	}
+
+	@Test
+	public void input3dLongArraysOutputLong() {
+		long[][][] input1 = new long[][][] { { { 1L, 2L }, { 3L, 4L } }, { { 5L, 6L }, { 7L, 8L } } };
+		long[][][] input2 = new long[][][] { { { 1L, 2L }, { 3L, 4L } }, { { 5L, 6L }, { 7L, 8L } } };
+		long result = model.in("input1", input1).in("input2", input2).out("output").run().getLong("output");
+		Assert.assertTrue(11L == result);
+	}
+
+	@Test
+	public void input4dLongArraysOutputLong() {
+		long[][][][] input1 = new long[][][][] { { { { 1L, 2L }, { 3L, 4L } }, { { 5L, 6L }, { 7L, 8L } } },
+				{ { { 1L, 2L }, { 3L, 4L } }, { { 5L, 6L }, { 7L, 8L } } } };
+		long[][][][] input2 = new long[][][][] { { { { 1L, 2L }, { 3L, 4L } }, { { 5L, 6L }, { 7L, 8L } } },
+				{ { { 1L, 2L }, { 3L, 4L } }, { { 5L, 6L }, { 7L, 8L } } } };
+		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
+		Assert.assertTrue(11L == result);
+	}
+
 }
