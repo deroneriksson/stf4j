@@ -217,4 +217,116 @@ public class AddInt32Test {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void inputIntArrayIntScalarOutputIntArray() {
+		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", 3).out("output").run().getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputLongArrayIntScalarOutputIntArray() {
+		int[] result = model.in("input1", new long[] { 1L, 2L }).in("input2", 3).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputFloatArrayIntScalarOutputIntArray() {
+		int[] result = model.in("input1", new float[] { 1.0f, 2.0f }).in("input2", 3).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputDoubleArrayIntScalarOutputIntArray() {
+		int[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", 3).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputStringArrayIntScalarOutputIntArray() {
+		int[] result = model.in("input1", new String[] { "1", "2" }).in("input2", 3).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputIntScalarIntArrayOutputIntArray() {
+		int[] result = model.in("input1", 1).in("input2", new int[] { 2, 3 }).out("output").run().getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 3, 4 }, result);
+	}
+
+	@Test
+	public void inputMultiIntArrayIntScalarOutputMultiIntArray() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int input2 = 5;
+		int[][] expected = new int[][] { { 6, 7 }, { 8, 9 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiLongArrayIntScalarOutputMultiIntArray() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		int input2 = 5;
+		int[][] expected = new int[][] { { 6, 7 }, { 8, 9 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiFloatArrayIntScalarOutputMultiIntArray() {
+		float[][] input1 = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		int input2 = 5;
+		int[][] expected = new int[][] { { 6, 7 }, { 8, 9 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiDoubleArrayIntScalarOutputMultiIntArray() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		int input2 = 5;
+		int[][] expected = new int[][] { { 6, 7 }, { 8, 9 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiStringArrayIntScalarOutputMultiIntArray() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		int input2 = 5;
+		int[][] expected = new int[][] { { 6, 7 }, { 8, 9 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputIntScalarMultiIntArrayOutputMultiIntArray() {
+		int input1 = 5;
+		int[][] input2 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] expected = new int[][] { { 6, 7 }, { 8, 9 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }
