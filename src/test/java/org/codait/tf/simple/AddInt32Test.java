@@ -405,4 +405,108 @@ public class AddInt32Test {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void inputIntArrayLongScalarOutputIntArray() {
+		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", 3L).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputIntArrayFloatScalarOutputIntArray() {
+		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", 3.0f).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputIntArrayDoubleScalarOutputIntArray() {
+		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", 3.0d).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputIntArrayStringScalarOutputIntArray() {
+		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", "3").out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputLongArrayLongScalarOutputLongArray() {
+		long[] result = model.in("input1", new long[] { 1L, 2L }).in("input2", 3L).out("output").run()
+				.getLongArray("output");
+		Assert.assertArrayEquals(new long[] { 4, 5 }, result);
+	}
+
+	@Test
+	public void inputFloatArrayFloatScalarOutputFloatArray() {
+		float[] result = model.in("input1", new float[] { 1.0f, 2.0f }).in("input2", 3.0f).out("output").run()
+				.getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 5.0f }, result, 0.0f);
+	}
+
+	@Test
+	public void inputDoubleArrayDoubleScalarOutputDoubleArray() {
+		double[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", 3.0d).out("output").run()
+				.getDoubleArray("output");
+		Assert.assertArrayEquals(new double[] { 4.0d, 5.0d }, result, 0.0d);
+	}
+
+	@Test
+	public void inputStringArrayStringScalarOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "1", "2" }).in("input2", "3").out("output").run()
+				.getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "4", "5" }, result);
+	}
+
+	@Test
+	public void inputMultiLongArrayLongScalarOutputMultiLongArray() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long input2 = 5L;
+		long[][] expected = new long[][] { { 6L, 7L }, { 8L, 9L } };
+		long[][] result = (long[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getLongArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiFloatArrayFloatScalarOutputMultiFloatArray() {
+		float[][] input1 = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		float input2 = 5.0f;
+		float[][] expected = new float[][] { { 6.0f, 7.0f }, { 8.0f, 9.0f } };
+		float[][] result = (float[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getFloatArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0f);
+		}
+	}
+
+	@Test
+	public void inputMultiDoubleArrayDoubleScalarOutputMultiDoubleArray() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double input2 = 5.0d;
+		double[][] expected = new double[][] { { 6.0d, 7.0d }, { 8.0d, 9.0d } };
+		double[][] result = (double[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getDoubleArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0d);
+		}
+	}
+
+	@Test
+	public void inputMultiStringArrayStringScalarOutputMultiStringArray() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String input2 = "5";
+		String[][] expected = new String[][] { { "6", "7" }, { "8", "9" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getStringArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }
