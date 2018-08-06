@@ -336,6 +336,16 @@ public class TFUtil {
 				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(value);
 				tensor = Tensor.create(byteArray, String.class);
 			}
+		} else if (DataType.DT_STRING == dtype && isIntType(value)) {
+			if (value instanceof Integer) {
+				byte[] b = Integer.toString((int) value).getBytes(StandardCharsets.UTF_8);
+				tensor = Tensor.create(b, String.class);
+			} else {
+				log.warn("Implicitly converting int array to String array to byte array");
+				Object stringArray = ArrayUtil.convertArrayType(value, String.class);
+				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(stringArray);
+				tensor = Tensor.create(byteArray, String.class);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");

@@ -221,10 +221,105 @@ public class AddStringTest {
 
 	// try with a 2-byte UTF-8 character
 	@Test
-	public void inputStringOutputString_aaaring_b_c_daring__e_faaring_g_h__ae_bf_cg_daringh() {
+	public void inputStringOutputString_aaaring_b_c_daring__e_faaring_g_h__aaaringe_bfaaring_cg_daringh() {
 		String[][] input1 = new String[][] { { "ååå", "b" }, { "c", "då" } };
 		String[][] input2 = new String[][] { { "e", "fåå" }, { "g", "h" } };
 		String[][] expected = new String[][] { { "åååe", "bfåå" }, { "cg", "dåh" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getStringArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputStringIntOutputString() {
+		String result = model.in("input1", "a").in("input2", 2).out("output").run().getString("output");
+		Assert.assertTrue("a2".equals(result));
+	}
+
+	@Test
+	public void inputIntStringOutputString() {
+		String result = model.in("input1", 1).in("input2", "a").out("output").run().getString("output");
+		Assert.assertTrue("1a".equals(result));
+	}
+
+	@Test
+	public void inputIntIntOutputString() {
+		String result = model.in("input1", 1).in("input2", 2).out("output").run().getString("output");
+		Assert.assertTrue("12".equals(result));
+	}
+
+	@Test
+	public void inputNegIntNegIntOutputString() {
+		String result = model.in("input1", -1).in("input2", -2).out("output").run().getString("output");
+		Assert.assertTrue("-1-2".equals(result));
+	}
+
+	@Test
+	public void inputIntArrayIntArrayOutputStringArray() {
+		String[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "13", "24" }, result);
+	}
+
+	@Test
+	public void inputStringArrayIntArrayOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "a", "b" }).in("input2", new int[] { 1, 2 }).out("output")
+				.run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "a1", "b2" }, result);
+	}
+
+	@Test
+	public void inputIntArrayStringArrayOutputStringArray() {
+		String[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new String[] { "a", "b" }).out("output")
+				.run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "1a", "2b" }, result);
+	}
+
+	@Test
+	public void inputStringArray2IntArrayOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "aaa", "bb" }).in("input2", new int[] { 1, 2 })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "aaa1", "bb2" }, result);
+	}
+
+	@Test
+	public void inputStringArray2IntArray2OutputStringArray() {
+		String[] result = model.in("input1", new String[] { "aaa", "bb" }).in("input2", new int[] { 11, 22 })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "aaa11", "bb22" }, result);
+	}
+
+	@Test
+	public void input2dIntArray2dIntArrayOutput2dStringArray() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 5, 6 }, { 7, 8 } };
+		String[][] expected = new String[][] { { "15", "26" }, { "37", "48" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getStringArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void input2dStringArray2dIntArrayOutput2dStringArray() {
+		String[][] input1 = new String[][] { { "a", "b" }, { "c", "d" } };
+		int[][] input2 = new int[][] { { 1, 2 }, { 3, 4 } };
+		String[][] expected = new String[][] { { "a1", "b2" }, { "c3", "d4" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getStringArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void input2dIntArray2dStringArrayOutput2dStringArray() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		String[][] input2 = new String[][] { { "a", "b" }, { "c", "d" } };
+		String[][] expected = new String[][] { { "1a", "2b" }, { "3c", "4d" } };
 		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
 				.getStringArrayMultidimensional("output");
 		for (int i = 0; i < expected.length; i++) {
