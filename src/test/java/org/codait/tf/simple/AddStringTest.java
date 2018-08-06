@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codait.tf.TFException;
 import org.codait.tf.TFModel;
 import org.junit.After;
 import org.junit.Assert;
@@ -360,5 +361,45 @@ public class AddStringTest {
 		String[] result = model.in("input1", new String[] { "a", "b" }).in("input2", 1.0d).out("output").run()
 				.getStringArray("output");
 		Assert.assertArrayEquals(new String[] { "a1.0", "b1.0" }, result);
+	}
+
+	@Test
+	public void inputIntArrayIntArrayOutputIntArray() {
+		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 13, 24 }, result);
+	}
+
+	@Test
+	public void inputLongArrayLongArrayOutputLongArray() {
+		long[] result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output")
+				.run().getLongArray("output");
+		Assert.assertArrayEquals(new long[] { 13L, 24L }, result);
+	}
+
+	@Test
+	public void inputFloatArrayFloatArrayOutputStringArray() {
+		String[] result = model.in("input1", new float[] { 1.0f, 2.0f }).in("input2", new float[] { 3.0f, 4.0f })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "1.03.0", "2.04.0" }, result);
+	}
+
+	@Test(expected = TFException.class)
+	public void inputFloatArrayFloatArrayOutputFloatArray() {
+		model.in("input1", new float[] { 1.0f, 2.0f }).in("input2", new float[] { 3.0f, 4.0f }).out("output").run()
+				.getFloatArray("output");
+	}
+
+	@Test
+	public void inputDoubleArrayDoubleArrayOutputStringArray() {
+		String[] result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "1.03.0", "2.04.0" }, result);
+	}
+
+	@Test(expected = TFException.class)
+	public void inputDoubleArrayDoubleArrayOutputDoubleArray() {
+		model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d }).out("output").run()
+				.getDoubleArray("output");
 	}
 }

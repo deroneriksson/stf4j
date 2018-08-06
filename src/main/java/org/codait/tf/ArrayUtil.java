@@ -91,50 +91,56 @@ public class ArrayUtil {
 		for (int i = 0; i < Array.getLength(orig); i++) {
 			Object v = Array.get(orig, i);
 			Object vd = Array.get(dest, i);
-			if (v.getClass().isArray()) {
-				copyArrayVals(v, vd);
-			} else {
-				if ("int".equals(o) && "Long".equals(d)) {
-					Array.set(dest, i, Long.valueOf((int) v));
-				} else if ("int".equals(o) && "Float".equals(d)) {
-					Array.set(dest, i, Float.valueOf((int) v));
-				} else if ("int".equals(o) && "double".equalsIgnoreCase(d)) {
-					Array.set(dest, i, Double.valueOf((int) v));
-				} else if ("int".equals(o) && "String".equals(d)) {
-					Array.set(dest, i, Integer.toString((int) v));
-				} else if ("long".equals(o) && "int".equals(d)) {
-					Array.set(dest, i, ((Long) v).intValue());
-				} else if ("double".equalsIgnoreCase(o) && "float".equals(d)) {
-					Array.set(dest, i, Float.valueOf((float) (double) v));
-				} else if ("Byte".equals(o) && "byte".equals(d)) {
-					Array.set(dest, i, v);
-				} else if ("String".equals(o) && "int".equals(d)) {
-					Array.set(dest, i, Integer.valueOf((String) v));
-				} else if ("String".equals(o) && "long".equals(d)) {
-					Array.set(dest, i, Long.valueOf((String) v));
-				} else if ("String".equals(o) && "float".equals(d)) {
-					Array.set(dest, i, Float.valueOf((String) v));
-				} else if ("String".equals(o) && "double".equals(d)) {
-					Array.set(dest, i, Double.valueOf((String) v));
-				} else if ("long".equals(o) && "String".equals(d)) {
-					Array.set(dest, i, Long.toString((long) v));
-				} else if ("float".equals(o) && "String".equals(d)) {
-					Array.set(dest, i, Float.toString((float) v));
-				} else if ("float".equals(o) && "long".equals(d)) {
-					Array.set(dest, i, ((Float) v).longValue());
-				} else if ("double".equals(o) && "String".equals(d)) {
-					Array.set(dest, i, Double.toString((double) v));
-				} else if ("double".equals(o) && "long".equals(d)) {
-					Array.set(dest, i, ((Double) v).longValue());
-				} else if ("float".equals(o) && "int".equals(d)) {
-					Array.set(dest, i, ((Float) v).intValue());
-				} else if ("double".equals(o) && "int".equals(d)) {
-					Array.set(dest, i, ((Double) v).intValue());
+			try {
+				if (v.getClass().isArray()) {
+					copyArrayVals(v, vd);
 				} else {
-					Array.set(dest, i, v);
+					if ("int".equals(o) && "Long".equals(d)) {
+						Array.set(dest, i, Long.valueOf((int) v));
+					} else if ("int".equals(o) && "Float".equals(d)) {
+						Array.set(dest, i, Float.valueOf((int) v));
+					} else if ("int".equals(o) && "double".equalsIgnoreCase(d)) {
+						Array.set(dest, i, Double.valueOf((int) v));
+					} else if ("int".equals(o) && "String".equals(d)) {
+						Array.set(dest, i, Integer.toString((int) v));
+					} else if ("long".equals(o) && "int".equals(d)) {
+						Array.set(dest, i, ((Long) v).intValue());
+					} else if ("double".equalsIgnoreCase(o) && "float".equals(d)) {
+						Array.set(dest, i, Float.valueOf((float) (double) v));
+					} else if ("Byte".equals(o) && "byte".equals(d)) {
+						Array.set(dest, i, v);
+					} else if ("String".equals(o) && "int".equals(d)) {
+						Array.set(dest, i, Integer.valueOf((String) v));
+					} else if ("String".equals(o) && "long".equals(d)) {
+						Array.set(dest, i, Long.valueOf((String) v));
+					} else if ("String".equals(o) && "float".equals(d)) {
+						Array.set(dest, i, Float.valueOf((String) v));
+					} else if ("String".equals(o) && "double".equals(d)) {
+						Array.set(dest, i, Double.valueOf((String) v));
+					} else if ("long".equals(o) && "String".equals(d)) {
+						Array.set(dest, i, Long.toString((long) v));
+					} else if ("float".equals(o) && "String".equals(d)) {
+						Array.set(dest, i, Float.toString((float) v));
+					} else if ("float".equals(o) && "long".equals(d)) {
+						Array.set(dest, i, ((Float) v).longValue());
+					} else if ("double".equals(o) && "String".equals(d)) {
+						Array.set(dest, i, Double.toString((double) v));
+					} else if ("double".equals(o) && "long".equals(d)) {
+						Array.set(dest, i, ((Double) v).longValue());
+					} else if ("float".equals(o) && "int".equals(d)) {
+						Array.set(dest, i, ((Float) v).intValue());
+					} else if ("double".equals(o) && "int".equals(d)) {
+						Array.set(dest, i, ((Double) v).intValue());
+					} else {
+						Array.set(dest, i, v);
+					}
 				}
+			} catch (Exception e) {
+				throw new TFException("Problem converting array values ('" + o + "' to '" + d + "' with value '" + v
+						+ "'): " + e.getMessage(), e);
 			}
 		}
+
 	}
 
 	/**
