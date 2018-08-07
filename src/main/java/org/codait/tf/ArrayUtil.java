@@ -381,6 +381,19 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert {@code Tensor<Boolean>} to byte array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Boolean values
+	 * @return Primitive byte array
+	 */
+	public static byte[] booleanTensorToByteArray(Tensor<Boolean> tensor) {
+		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
+		tensor.writeTo(bb);
+		return bb.array();
+	}
+
+	/**
 	 * Convert {@code Tensor<Float>} to float array.
 	 * 
 	 * @param tensor

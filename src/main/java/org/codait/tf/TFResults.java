@@ -968,4 +968,24 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the byte array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The byte array
+	 */
+	public byte[] getByteArray(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			byte[] b = ArrayUtil.booleanTensorToByteArray(tensor);
+			return b;
+		} else {
+			throw new TFException("getByteArray not implemented for '" + key + "' data type: " + dtype);
+		}
+	}
 }
