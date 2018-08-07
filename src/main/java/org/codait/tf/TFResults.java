@@ -142,7 +142,8 @@ public class TFResults {
 				long l = tensor.longValue();
 				return l;
 			} else {
-				long l = tensor.copyTo(new long[1])[0];
+				Object lArray = getLongArrayMultidimensional(key);
+				long l = (long) ArrayUtil.firstElementValueOfMultidimArray(lArray);
 				return l;
 			}
 		} else if (dtype == DataType.DT_INT32) {
@@ -301,7 +302,8 @@ public class TFResults {
 				float f = (float) tensor.longValue();
 				return f;
 			} else {
-				float f = (float) tensor.copyTo(new long[1])[0];
+				Object lArray = getLongArrayMultidimensional(key);
+				float f = (float) (long) ArrayUtil.firstElementValueOfMultidimArray(lArray);
 				return f;
 			}
 		} else if (dtype == DataType.DT_INT32) {
@@ -458,7 +460,8 @@ public class TFResults {
 				int i = (int) tensor.longValue();
 				return i;
 			} else {
-				int i = (int) tensor.copyTo(new long[1])[0];
+				Object lArray = getLongArrayMultidimensional(key);
+				int i = (int) (long) ArrayUtil.firstElementValueOfMultidimArray(lArray);
 				return i;
 			}
 		} else if (dtype == DataType.DT_INT32) {
@@ -616,7 +619,8 @@ public class TFResults {
 				double d = (double) tensor.longValue();
 				return d;
 			} else {
-				double d = (double) tensor.copyTo(new long[1])[0];
+				Object lArray = getLongArrayMultidimensional(key);
+				double d = (double) (long) ArrayUtil.firstElementValueOfMultidimArray(lArray);
 				return d;
 			}
 		} else if (dtype == DataType.DT_INT32) {
@@ -864,7 +868,13 @@ public class TFResults {
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
-			return Long.toString(tensor.longValue());
+			if (tensor.shape().length == 0) {
+				return Long.toString(tensor.longValue());
+			} else {
+				Object lArray = getLongArrayMultidimensional(key);
+				long l = (long) ArrayUtil.firstElementValueOfMultidimArray(lArray);
+				return Long.toString(l);
+			}
 		} else if (dtype == DataType.DT_INT32) {
 			@SuppressWarnings("unchecked")
 			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);

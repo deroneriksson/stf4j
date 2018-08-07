@@ -351,4 +351,79 @@ public class AddInt64Test {
 				.getStringArray("output");
 		Assert.assertArrayEquals(new String[] { "4", "5" }, result);
 	}
+
+	@Test
+	public void inputLongArraysOutputInt() {
+		int result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output").run()
+				.getInt("output");
+		Assert.assertTrue(4 == result);
+	}
+
+	@Test
+	public void inputLongArraysOutputLong() {
+		long result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output").run()
+				.getLong("output");
+		Assert.assertTrue(4L == result);
+	}
+
+	@Test
+	public void inputLongArraysOutputFloat() {
+		float result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output").run()
+				.getFloat("output");
+		Assert.assertTrue(4.0f == result);
+	}
+
+	@Test
+	public void inputLongArraysOutputDouble() {
+		double result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output")
+				.run().getDouble("output");
+		Assert.assertTrue(4.0d == result);
+	}
+
+	@Test
+	public void inputLongArraysOutputString() {
+		String result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output")
+				.run().getString("output");
+		Assert.assertTrue("4".equals(result));
+	}
+
+	@Test
+	public void inputMultiLongArraysOutputInt() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
+		Assert.assertTrue(2 == result);
+	}
+
+	@Test
+	public void inputMultiLongArraysOutputLong() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long result = model.in("input1", input1).in("input2", input2).out("output").run().getLong("output");
+		Assert.assertTrue(2L == result);
+	}
+
+	@Test
+	public void inputMultiLongArraysOutputFloat() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		float result = model.in("input1", input1).in("input2", input2).out("output").run().getFloat("output");
+		Assert.assertTrue(2.0f == result);
+	}
+
+	@Test
+	public void inputMultiLongArraysOutputDouble() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		double result = model.in("input1", input1).in("input2", input2).out("output").run().getDouble("output");
+		Assert.assertTrue(2.0d == result);
+	}
+
+	@Test
+	public void inputMultiLongArraysOutputString() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		String result = model.in("input1", input1).in("input2", input2).out("output").run().getString("output");
+		Assert.assertTrue("2".equals(result));
+	}
 }
