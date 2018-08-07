@@ -988,4 +988,26 @@ public class TFResults {
 			throw new TFException("getByteArray not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
+
+	/**
+	 * Obtain the multidimensional boolean array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The multidimensional boolean array
+	 */
+	public Object getBooleanArrayMultidimensional(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model.metaGraphDef());
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			Object i = ArrayUtil.booleanTensorToMultidimensionalBooleanArray(tensor);
+			return i;
+		} else {
+			throw new TFException(
+					"getBooleanArrayMultidimensional not implemented for '" + key + "' data type: " + dtype);
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package org.codait.tf.simple;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -77,7 +78,40 @@ public class BooleanLogicTest {
 	public void booleanArrayAndBooleanArrayOutputByteArray() {
 		byte[] result = model.in("input1", new boolean[] { true, false }).in("input2", new boolean[] { true, true })
 				.out("and").run().getByteArray("and");
-		Assert.assertTrue(result[0] == 1);
-		Assert.assertTrue(result[1] == 0);
+		Assert.assertArrayEquals(new byte[] { 1, 0 }, result);
+	}
+
+	@Test
+	public void multiBooleanArrayAndMultiBooleanArrayOutputMultiBooleanArray() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { true, false }, { true, false } };
+		boolean[][] expected = new boolean[][] { { true, false }, { false, false } };
+		boolean[][] result = (boolean[][]) model.in("input1", input1).in("input2", input2).out("and").run()
+				.getBooleanArrayMultidimensional("and");
+		assertArrayEquals(expected, result);
+	}
+
+	@Test
+	public void multiBooleanArrayOrMultiBooleanArrayOutputMultiBooleanArray() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { true, false }, { true, false } };
+		boolean[][] expected = new boolean[][] { { true, true }, { true, false } };
+		boolean[][] result = (boolean[][]) model.in("input1", input1).in("input2", input2).out("or").run()
+				.getBooleanArrayMultidimensional("or");
+		assertArrayEquals(expected, result);
+	}
+
+	protected void assertArrayEquals(boolean[][] expecteds, boolean[][] actuals) {
+		Assert.assertTrue(expecteds.length == actuals.length);
+		for (int i = 0; i < expecteds.length; i++) {
+			assertArrayEquals(expecteds[i], actuals[i]);
+		}
+	}
+
+	protected void assertArrayEquals(boolean[] expecteds, boolean[] actuals) {
+		Assert.assertTrue(expecteds.length == actuals.length);
+		for (int i = 0; i < expecteds.length; i++) {
+			Assert.assertTrue(expecteds[i] == actuals[i]);
+		}
 	}
 }

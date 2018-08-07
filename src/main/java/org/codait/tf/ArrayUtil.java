@@ -476,6 +476,20 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert {@code Tensor<Boolean>} to multidimensional boolean array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Boolean values
+	 * @return Multidimensional primitive boolean array as an Object
+	 */
+	public static Object booleanTensorToMultidimensionalBooleanArray(Tensor<Boolean> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object i = Array.newInstance(boolean.class, shape);
+		tensor.copyTo(i);
+		return i;
+	}
+
+	/**
 	 * Convert {@code Tensor<String>} to multidimensional String array.
 	 * 
 	 * @param tensor
