@@ -1,7 +1,6 @@
 package org.codait.tf.simple;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -129,6 +128,32 @@ public class BooleanLogicTest {
 		boolean[][] result = (boolean[][]) model.in("input1", input1).in("input2", input2).out("not_or").run()
 				.getBooleanArrayMultidimensional("not_or");
 		assertArrayEquals(expected, result);
+	}
+
+	@Test
+	public void multiBooleanArrayAndMultiBooleanArrayOutputMultiByteArray() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { true, false }, { true, false } };
+		byte[][] expected = new byte[][] { { 1, 0 }, { 0, 0 } };
+		byte[][] result = (byte[][]) model.in("input1", input1).in("input2", input2).out("and").run()
+				.getByteArrayMultidimensional("and");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void multiBooleanArrayOrMultiBooleanArrayOutputMultiByteArray() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { true, false }, { true, false } };
+		byte[][] expected = new byte[][] { { 1, 1 }, { 1, 0 } };
+		byte[][] result = (byte[][]) model.in("input1", input1).in("input2", input2).out("or").run()
+				.getByteArrayMultidimensional("or");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
 	}
 
 	protected void assertArrayEquals(boolean[][] expecteds, boolean[][] actuals) {

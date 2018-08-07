@@ -132,6 +132,8 @@ public class ArrayUtil {
 						Array.set(dest, i, ((Float) v).intValue());
 					} else if ("double".equals(o) && "int".equals(d)) {
 						Array.set(dest, i, ((Double) v).intValue());
+					} else if ("boolean".equals(o) && "byte".equals(d)) {
+						Array.set(dest, i, ((Boolean) v).booleanValue() == true ? (byte) 1 : (byte) 0);
 					} else {
 						Array.set(dest, i, v);
 					}
@@ -484,9 +486,9 @@ public class ArrayUtil {
 	 */
 	public static Object booleanTensorToMultidimensionalBooleanArray(Tensor<Boolean> tensor) {
 		int[] shape = lToI(tensor.shape());
-		Object i = Array.newInstance(boolean.class, shape);
-		tensor.copyTo(i);
-		return i;
+		Object b = Array.newInstance(boolean.class, shape);
+		tensor.copyTo(b);
+		return b;
 	}
 
 	/**
