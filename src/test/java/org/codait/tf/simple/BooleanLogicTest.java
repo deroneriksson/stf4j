@@ -169,4 +169,16 @@ public class BooleanLogicTest {
 			Assert.assertTrue(expecteds[i] == actuals[i]);
 		}
 	}
+
+	@Test
+	public void trueAndFalseOutputByte() {
+		byte result = model.in("input1", true).in("input2", false).out("and").run().getByte("and");
+		Assert.assertTrue(0 == result);
+	}
+
+	@Test
+	public void trueOrFalseOutputByte() {
+		byte result = model.in("input1", true).in("input2", false).out("or").run().getByte("or");
+		Assert.assertTrue(1 == result);
+	}
 }

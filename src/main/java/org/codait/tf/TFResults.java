@@ -948,6 +948,33 @@ public class TFResults {
 	}
 
 	/**
+	 * Obtain the byte value corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The byte value
+	 */
+	public byte getByte(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				boolean b = tensor.booleanValue();
+				return b ? (byte) 1 : (byte) 0;
+			} else {
+				throw new TFException("getBoolean not implemented for '" + key + "' data type " + dtype
+						+ " with shape length " + shapeLength);
+			}
+		} else {
+			throw new TFException("getBoolean not implemented for '" + key + "' data type: " + dtype);
+		}
+	}
+
+	/**
 	 * Obtain the boolean array corresponding to the output key.
 	 * 
 	 * @param key
