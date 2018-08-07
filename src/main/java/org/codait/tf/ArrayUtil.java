@@ -1,6 +1,7 @@
 package org.codait.tf;
 
 import java.lang.reflect.Array;
+import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -352,6 +353,31 @@ public class ArrayUtil {
 		IntBuffer ib = IntBuffer.allocate(tensor.numElements());
 		tensor.writeTo(ib);
 		return ib.array();
+	}
+
+	/**
+	 * Convert {@code Tensor<Boolean>} to boolean array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Boolean values
+	 * @return Primitive boolean array
+	 */
+	public static boolean[] booleanTensorToBooleanArray(Tensor<Boolean> tensor) {
+		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
+		tensor.writeTo(bb);
+		byte[] byteArray = bb.array();
+		boolean[] booleanArray = new boolean[byteArray.length];
+		for (int i = 0; i < byteArray.length; i++) {
+			if (byteArray[i] == 0) {
+				booleanArray[i] = false;
+			} else if (byteArray[i] == 1) {
+				booleanArray[i] = true;
+			} else {
+				throw new TFException(
+						"Byte value at position " + i + " was " + byteArray[i] + " when 0 or 1 was expected");
+			}
+		}
+		return booleanArray;
 	}
 
 	/**

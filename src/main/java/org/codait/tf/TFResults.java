@@ -947,4 +947,25 @@ public class TFResults {
 		}
 	}
 
+	/**
+	 * Obtain the boolean array corresponding to the output key.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return The boolean array
+	 */
+	public boolean[] getBooleanArray(String key) {
+		checkKey(key);
+		TensorInfo ti = TFUtil.outputKeyToTensorInfo(key, model);
+		DataType dtype = ti.getDtype();
+		if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			boolean[] b = ArrayUtil.booleanTensorToBooleanArray(tensor);
+			return b;
+		} else {
+			throw new TFException("getBooleanArray not implemented for '" + key + "' data type: " + dtype);
+		}
+	}
+
 }

@@ -1,6 +1,7 @@
 package org.codait.tf.simple;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -55,5 +56,21 @@ public class BooleanLogicTest {
 	public void trueXorFalse() {
 		boolean result = model.in("input1", true).in("input2", false).out("xor").run().getBoolean("xor");
 		Assert.assertTrue(true == result);
+	}
+
+	@Test
+	public void booleanArrayAndBooleanArray() {
+		boolean[] result = model.in("input1", new boolean[] { true, false }).in("input2", new boolean[] { true, true })
+				.out("and").run().getBooleanArray("and");
+		Assert.assertTrue(result[0] == true);
+		Assert.assertTrue(result[1] == false);
+	}
+
+	@Test
+	public void booleanArrayOrBooleanArray() {
+		boolean[] result = model.in("input1", new boolean[] { true, false }).in("input2", new boolean[] { true, true })
+				.out("or").run().getBooleanArray("or");
+		Assert.assertTrue(result[0] == true);
+		Assert.assertTrue(result[1] == true);
 	}
 }
