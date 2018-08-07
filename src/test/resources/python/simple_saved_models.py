@@ -127,9 +127,9 @@ def boolean_logic():
   input2 = tf.placeholder(tf.bool, name="input2")
   output_and = tf.identity(input1 & input2, "output_and")
   output_or = tf.identity(input1 | input2, "output_or")
-  output_not_and = tf.identity(~(input1 & input2), "output_and")
-  output_not_or = tf.identity(~(input1 | input2), "output_and")
-  output_xor = tf.identity(input1 ^ input2, "output_or")
+  output_not_and = tf.identity(~(input1 & input2), "output_not_and")
+  output_not_or = tf.identity(~(input1 | input2), "output_not_or")
+  output_xor = tf.identity(input1 ^ input2, "output_xor")
   print(input1)
   print(input2)
   print(output_and)
@@ -145,9 +145,9 @@ def boolean_logic():
   saved_model.simple_save(sess,
                           '/Users/deroneriksson/Documents/workspace5/tf-java-tryout/simple/boolean_logic',
                           inputs={"input1": input1, "input2": input2},
-                          outputs={"output_and": output_and, "output_or": output_or,
-                                   "output_not_and": output_not_and, "output_not_or": output_not_or,
-                                   "output_xor": output_xor})
+                          outputs={"and": output_and, "or": output_or,
+                                   "not_and": output_not_and, "not_or": output_not_or,
+                                   "xor": output_xor})
 
 
 if __name__ == "__main__":
