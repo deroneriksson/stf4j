@@ -101,6 +101,36 @@ public class BooleanLogicTest {
 		assertArrayEquals(expected, result);
 	}
 
+	@Test
+	public void multiBooleanArrayXorMultiBooleanArrayOutputMultiBooleanArray() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { true, false }, { true, false } };
+		boolean[][] expected = new boolean[][] { { false, true }, { true, false } };
+		boolean[][] result = (boolean[][]) model.in("input1", input1).in("input2", input2).out("xor").run()
+				.getBooleanArrayMultidimensional("xor");
+		assertArrayEquals(expected, result);
+	}
+
+	@Test
+	public void notMultiBooleanArrayAndMultiBooleanArrayOutputMultiBooleanArray() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { true, false }, { true, false } };
+		boolean[][] expected = new boolean[][] { { false, true }, { true, true } };
+		boolean[][] result = (boolean[][]) model.in("input1", input1).in("input2", input2).out("not_and").run()
+				.getBooleanArrayMultidimensional("not_and");
+		assertArrayEquals(expected, result);
+	}
+
+	@Test
+	public void notMultiBooleanArrayOrMultiBooleanArrayOutputMultiBooleanArray() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { true, false }, { true, false } };
+		boolean[][] expected = new boolean[][] { { false, false }, { false, true } };
+		boolean[][] result = (boolean[][]) model.in("input1", input1).in("input2", input2).out("not_or").run()
+				.getBooleanArrayMultidimensional("not_or");
+		assertArrayEquals(expected, result);
+	}
+
 	protected void assertArrayEquals(boolean[][] expecteds, boolean[][] actuals) {
 		Assert.assertTrue(expecteds.length == actuals.length);
 		for (int i = 0; i < expecteds.length; i++) {
