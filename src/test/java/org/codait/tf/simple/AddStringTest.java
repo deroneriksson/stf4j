@@ -562,4 +562,65 @@ public class AddStringTest {
 		double result = model.in("input1", input1).in("input2", input2).out("output").run().getDouble("output");
 		Assert.assertTrue(1.0d == result);
 	}
+
+	@Test
+	public void inputStringArraysOutputInt() {
+		int result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { "3", "4" }).out("output")
+				.run().getInt("output");
+		Assert.assertTrue(13 == result);
+	}
+
+	@Test
+	public void inputStringArraysOutputLong() {
+		long result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { "3", "4" })
+				.out("output").run().getLong("output");
+		Assert.assertTrue(13L == result);
+	}
+
+	@Test
+	public void inputStringArraysOutputString() {
+		String result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { "3", "4" })
+				.out("output").run().getString("output");
+		Assert.assertTrue("13".equals(result));
+	}
+
+	@Test
+	public void inputMultiStringArraysOutputInt() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] input2 = new String[][] { { "1", "2" }, { "3", "4" } };
+		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
+		Assert.assertTrue(11 == result);
+	}
+
+	@Test
+	public void inputMultiStringArraysOutputLong() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] input2 = new String[][] { { "1", "2" }, { "3", "4" } };
+		long result = model.in("input1", input1).in("input2", input2).out("output").run().getLong("output");
+		Assert.assertTrue(11L == result);
+	}
+
+	@Test
+	public void inputMultiStringArraysOutputFloat() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] input2 = new String[][] { { ".0", ".0" }, { ".0", ".0" } };
+		float result = model.in("input1", input1).in("input2", input2).out("output").run().getFloat("output");
+		Assert.assertTrue(1.0f == result);
+	}
+
+	@Test
+	public void inputMultiStringArraysOutputDouble() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] input2 = new String[][] { { ".0", ".0" }, { ".0", ".0" } };
+		double result = model.in("input1", input1).in("input2", input2).out("output").run().getDouble("output");
+		Assert.assertTrue(1.0d == result);
+	}
+
+	@Test
+	public void inputMultiStringArraysOutputString() {
+		String[][] input1 = new String[][] { { "a", "b" }, { "c", "d" } };
+		String[][] input2 = new String[][] { { "e", "f" }, { "g", "h" } };
+		String result = model.in("input1", input1).in("input2", input2).out("output").run().getString("output");
+		Assert.assertTrue("ae".equals(result));
+	}
 }

@@ -908,7 +908,13 @@ public class TFResults {
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
 			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
-			return new String(tensor.bytesValue());
+			if (tensor.shape().length == 0) {
+				return new String(tensor.bytesValue());
+			} else {
+				Object sArray = getStringArrayMultidimensional(key);
+				String s = (String) ArrayUtil.firstElementValueOfMultidimArray(sArray);
+				return s;
+			}
 		} else {
 			throw new TFException("getString not implemented for '" + key + "' data type: " + dtype);
 		}
