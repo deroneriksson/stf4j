@@ -398,6 +398,20 @@ public class TFUtil {
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
 				tensor = Tensor.create(booleanArray, Boolean.class);
 			}
+		} else if (DataType.DT_BOOL == dtype && isIntType(value)) {
+			if (value instanceof Integer) {
+				if ((int) value == 0) {
+					tensor = Tensor.create(false, Boolean.class);
+				} else if ((int) value == 1) {
+					tensor = Tensor.create(true, Boolean.class);
+				} else {
+					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
+				}
+			} else {
+				log.warn("Implicitly converting int array to boolean array");
+				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
+				tensor = Tensor.create(booleanArray, Boolean.class);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");

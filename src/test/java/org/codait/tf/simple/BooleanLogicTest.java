@@ -234,4 +234,29 @@ public class BooleanLogicTest {
 		}
 	}
 
+	@Test
+	public void intTrueAndIntFalseOutputInt() {
+		int result = model.in("input1", 1).in("input2", 0).out("and").run().getInt("and");
+		Assert.assertTrue(0 == result);
+	}
+
+	@Test
+	public void intTrueOrIntFalseOutputInt() {
+		int result = model.in("input1", 1).in("input2", 0).out("or").run().getInt("or");
+		Assert.assertTrue(1 == result);
+	}
+
+	@Test
+	public void intArrayAndIntArrayOutputIntArray() {
+		int[] result = model.in("input1", new int[] { 1, 0 }).in("input2", new int[] { 1, 1 }).out("and").run()
+				.getIntArray("and");
+		Assert.assertArrayEquals(new int[] { 1, 0 }, result);
+	}
+
+	@Test
+	public void intArrayOrIntArrayOutputIntArray() {
+		int[] result = model.in("input1", new int[] { 1, 0 }).in("input2", new int[] { 1, 1 }).out("or").run()
+				.getIntArray("or");
+		Assert.assertArrayEquals(new int[] { 1, 1 }, result);
+	}
 }
