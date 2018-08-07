@@ -376,11 +376,25 @@ public class TFUtil {
 				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(stringArray);
 				tensor = Tensor.create(byteArray, String.class);
 			}
+			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_BOOL == dtype && isBooleanType(value)) {
 			if (value instanceof Boolean) {
 				tensor = Tensor.create(value, Boolean.class);
 			} else {
 				tensor = Tensor.create(value, Boolean.class);
+			}
+		} else if (DataType.DT_BOOL == dtype && isByteType(value)) {
+			if (value instanceof Byte) {
+				byte b = ((Byte) value).byteValue();
+				if (b == 0) {
+					tensor = Tensor.create(false, Boolean.class);
+				} else if (b == 1) {
+					tensor = Tensor.create(true, Boolean.class);
+				} else {
+					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
+				}
+			} else {
+				throw new TFException("Not implemented yet");
 			}
 		}
 		if (tensor == null) {
@@ -440,6 +454,25 @@ public class TFUtil {
 		}
 		String typeName = value.getClass().getTypeName();
 		if (typeName.startsWith("boolean[") || typeName.startsWith("java.lang.Boolean[")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Return true if the object is a Byte instance or an byte/Byte array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Byte type, false otherwise
+	 */
+	public static boolean isByteType(Object value) {
+		if (value instanceof Byte) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("byte[") || typeName.startsWith("java.lang.Byte[")) {
 			return true;
 		} else {
 			return false;

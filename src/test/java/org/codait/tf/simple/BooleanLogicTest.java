@@ -181,4 +181,16 @@ public class BooleanLogicTest {
 		byte result = model.in("input1", true).in("input2", false).out("or").run().getByte("or");
 		Assert.assertTrue(1 == result);
 	}
+
+	@Test
+	public void trueByteAndFalseByteOutputByte() {
+		byte result = model.in("input1", (byte) 1).in("input2", (byte) 0).out("and").run().getByte("and");
+		Assert.assertTrue(0 == result);
+	}
+
+	@Test
+	public void trueByteOrFalseByteOutputByte() {
+		byte result = model.in("input1", (byte) 1).in("input2", (byte) 0).out("or").run().getByte("or");
+		Assert.assertTrue(1 == result);
+	}
 }
