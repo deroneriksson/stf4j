@@ -120,7 +120,8 @@ public class TFResults {
 				long l = (long) tensor.floatValue();
 				return l;
 			} else {
-				long l = (long) tensor.copyTo(new float[1])[0];
+				Object fArray = getFloatArrayMultidimensional(key);
+				long l = (long) (float) ArrayUtil.firstElementValueOfMultidimArray(fArray);
 				return l;
 			}
 		} else if (dtype == DataType.DT_DOUBLE) {
@@ -280,7 +281,8 @@ public class TFResults {
 				float f = tensor.floatValue();
 				return f;
 			} else {
-				float f = tensor.copyTo(new float[1])[0];
+				Object fArray = getFloatArrayMultidimensional(key);
+				float f = (float) ArrayUtil.firstElementValueOfMultidimArray(fArray);
 				return f;
 			}
 		} else if (dtype == DataType.DT_DOUBLE) {
@@ -438,7 +440,8 @@ public class TFResults {
 				int i = (int) tensor.floatValue();
 				return i;
 			} else {
-				int i = (int) tensor.copyTo(new float[1])[0];
+				Object fArray = getFloatArrayMultidimensional(key);
+				int i = (int) (float) ArrayUtil.firstElementValueOfMultidimArray(fArray);
 				return i;
 			}
 		} else if (dtype == DataType.DT_DOUBLE) {
@@ -597,7 +600,8 @@ public class TFResults {
 				double d = (double) tensor.floatValue();
 				return d;
 			} else {
-				double d = (double) tensor.copyTo(new float[1])[0];
+				Object fArray = getFloatArrayMultidimensional(key);
+				double d = (double) (float) ArrayUtil.firstElementValueOfMultidimArray(fArray);
 				return d;
 			}
 		} else if (dtype == DataType.DT_DOUBLE) {
@@ -860,7 +864,13 @@ public class TFResults {
 		if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
-			return Float.toString(tensor.floatValue());
+			if (tensor.shape().length == 0) {
+				return Float.toString(tensor.floatValue());
+			} else {
+				Object fArray = getFloatArrayMultidimensional(key);
+				float f = (float) ArrayUtil.firstElementValueOfMultidimArray(fArray);
+				return Float.toString(f);
+			}
 		} else if (dtype == DataType.DT_DOUBLE) {
 			@SuppressWarnings("unchecked")
 			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
