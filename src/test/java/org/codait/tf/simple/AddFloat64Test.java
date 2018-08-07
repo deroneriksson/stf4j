@@ -297,4 +297,79 @@ public class AddFloat64Test {
 				.getStringArray("output");
 		Assert.assertArrayEquals(new String[] { "4.0", "5.0" }, result);
 	}
+
+	@Test
+	public void inputDoubleArraysOutputInt() {
+		int result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getInt("output");
+		Assert.assertTrue(4 == result);
+	}
+
+	@Test
+	public void inputDoubleArraysOutputLong() {
+		long result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getLong("output");
+		Assert.assertTrue(4L == result);
+	}
+
+	@Test
+	public void inputDoubleArraysOutputFloat() {
+		float result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getFloat("output");
+		Assert.assertTrue(4.0f == result);
+	}
+
+	@Test
+	public void inputDoubleArraysOutputDouble() {
+		double result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getDouble("output");
+		Assert.assertTrue(4.0d == result);
+	}
+
+	@Test
+	public void inputDoubleArraysOutputString() {
+		String result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getString("output");
+		Assert.assertTrue("4.0".equals(result));
+	}
+
+	@Test
+	public void inputMultiDoubleArraysOutputInt() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] input2 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
+		Assert.assertTrue(2 == result);
+	}
+
+	@Test
+	public void inputMultiDoubleArraysOutputLong() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] input2 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		long result = model.in("input1", input1).in("input2", input2).out("output").run().getLong("output");
+		Assert.assertTrue(2L == result);
+	}
+
+	@Test
+	public void inputMultiDoubleArraysOutputFloat() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] input2 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		float result = model.in("input1", input1).in("input2", input2).out("output").run().getFloat("output");
+		Assert.assertTrue(2.0f == result);
+	}
+
+	@Test
+	public void inputMultiDoubleArraysOutputDouble() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] input2 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double result = model.in("input1", input1).in("input2", input2).out("output").run().getDouble("output");
+		Assert.assertTrue(2.0d == result);
+	}
+
+	@Test
+	public void inputMultiDoubleArraysOutputString() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] input2 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		String result = model.in("input1", input1).in("input2", input2).out("output").run().getString("output");
+		Assert.assertTrue("2.0".equals(result));
+	}
 }

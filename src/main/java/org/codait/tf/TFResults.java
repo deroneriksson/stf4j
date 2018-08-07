@@ -132,7 +132,8 @@ public class TFResults {
 				long l = (long) tensor.doubleValue();
 				return l;
 			} else {
-				long l = (long) tensor.copyTo(new double[1])[0];
+				Object dArray = getDoubleArrayMultidimensional(key);
+				long l = (long) (double) ArrayUtil.firstElementValueOfMultidimArray(dArray);
 				return l;
 			}
 		} else if (dtype == DataType.DT_INT64) {
@@ -293,7 +294,8 @@ public class TFResults {
 				float f = (float) tensor.doubleValue();
 				return f;
 			} else {
-				float f = (float) tensor.copyTo(new double[1])[0];
+				Object dArray = getDoubleArrayMultidimensional(key);
+				float f = (float) (double) ArrayUtil.firstElementValueOfMultidimArray(dArray);
 				return f;
 			}
 		} else if (dtype == DataType.DT_INT64) {
@@ -452,7 +454,8 @@ public class TFResults {
 				int i = (int) tensor.doubleValue();
 				return i;
 			} else {
-				int i = (int) tensor.copyTo(new double[1])[0];
+				Object dArray = getDoubleArrayMultidimensional(key);
+				int i = (int) (double) ArrayUtil.firstElementValueOfMultidimArray(dArray);
 				return i;
 			}
 		} else if (dtype == DataType.DT_INT64) {
@@ -612,7 +615,8 @@ public class TFResults {
 				double d = tensor.doubleValue();
 				return d;
 			} else {
-				double d = tensor.copyTo(new double[1])[0];
+				Object dArray = getDoubleArrayMultidimensional(key);
+				double d = (double) ArrayUtil.firstElementValueOfMultidimArray(dArray);
 				return d;
 			}
 		} else if (dtype == DataType.DT_INT64) {
@@ -874,7 +878,13 @@ public class TFResults {
 		} else if (dtype == DataType.DT_DOUBLE) {
 			@SuppressWarnings("unchecked")
 			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
-			return Double.toString(tensor.doubleValue());
+			if (tensor.shape().length == 0) {
+				return Double.toString(tensor.doubleValue());
+			} else {
+				Object dArray = getDoubleArrayMultidimensional(key);
+				double d = (double) ArrayUtil.firstElementValueOfMultidimArray(dArray);
+				return Double.toString(d);
+			}
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
 			Tensor<Long> tensor = (Tensor<Long>) keyToOutput(key);
