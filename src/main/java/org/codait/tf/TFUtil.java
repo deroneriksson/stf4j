@@ -394,7 +394,9 @@ public class TFUtil {
 					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
 				}
 			} else {
-				throw new TFException("Not implemented yet");
+				log.warn("Implicitly converting byte array to boolean array");
+				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
+				tensor = Tensor.create(booleanArray, Boolean.class);
 			}
 		}
 		if (tensor == null) {

@@ -193,4 +193,45 @@ public class BooleanLogicTest {
 		byte result = model.in("input1", (byte) 1).in("input2", (byte) 0).out("or").run().getByte("or");
 		Assert.assertTrue(1 == result);
 	}
+
+	@Test
+	public void byteArrayAndByteArrayOutputByteArray() {
+		byte[] result = model.in("input1", new byte[] { 1, 0 }).in("input2", new byte[] { 1, 1 }).out("and").run()
+				.getByteArray("and");
+		Assert.assertArrayEquals(new byte[] { 1, 0 }, result);
+	}
+
+	@Test
+	public void byteArrayOrByteArrayOutputByteArray() {
+		byte[] result = model.in("input1", new byte[] { 1, 0 }).in("input2", new byte[] { 1, 1 }).out("or").run()
+				.getByteArray("or");
+		Assert.assertArrayEquals(new byte[] { 1, 1 }, result);
+	}
+
+	@Test
+	public void multiByteArrayAndMultiByteArrayOutputMultiByteArray() {
+		byte[][] input1 = new byte[][] { { 1, 1 }, { 0, 0 } };
+		byte[][] input2 = new byte[][] { { 1, 0 }, { 1, 0 } };
+		byte[][] expected = new byte[][] { { 1, 0 }, { 0, 0 } };
+		byte[][] result = (byte[][]) model.in("input1", input1).in("input2", input2).out("and").run()
+				.getByteArrayMultidimensional("and");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void multiByteArrayOrMultiByteArrayOutputMultiByteArray() {
+		byte[][] input1 = new byte[][] { { 1, 1 }, { 0, 0 } };
+		byte[][] input2 = new byte[][] { { 1, 0 }, { 1, 0 } };
+		byte[][] expected = new byte[][] { { 1, 1 }, { 1, 0 } };
+		byte[][] result = (byte[][]) model.in("input1", input1).in("input2", input2).out("or").run()
+				.getByteArrayMultidimensional("or");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
 }

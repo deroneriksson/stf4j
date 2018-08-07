@@ -134,6 +134,8 @@ public class ArrayUtil {
 						Array.set(dest, i, ((Double) v).intValue());
 					} else if ("boolean".equals(o) && "byte".equals(d)) {
 						Array.set(dest, i, ((Boolean) v).booleanValue() == true ? (byte) 1 : (byte) 0);
+					} else if ("byte".equals(o) && "boolean".equals(d)) { // assume 1 or 0
+						Array.set(dest, i, ((Byte) v).byteValue() == 1 ? true : false);
 					} else {
 						Array.set(dest, i, v);
 					}
