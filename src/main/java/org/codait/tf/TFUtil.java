@@ -376,6 +376,12 @@ public class TFUtil {
 				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(stringArray);
 				tensor = Tensor.create(byteArray, String.class);
 			}
+		} else if (DataType.DT_BOOL == dtype && isBooleanType(value)) {
+			if (value instanceof Boolean) {
+				tensor = Tensor.create(value, Boolean.class);
+			} else {
+				tensor = Tensor.create(value, Boolean.class);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
@@ -415,6 +421,25 @@ public class TFUtil {
 		}
 		String typeName = value.getClass().getTypeName();
 		if (typeName.startsWith("int[") || typeName.startsWith("java.lang.Integer[")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Return true if the object is a Boolean instance or an boolean/Boolean array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Boolean type, false otherwise
+	 */
+	public static boolean isBooleanType(Object value) {
+		if (value instanceof Boolean) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("boolean[") || typeName.startsWith("java.lang.Boolean[")) {
 			return true;
 		} else {
 			return false;
