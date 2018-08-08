@@ -390,4 +390,55 @@ public class BooleanLogicTest {
 		}
 	}
 
+	@Test
+	public void doubleTrueAndDoubleFalseOutputDouble() {
+		double result = model.in("input1", 1.0d).in("input2", 0.0d).out("and").run().getDouble("and");
+		Assert.assertTrue(0 == result);
+	}
+
+	@Test
+	public void doubleTrueOrDoubleFalseOutputDouble() {
+		double result = model.in("input1", 1.0d).in("input2", 0.0d).out("or").run().getDouble("or");
+		Assert.assertTrue(1 == result);
+	}
+
+	@Test
+	public void doubleArrayAndDoubleArrayOutputDoubleArray() {
+		double[] result = model.in("input1", new double[] { 1.0d, 0.0d }).in("input2", new double[] { 1.0d, 1.0d })
+				.out("and").run().getDoubleArray("and");
+		Assert.assertArrayEquals(new double[] { 1.0d, 0.0d }, result, 0.0d);
+	}
+
+	@Test
+	public void doubleArrayOrDoubleArrayOutputDoubleArray() {
+		double[] result = model.in("input1", new double[] { 1.0d, 0.0d }).in("input2", new double[] { 1.0d, 1.0d })
+				.out("or").run().getDoubleArray("or");
+		Assert.assertArrayEquals(new double[] { 1.0d, 1.0d }, result, 0.0d);
+	}
+
+	@Test
+	public void multiDoubleArrayAndMultiDoubleArrayOutputMultiDoubleArray() {
+		double[][] input1 = new double[][] { { 1.0d, 1.0d }, { 0.0d, 0.0d } };
+		double[][] input2 = new double[][] { { 1.0d, 0.0d }, { 1.0d, 0.0d } };
+		double[][] expected = new double[][] { { 1.0d, 0.0d }, { 0.0d, 0.0d } };
+		double[][] result = (double[][]) model.in("input1", input1).in("input2", input2).out("and").run()
+				.getDoubleArrayMultidimensional("and");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0d);
+		}
+	}
+
+	@Test
+	public void multiDoubleArrayOrMultiDoubleArrayOutputMultiDoubleArray() {
+		double[][] input1 = new double[][] { { 1.0d, 1.0d }, { 0.0d, 0.0d } };
+		double[][] input2 = new double[][] { { 1.0d, 0.0d }, { 1.0d, 0.0d } };
+		double[][] expected = new double[][] { { 1.0d, 1.0d }, { 1.0d, 0.0d } };
+		double[][] result = (double[][]) model.in("input1", input1).in("input2", input2).out("or").run()
+				.getDoubleArrayMultidimensional("or");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0d);
+		}
+	}
 }

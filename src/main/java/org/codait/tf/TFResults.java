@@ -727,6 +727,18 @@ public class TFResults {
 				double d = Double.parseDouble(s);
 				return d;
 			}
+		} else if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				boolean b = tensor.booleanValue();
+				return b ? 1.0d : 0.0d;
+			} else {
+				Object bArray = getBooleanArrayMultidimensional(key);
+				boolean b = (boolean) ArrayUtil.firstElementValueOfMultidimArray(bArray);
+				return b ? 1.0d : 0.0d;
+			}
 		} else {
 			throw new TFException("getDouble not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -766,6 +778,12 @@ public class TFResults {
 		} else if (dtype == DataType.DT_STRING) {
 			String[] s = getStringArray(key);
 			double[] d = (double[]) ArrayUtil.convertArrayType(s, double.class);
+			return d;
+		} else if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			boolean[] b = ArrayUtil.booleanTensorToBooleanArray(tensor);
+			double[] d = (double[]) ArrayUtil.convertArrayType(b, double.class);
 			return d;
 		} else {
 			throw new TFException("getDoubleArray not implemented for '" + key + "' data type: " + dtype);
@@ -809,6 +827,12 @@ public class TFResults {
 		} else if (dtype == DataType.DT_STRING) {
 			Object s = getStringArrayMultidimensional(key);
 			Object d = ArrayUtil.convertArrayType(s, double.class);
+			return d;
+		} else if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			Object b = ArrayUtil.booleanTensorToMultidimensionalBooleanArray(tensor);
+			Object d = ArrayUtil.convertArrayType(b, double.class);
 			return d;
 		} else {
 			throw new TFException(

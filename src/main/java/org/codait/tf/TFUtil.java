@@ -440,6 +440,20 @@ public class TFUtil {
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
 				tensor = Tensor.create(booleanArray, Boolean.class);
 			}
+		} else if (DataType.DT_BOOL == dtype && isDoubleType(value)) {
+			if (value instanceof Double) {
+				if ((double) value == 0.0d) {
+					tensor = Tensor.create(false, Boolean.class);
+				} else if ((double) value == 1.0d) {
+					tensor = Tensor.create(true, Boolean.class);
+				} else {
+					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
+				}
+			} else {
+				log.warn("Implicitly converting double array to boolean array");
+				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
+				tensor = Tensor.create(booleanArray, Boolean.class);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
