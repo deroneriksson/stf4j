@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import org.tensorflow.Tensor;
 import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.TensorInfo;
+import org.tensorflow.types.UInt8;
 
 /**
  * Representation of the results of running a TensorFlow model, which primarily consists of a map of Tensor values. An
@@ -529,6 +530,17 @@ public class TFResults {
 				Object iArray = getIntArrayMultidimensional(key);
 				int i = (int) ArrayUtil.firstElementValueOfMultidimArray(iArray);
 				return i;
+			}
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				byte b = TFUtil.byteScalarFromUInt8Tensor(tensor);
+				return (int) b & 0xFF; // unsigned
+			} else {
+				throw new TFException("getInt not implemented for '" + key + "' data type " + dtype
+						+ " with shape length " + shapeLength);
 			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
@@ -1082,6 +1094,17 @@ public class TFResults {
 			if (shapeLength == 0) {
 				boolean b = tensor.booleanValue();
 				return b ? (byte) 1 : (byte) 0;
+			} else {
+				throw new TFException("getBoolean not implemented for '" + key + "' data type " + dtype
+						+ " with shape length " + shapeLength);
+			}
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				byte b = TFUtil.byteScalarFromUInt8Tensor(tensor);
+				return b;
 			} else {
 				throw new TFException("getBoolean not implemented for '" + key + "' data type " + dtype
 						+ " with shape length " + shapeLength);

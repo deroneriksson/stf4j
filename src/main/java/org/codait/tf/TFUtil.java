@@ -1,5 +1,8 @@
 package org.codait.tf;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,6 +18,7 @@ import org.tensorflow.framework.SignatureDef;
 import org.tensorflow.framework.TensorInfo;
 import org.tensorflow.framework.TensorShapeProto;
 import org.tensorflow.framework.TensorShapeProto.Dim;
+import org.tensorflow.types.UInt8;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -318,6 +322,13 @@ public class TFUtil {
 				log.warn("Implicitly converting String array to int array");
 				Object intArray = ArrayUtil.convertArrayType(value, int.class);
 				tensor = Tensor.create(intArray, Integer.class);
+			}
+			//////////////////////////////////////////////////////////////////////////////
+		} else if (DataType.DT_UINT8 == dtype && isByteType(value)) {
+			if (value instanceof Byte) {
+				tensor = Tensor.create(value, UInt8.class);
+			} else {
+				tensor = Tensor.create(value, UInt8.class);
 			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
@@ -843,4 +854,45 @@ public class TFUtil {
 		throw new TFException("Output key '" + key + "' not found in MetaGraphDef");
 	}
 
+	/**
+	 * HACK ALERT. Tensorflow (1.9.0) does not seem to allow the obtaining of a scalar byte (UInt8 value) from a UInt8
+	 * Tensor. Therefore, use reflection to obtain the value using the private Tensor buffer() method.
+	 * 
+	 * @param tensor
+	 *            The UInt8 tensor
+	 * @return The UInt8 value as a byte
+	 */
+	public static byte byteScalarFromUInt8Tensor(Tensor<UInt8> tensor) {
+		// Could not do this:
+		// Message: Tensor is not a string/bytes scalar
+		// byte[] b = tensor.bytesValue();
+
+		// Could not do this:
+		// Message: BufferUnderflowException
+		// ByteBuffer bb = ByteBuffer.allocate(tensor.numBytes());
+		// tensor.writeTo(bb);
+		// byte b = bb.get();
+
+		// Could not do this:
+		// Message: cannot copy Tensor with 0 dimensions into an object with 1
+		// byte[] b = tensor.copyTo(new byte[tensor.numBytes()]);
+
+		try {
+			Method method = tensor.getClass().getDeclaredMethod("buffer");
+			method.setAccessible(true);
+			ByteBuffer bb = (ByteBuffer) method.invoke(tensor, new Object[] {});
+			return bb.get();
+		} catch (NoSuchMethodException e) {
+			log.error(e);
+		} catch (SecurityException e) {
+			log.error(e);
+		} catch (IllegalAccessException e) {
+			log.error(e);
+		} catch (IllegalArgumentException e) {
+			log.error(e);
+		} catch (InvocationTargetException e) {
+			log.error(e);
+		}
+		throw new TFException("Could not obtain byte scalar from UInt8 tensor");
+	}
 }
