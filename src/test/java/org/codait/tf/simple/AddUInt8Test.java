@@ -65,4 +65,27 @@ public class AddUInt8Test {
 		Assert.assertTrue(-128 == result);
 	}
 
+	@Test
+	public void inputInt1Int2OutputInt() {
+		int result = model.in("input1", 1).in("input2", 2).out("output").run().getInt("output");
+		Assert.assertTrue(3 == result);
+	}
+
+	@Test
+	public void inputInt127Int1OutputInt() {
+		int result = model.in("input1", 127).in("input2", 1).out("output").run().getInt("output");
+		Assert.assertTrue(128 == result);
+	}
+
+	@Test
+	public void inputInt254Int1OutputInt() {
+		int result = model.in("input1", 254).in("input2", 1).out("output").run().getInt("output");
+		Assert.assertTrue(255 == result);
+	}
+
+	@Test
+	public void inputInt255Int1OutputInt() {
+		int result = model.in("input1", 255).in("input2", 1).out("output").run().getInt("output");
+		Assert.assertTrue(0 == result);
+	}
 }
