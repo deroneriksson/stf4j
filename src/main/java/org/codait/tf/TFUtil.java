@@ -357,6 +357,15 @@ public class TFUtil {
 				Object byteArray = ArrayUtil.convertArrayType(value, byte.class);
 				tensor = Tensor.create(byteArray, UInt8.class);
 			}
+		} else if (DataType.DT_UINT8 == dtype && isDoubleType(value)) {
+			if (value instanceof Double) {
+				byte val = ((Double) value).byteValue();
+				tensor = Tensor.create(val, UInt8.class);
+			} else {
+				log.warn("Implicitly converting double array to byte array (for UInt8)");
+				Object byteArray = ArrayUtil.convertArrayType(value, byte.class);
+				tensor = Tensor.create(byteArray, UInt8.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
 			if (isByteObjectArray(value)) {
