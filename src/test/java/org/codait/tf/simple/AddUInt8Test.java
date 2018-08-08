@@ -160,4 +160,27 @@ public class AddUInt8Test {
 		double result = model.in("input1", 255.0d).in("input2", 1.0d).out("output").run().getDouble("output");
 		Assert.assertTrue(0.0d == result);
 	}
+
+	@Test
+	public void inputString1String2OutputString() {
+		String result = model.in("input1", "1").in("input2", "2").out("output").run().getString("output");
+		Assert.assertTrue("3".equals(result));
+	}
+
+	@Test
+	public void inputString127String1OutputString() {
+		String result = model.in("input1", "127").in("input2", "1").out("output").run().getString("output");
+		Assert.assertTrue("128".equals(result));
+	}
+
+	@Test
+	public void inputString254String1OutputString() {
+		String result = model.in("input1", "254").in("input2", "1").out("output").run().getString("output");
+		Assert.assertTrue("255".equals(result));
+	}
+
+	public void inputString255String1OutputString() {
+		String result = model.in("input1", "255").in("input2", "1").out("output").run().getString("output");
+		Assert.assertTrue("0".equals(result));
+	}
 }
