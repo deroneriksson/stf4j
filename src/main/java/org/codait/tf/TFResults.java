@@ -173,6 +173,18 @@ public class TFResults {
 				long l = Long.parseLong(s);
 				return l;
 			}
+		} else if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				boolean b = tensor.booleanValue();
+				return b ? 1L : 0L;
+			} else {
+				Object bArray = getBooleanArrayMultidimensional(key);
+				boolean b = (boolean) ArrayUtil.firstElementValueOfMultidimArray(bArray);
+				return b ? 1L : 0L;
+			}
 		} else {
 			throw new TFException("getLong not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -214,6 +226,12 @@ public class TFResults {
 		} else if (dtype == DataType.DT_STRING) {
 			String[] s = getStringArray(key);
 			long[] l = (long[]) ArrayUtil.convertArrayType(s, long.class);
+			return l;
+		} else if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			boolean[] b = ArrayUtil.booleanTensorToBooleanArray(tensor);
+			long[] l = (long[]) ArrayUtil.convertArrayType(b, long.class);
 			return l;
 		} else {
 			throw new TFException("getLongArray not implemented for '" + key + "' data type: " + dtype);

@@ -285,4 +285,30 @@ public class BooleanLogicTest {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void longTrueAndLongFalseOutputLong() {
+		long result = model.in("input1", 1L).in("input2", 0L).out("and").run().getLong("and");
+		Assert.assertTrue(0 == result);
+	}
+
+	@Test
+	public void longTrueOrLongFalseOutputLong() {
+		long result = model.in("input1", 1L).in("input2", 0L).out("or").run().getLong("or");
+		Assert.assertTrue(1 == result);
+	}
+
+	@Test
+	public void longArrayAndLongArrayOutputLongArray() {
+		long[] result = model.in("input1", new long[] { 1L, 0L }).in("input2", new long[] { 1L, 1L }).out("and").run()
+				.getLongArray("and");
+		Assert.assertArrayEquals(new long[] { 1L, 0L }, result);
+	}
+
+	@Test
+	public void longArrayOrLongArrayOutputLongArray() {
+		long[] result = model.in("input1", new long[] { 1L, 0L }).in("input2", new long[] { 1L, 1L }).out("or").run()
+				.getLongArray("or");
+		Assert.assertArrayEquals(new long[] { 1L, 1L }, result);
+	}
 }

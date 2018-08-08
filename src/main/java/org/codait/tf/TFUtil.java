@@ -412,6 +412,20 @@ public class TFUtil {
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
 				tensor = Tensor.create(booleanArray, Boolean.class);
 			}
+		} else if (DataType.DT_BOOL == dtype && isLongType(value)) {
+			if (value instanceof Long) {
+				if ((long) value == 0L) {
+					tensor = Tensor.create(false, Boolean.class);
+				} else if ((long) value == 1L) {
+					tensor = Tensor.create(true, Boolean.class);
+				} else {
+					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
+				}
+			} else {
+				log.warn("Implicitly converting long array to boolean array");
+				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
+				tensor = Tensor.create(booleanArray, Boolean.class);
+			}
 		}
 		if (tensor == null) {
 			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
