@@ -150,6 +150,29 @@ def boolean_logic():
                                    "xor": output_xor})
 
 
+def add_uint8():
+  tf.reset_default_graph()
+  sess = tf.Session()
+  input1 = tf.placeholder(tf.uint8, name="input1")
+  input2 = tf.placeholder(tf.uint8, name="input2")
+  sum = input1 + input2
+  output = tf.identity(sum, "output")
+  print(input1)
+  print(input2)
+  print(sum)
+  print(output)
+
+  dict = {input1: 1, input2: 2}
+  result = sess.run(output, dict)
+  print(result)
+
+  saved_model.simple_save(sess,
+                          '/Users/deroneriksson/Documents/workspace5/tf-java-tryout/simple/add_uint8',
+                          inputs={"input1": input1, "input2": input2},
+                          outputs={"output": output})
+
+  sess.close()
+
 if __name__ == "__main__":
   add_int32()
   add_int64()
@@ -157,3 +180,4 @@ if __name__ == "__main__":
   add_float64()
   add_string()
   boolean_logic()
+  add_uint8();
