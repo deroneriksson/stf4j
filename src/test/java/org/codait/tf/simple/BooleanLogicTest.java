@@ -311,4 +311,30 @@ public class BooleanLogicTest {
 				.getLongArray("or");
 		Assert.assertArrayEquals(new long[] { 1L, 1L }, result);
 	}
+
+	@Test
+	public void multiLongArrayAndMultiLongArrayOutputMultiLongArray() {
+		long[][] input1 = new long[][] { { 1L, 1L }, { 0L, 0L } };
+		long[][] input2 = new long[][] { { 1L, 0L }, { 1L, 0L } };
+		long[][] expected = new long[][] { { 1L, 0L }, { 0L, 0L } };
+		long[][] result = (long[][]) model.in("input1", input1).in("input2", input2).out("and").run()
+				.getLongArrayMultidimensional("and");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void multiLongArrayOrMultiLongArrayOutputMultiLongArray() {
+		long[][] input1 = new long[][] { { 1L, 1L }, { 0L, 0L } };
+		long[][] input2 = new long[][] { { 1L, 0L }, { 1L, 0L } };
+		long[][] expected = new long[][] { { 1L, 1L }, { 1L, 0L } };
+		long[][] result = (long[][]) model.in("input1", input1).in("input2", input2).out("or").run()
+				.getLongArrayMultidimensional("or");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }

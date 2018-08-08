@@ -276,6 +276,12 @@ public class TFResults {
 			Object s = getStringArrayMultidimensional(key);
 			Object l = ArrayUtil.convertArrayType(s, long.class);
 			return l;
+		} else if (dtype == DataType.DT_BOOL) {
+			@SuppressWarnings("unchecked")
+			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
+			Object b = ArrayUtil.booleanTensorToMultidimensionalBooleanArray(tensor);
+			Object l = ArrayUtil.convertArrayType(b, long.class);
+			return l;
 		} else {
 			throw new TFException("getLongArrayMultidimensional not implemented for '" + key + "' data type: " + dtype);
 		}
