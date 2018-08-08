@@ -358,6 +358,18 @@ public class TFResults {
 				float f = (float) (int) ArrayUtil.firstElementValueOfMultidimArray(iArray);
 				return f;
 			}
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				byte b = TFUtil.byteScalarFromUInt8Tensor(tensor);
+				int i = b & 0xFF; // unsigned
+				return (float) i;
+			} else {
+				throw new TFException("getFloat not implemented for '" + key + "' data type " + dtype
+						+ " with shape length " + shapeLength);
+			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
 			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);

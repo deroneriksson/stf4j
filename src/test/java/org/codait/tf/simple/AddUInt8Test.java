@@ -112,4 +112,28 @@ public class AddUInt8Test {
 		long result = model.in("input1", 255L).in("input2", 1L).out("output").run().getLong("output");
 		Assert.assertTrue(0L == result);
 	}
+
+	@Test
+	public void inputFloat1Float2OutputFloat() {
+		float result = model.in("input1", 1.0f).in("input2", 2.0f).out("output").run().getFloat("output");
+		Assert.assertTrue(3.0f == result);
+	}
+
+	@Test
+	public void inputFloat127Float1OutputFloat() {
+		float result = model.in("input1", 127.0f).in("input2", 1.0f).out("output").run().getFloat("output");
+		Assert.assertTrue(128.0f == result);
+	}
+
+	@Test
+	public void inputFloat254Float1OutputFloat() {
+		float result = model.in("input1", 254.0f).in("input2", 1.0f).out("output").run().getFloat("output");
+		Assert.assertTrue(255.0f == result);
+	}
+
+	@Test
+	public void inputFloat255Float1OutputFloat() {
+		float result = model.in("input1", 255.0f).in("input2", 1.0f).out("output").run().getFloat("output");
+		Assert.assertTrue(0.0f == result);
+	}
 }
