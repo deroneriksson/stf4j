@@ -340,13 +340,13 @@ public class BooleanLogicTest {
 
 	@Test
 	public void floatTrueAndFloatFalseOutputFloat() {
-		float result = model.in("input1", 1).in("input2", 0).out("and").run().getFloat("and");
+		float result = model.in("input1", 1.0f).in("input2", 0.0f).out("and").run().getFloat("and");
 		Assert.assertTrue(0 == result);
 	}
 
 	@Test
 	public void floatTrueOrFloatFalseOutputFloat() {
-		float result = model.in("input1", 1).in("input2", 0).out("or").run().getFloat("or");
+		float result = model.in("input1", 1.0f).in("input2", 0.0f).out("or").run().getFloat("or");
 		Assert.assertTrue(1 == result);
 	}
 
@@ -389,4 +389,5 @@ public class BooleanLogicTest {
 			Assert.assertArrayEquals(expected[i], result[i], 0.0f);
 		}
 	}
+
 }

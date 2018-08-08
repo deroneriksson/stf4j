@@ -430,7 +430,7 @@ public class TFUtil {
 			if (value instanceof Float) {
 				if ((float) value == 0.0f) {
 					tensor = Tensor.create(false, Boolean.class);
-				} else if ((float) value == 0.0f) {
+				} else if ((float) value == 1.0f) {
 					tensor = Tensor.create(true, Boolean.class);
 				} else {
 					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
