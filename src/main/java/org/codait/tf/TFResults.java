@@ -161,6 +161,17 @@ public class TFResults {
 				long l = (long) (int) ArrayUtil.firstElementValueOfMultidimArray(iArray);
 				return l;
 			}
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				byte b = TFUtil.byteScalarFromUInt8Tensor(tensor);
+				return (long) b & 0xFF; // unsigned
+			} else {
+				throw new TFException("getLong not implemented for '" + key + "' data type " + dtype
+						+ " with shape length " + shapeLength);
+			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
 			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);

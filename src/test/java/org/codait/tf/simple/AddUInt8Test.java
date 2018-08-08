@@ -88,4 +88,28 @@ public class AddUInt8Test {
 		int result = model.in("input1", 255).in("input2", 1).out("output").run().getInt("output");
 		Assert.assertTrue(0 == result);
 	}
+
+	@Test
+	public void inputLong1Long2OutputLong() {
+		long result = model.in("input1", 1L).in("input2", 2L).out("output").run().getLong("output");
+		Assert.assertTrue(3L == result);
+	}
+
+	@Test
+	public void inputLong127Long1OutputLong() {
+		long result = model.in("input1", 127L).in("input2", 1L).out("output").run().getLong("output");
+		Assert.assertTrue(128L == result);
+	}
+
+	@Test
+	public void inputLong254Long1OutputLong() {
+		long result = model.in("input1", 254L).in("input2", 1L).out("output").run().getLong("output");
+		Assert.assertTrue(255L == result);
+	}
+
+	@Test
+	public void inputLong255Long1OutputLong() {
+		long result = model.in("input1", 255L).in("input2", 1L).out("output").run().getLong("output");
+		Assert.assertTrue(0L == result);
+	}
 }
