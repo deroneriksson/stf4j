@@ -142,6 +142,8 @@ public class ArrayUtil {
 						Array.set(dest, i, ((Boolean) v).booleanValue() == true ? 1.0f : 0.0f);
 					} else if ("boolean".equals(o) && "double".equals(d)) {
 						Array.set(dest, i, ((Boolean) v).booleanValue() == true ? 1.0d : 0.0d);
+					} else if ("boolean".equals(o) && "String".equals(d)) {
+						Array.set(dest, i, ((Boolean) v).booleanValue() == true ? "true" : "false");
 					} else if ("byte".equals(o) && "boolean".equals(d)) {
 						Array.set(dest, i, ((Byte) v).byteValue() == 0 ? false : true);
 					} else if ("int".equals(o) && "boolean".equals(d)) {
@@ -152,6 +154,8 @@ public class ArrayUtil {
 						Array.set(dest, i, ((Float) v).floatValue() == 0.0f ? false : true);
 					} else if ("double".equals(o) && "boolean".equals(d)) {
 						Array.set(dest, i, ((Double) v).doubleValue() == 0.0d ? false : true);
+					} else if ("String".equals(o) && "boolean".equals(d)) {
+						Array.set(dest, i, "true".equals((String) v) ? true : false);
 					} else {
 						Array.set(dest, i, v);
 					}

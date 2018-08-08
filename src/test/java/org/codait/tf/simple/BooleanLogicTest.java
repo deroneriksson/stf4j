@@ -441,4 +441,56 @@ public class BooleanLogicTest {
 			Assert.assertArrayEquals(expected[i], result[i], 0.0d);
 		}
 	}
+
+	@Test
+	public void stringTrueAndStringFalseOutputString() {
+		String result = model.in("input1", "true").in("input2", "false").out("and").run().getString("and");
+		Assert.assertTrue("false".equals(result));
+	}
+
+	@Test
+	public void stringTrueOrStringFalseOutputString() {
+		String result = model.in("input1", "true").in("input2", "false").out("or").run().getString("or");
+		Assert.assertTrue("true".equals(result));
+	}
+
+	@Test
+	public void stringArrayAndStringArrayOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "true", "false" })
+				.in("input2", new String[] { "true", "true" }).out("and").run().getStringArray("and");
+		Assert.assertArrayEquals(new String[] { "true", "false" }, result);
+	}
+
+	@Test
+	public void stringArrayOrStringArrayOutputStringArray() {
+		String[] result = model.in("input1", new String[] { "true", "false" })
+				.in("input2", new String[] { "true", "true" }).out("or").run().getStringArray("or");
+		Assert.assertArrayEquals(new String[] { "true", "true" }, result);
+	}
+
+	@Test
+	public void multiStringArrayAndMultiStringArrayOutputMultiStringArray() {
+		String[][] input1 = new String[][] { { "true", "true" }, { "false", "false" } };
+		String[][] input2 = new String[][] { { "true", "false" }, { "true", "false" } };
+		String[][] expected = new String[][] { { "true", "false" }, { "false", "false" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("and").run()
+				.getStringArrayMultidimensional("and");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void multiStringArrayOrMultiStringArrayOutputMultiStringArray() {
+		String[][] input1 = new String[][] { { "true", "true" }, { "false", "false" } };
+		String[][] input2 = new String[][] { { "true", "false" }, { "true", "false" } };
+		String[][] expected = new String[][] { { "true", "true" }, { "true", "false" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("or").run()
+				.getStringArrayMultidimensional("or");
+		Assert.assertTrue(expected.length == result.length);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }

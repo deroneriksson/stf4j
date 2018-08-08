@@ -433,7 +433,8 @@ public class TFUtil {
 				} else if ((float) value == 1.0f) {
 					tensor = Tensor.create(true, Boolean.class);
 				} else {
-					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
+					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') value '"
+							+ value + "' to Tensor");
 				}
 			} else {
 				log.warn("Implicitly converting float array to boolean array");
@@ -447,16 +448,33 @@ public class TFUtil {
 				} else if ((double) value == 1.0d) {
 					tensor = Tensor.create(true, Boolean.class);
 				} else {
-					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
+					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') value '"
+							+ value + "' to Tensor");
 				}
 			} else {
 				log.warn("Implicitly converting double array to boolean array");
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
 				tensor = Tensor.create(booleanArray, Boolean.class);
 			}
+		} else if (DataType.DT_BOOL == dtype && isStringType(value)) {
+			if (value instanceof String) {
+				if ("false".equals((String) value)) {
+					tensor = Tensor.create(false, Boolean.class);
+				} else if ("true".equals((String) value)) {
+					tensor = Tensor.create(true, Boolean.class);
+				} else {
+					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') value '"
+							+ value + "' to Tensor");
+				}
+			} else {
+				log.warn("Implicitly converting String array to boolean array");
+				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
+				tensor = Tensor.create(booleanArray, Boolean.class);
+			}
 		}
 		if (tensor == null) {
-			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
+			throw new TFException(
+					"Could not convert input key '" + key + "' (name: '" + name + "') value '" + value + "' to Tensor");
 		}
 		return tensor;
 	}
