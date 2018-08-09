@@ -411,4 +411,39 @@ public class AddUInt8Test {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void inputIntArraysOutputInt_1_2__3_4__4() {
+		int result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getInt("output");
+		Assert.assertEquals(4, result);
+	}
+
+	@Test
+	public void inputLongArraysOutputLong_1_2__3_4__4() {
+		long result = model.in("input1", new long[] { 1L, 2L }).in("input2", new long[] { 3L, 4L }).out("output").run()
+				.getLong("output");
+		Assert.assertEquals(4L, result);
+	}
+
+	@Test
+	public void inputFloatArraysOutputFloat_1_2__3_4__4() {
+		float result = model.in("input1", new float[] { 1.0f, 2.0f }).in("input2", new float[] { 3.0f, 4.0f })
+				.out("output").run().getFloat("output");
+		Assert.assertEquals(4.0f, result, 0.0f);
+	}
+
+	@Test
+	public void inputDoubleArraysOutputDouble_1_2__3_4__4() {
+		double result = model.in("input1", new double[] { 1.0d, 2.0d }).in("input2", new double[] { 3.0d, 4.0d })
+				.out("output").run().getDouble("output");
+		Assert.assertEquals(4.0d, result, 0.0d);
+	}
+
+	@Test
+	public void inputStringArraysOutputString_1_2__3_4__4() {
+		String result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { "3", "4" })
+				.out("output").run().getString("output");
+		Assert.assertTrue("4".equals(result));
+	}
 }

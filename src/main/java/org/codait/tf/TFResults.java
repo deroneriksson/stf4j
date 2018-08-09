@@ -169,8 +169,9 @@ public class TFResults {
 				byte b = TFUtil.byteScalarFromUInt8Tensor(tensor);
 				return (long) b & 0xFF; // unsigned
 			} else {
-				throw new TFException("getLong not implemented for '" + key + "' data type " + dtype
-						+ " with shape length " + shapeLength);
+				Object bArray = getByteArrayMultidimensional(key);
+				long l = (long) ((byte) ArrayUtil.firstElementValueOfMultidimArray(bArray) & 0xFF);
+				return l;
 			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
@@ -379,8 +380,9 @@ public class TFResults {
 				int i = b & 0xFF; // unsigned
 				return (float) i;
 			} else {
-				throw new TFException("getFloat not implemented for '" + key + "' data type " + dtype
-						+ " with shape length " + shapeLength);
+				Object bArray = getByteArrayMultidimensional(key);
+				float f = (float) ((byte) ArrayUtil.firstElementValueOfMultidimArray(bArray) & 0xFF);
+				return f;
 			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
@@ -586,8 +588,9 @@ public class TFResults {
 				byte b = TFUtil.byteScalarFromUInt8Tensor(tensor);
 				return (int) b & 0xFF; // unsigned
 			} else {
-				throw new TFException("getInt not implemented for '" + key + "' data type " + dtype
-						+ " with shape length " + shapeLength);
+				Object bArray = getByteArrayMultidimensional(key);
+				int i = (int) ((byte) ArrayUtil.firstElementValueOfMultidimArray(bArray) & 0xFF);
+				return i;
 			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
@@ -794,8 +797,9 @@ public class TFResults {
 				int i = b & 0xFF; // unsigned
 				return (double) i;
 			} else {
-				throw new TFException("getDouble not implemented for '" + key + "' data type " + dtype
-						+ " with shape length " + shapeLength);
+				Object bArray = getByteArrayMultidimensional(key);
+				double d = (double) ((byte) ArrayUtil.firstElementValueOfMultidimArray(bArray) & 0xFF);
+				return d;
 			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
@@ -1128,8 +1132,10 @@ public class TFResults {
 				int i = (int) b & 0xFF; // unsigned
 				return Integer.toString(i);
 			} else {
-				throw new TFException("getString not implemented for '" + key + "' data type " + dtype
-						+ " with shape length " + shapeLength);
+				Object bArray = getByteArrayMultidimensional(key);
+				int i = (int) ((byte) ArrayUtil.firstElementValueOfMultidimArray(bArray) & 0xFF);
+				String s = Integer.toString(i);
+				return s;
 			}
 		} else if (dtype == DataType.DT_STRING) {
 			@SuppressWarnings("unchecked")
