@@ -493,4 +493,32 @@ public class BooleanLogicTest {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void booleanArrayAndBooleanArrayOutputBoolean() {
+		boolean result = model.in("input1", new boolean[] { true, false }).in("input2", new boolean[] { true, true })
+				.out("and").run().getBoolean("and");
+		Assert.assertEquals(true, result);
+	}
+
+	@Test
+	public void booleanArrayOrBooleanArrayOutputBoolean() {
+		boolean result = model.in("input1", new boolean[] { true, false }).in("input2", new boolean[] { true, true })
+				.out("or").run().getBoolean("or");
+		Assert.assertEquals(true, result);
+	}
+
+	@Test
+	public void byteArrayAndByteArrayOutputByte() {
+		byte result = model.in("input1", new byte[] { 1, 0 }).in("input2", new byte[] { 1, 1 }).out("and").run()
+				.getByte("and");
+		Assert.assertEquals((byte) 1, result);
+	}
+
+	@Test
+	public void byteArrayOrByteArrayOutputByte() {
+		byte result = model.in("input1", new byte[] { 1, 0 }).in("input2", new byte[] { 1, 1 }).out("or").run()
+				.getByte("or");
+		Assert.assertEquals((byte) 1, result);
+	}
 }
