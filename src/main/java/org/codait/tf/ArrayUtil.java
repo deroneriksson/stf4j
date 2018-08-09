@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.tensorflow.Tensor;
+import org.tensorflow.types.UInt8;
 
 public class ArrayUtil {
 
@@ -156,6 +157,57 @@ public class ArrayUtil {
 						Array.set(dest, i, ((Double) v).doubleValue() == 0.0d ? false : true);
 					} else if ("String".equals(o) && "boolean".equals(d)) {
 						Array.set(dest, i, "true".equals((String) v) ? true : false);
+					} else if ("int".equals(o) && "byte".equals(d)) {
+						Array.set(dest, i, ((Integer) v).byteValue());
+					} else {
+						Array.set(dest, i, v);
+					}
+				}
+			} catch (Exception e) {
+				throw new TFException("Problem converting array values ('" + o + "' to '" + d + "' with value '" + v
+						+ "'): " + e.getMessage(), e);
+			}
+		}
+
+	}
+
+	/**
+	 * Convert an unsigned array from one type to another, where the destination type is specified by the destType
+	 * parameter.
+	 * 
+	 * @param orig
+	 *            The original array of unsigned values
+	 * @param destType
+	 *            The type (class) that the original array should be converted to
+	 * @return The resulting array
+	 */
+	public static Object convertUnsignedArrayType(Object orig, Class<?> destType) {
+		int[] dimensions = getArrayDimensions(orig);
+		Object dest = Array.newInstance(destType, dimensions);
+		copyUnsignedArrayVals(orig, dest);
+		return dest;
+	}
+
+	/**
+	 * Copy unsigned values from one array to another array with the same shape and perform needed type conversions.
+	 * 
+	 * @param orig
+	 *            The original array of unsigned values
+	 * @param dest
+	 *            The destination array
+	 */
+	public static void copyUnsignedArrayVals(Object orig, Object dest) {
+		String o = orig.getClass().getComponentType().getSimpleName();
+		String d = dest.getClass().getComponentType().getSimpleName();
+		for (int i = 0; i < Array.getLength(orig); i++) {
+			Object v = Array.get(orig, i);
+			Object vd = Array.get(dest, i);
+			try {
+				if (v.getClass().isArray()) {
+					copyArrayVals(v, vd);
+				} else {
+					if ("byte".equals(o) && "int".equals(d)) {
+						Array.set(dest, i, (int) (((byte) v) & 0xFF));
 					} else {
 						Array.set(dest, i, v);
 					}
@@ -377,6 +429,19 @@ public class ArrayUtil {
 		IntBuffer ib = IntBuffer.allocate(tensor.numElements());
 		tensor.writeTo(ib);
 		return ib.array();
+	}
+
+	/**
+	 * Convert {@code Tensor<UInt8>} to byte array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of UInt8 values
+	 * @return Primitive byte array
+	 */
+	public static byte[] uint8TensorToByteArray(Tensor<UInt8> tensor) {
+		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
+		tensor.writeTo(bb);
+		return bb.array();
 	}
 
 	/**

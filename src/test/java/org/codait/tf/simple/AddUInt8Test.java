@@ -183,4 +183,18 @@ public class AddUInt8Test {
 		String result = model.in("input1", "255").in("input2", "1").out("output").run().getString("output");
 		Assert.assertTrue("0".equals(result));
 	}
+
+	@Test
+	public void inputIntArraysOutputIntArray_1_2__3_4__4_6() {
+		int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 4, 6 }, result);
+	}
+
+	@Test
+	public void inputIntArraysOutputIntArray_127_254__1_1__128_255() {
+		int[] result = model.in("input1", new int[] { 127, 254 }).in("input2", new int[] { 1, 1 }).out("output").run()
+				.getIntArray("output");
+		Assert.assertArrayEquals(new int[] { 128, 255 }, result);
+	}
 }
