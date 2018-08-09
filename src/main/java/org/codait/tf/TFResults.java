@@ -497,6 +497,12 @@ public class TFResults {
 			Object i = ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
 			Object f = ArrayUtil.convertArrayType(i, float.class);
 			return f;
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			Object b = ArrayUtil.uint8TensorToMultidimensionalByteArray(tensor);
+			Object f = ArrayUtil.convertUnsignedArrayType(b, float.class);
+			return f;
 		} else if (dtype == DataType.DT_STRING) {
 			Object s = getStringArrayMultidimensional(key);
 			Object f = ArrayUtil.convertArrayType(s, float.class);

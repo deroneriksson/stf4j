@@ -301,4 +301,28 @@ public class AddUInt8Test {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void inputMultiFloatArraysOutputMultiFloatArray_1_2_3_4__5_6_7_8__6_8_10_12() {
+		float[][] input1 = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		float[][] input2 = new float[][] { { 5.0f, 6.0f }, { 7.0f, 8.0f } };
+		float[][] expected = new float[][] { { 6.0f, 8.0f }, { 10.0f, 12.0f } };
+		float[][] result = (float[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getFloatArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0f);
+		}
+	}
+
+	@Test
+	public void inputMultiFloatArraysOutputMultiFloatArray_127_254_255_128__1_1_1_127__128_255_0_255() {
+		float[][] input1 = new float[][] { { 127.0f, 254.0f }, { 255.0f, 128.0f } };
+		float[][] input2 = new float[][] { { 1.0f, 1.0f }, { 1.0f, 127.0f } };
+		float[][] expected = new float[][] { { 128.0f, 255.0f }, { 0.0f, 255.0f } };
+		float[][] result = (float[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getFloatArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0f);
+		}
+	}
 }
