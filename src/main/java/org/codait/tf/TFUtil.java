@@ -150,8 +150,7 @@ public class TFUtil {
 			if (value instanceof Float) {
 				tensor = Tensor.create(value, Float.class);
 			} else if (isFloatObjectArray(value)) {
-				// to avoid: "cannot create non-scalar Tensors from arrays of
-				// boxed values"
+				// to avoid: "cannot create non-scalar Tensors from arrays of boxed values"
 				log.warn("Implicitly converting Float object array to primitive float array");
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
@@ -193,6 +192,15 @@ public class TFUtil {
 				log.warn("Implicitly converting String array to float array");
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
+			}
+		} else if (DataType.DT_FLOAT == dtype && isByteType(value)) {
+			if (value instanceof Byte) {
+				float val = ((Byte) value).floatValue();
+				tensor = Tensor.create(val, Float.class);
+			} else {
+				log.warn("Implicitly converting byte array to float array");
+				Object booleanArray = ArrayUtil.convertArrayType(value, float.class);
+				tensor = Tensor.create(booleanArray, Float.class);
 			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_DOUBLE == dtype && isLongType(value)) {
