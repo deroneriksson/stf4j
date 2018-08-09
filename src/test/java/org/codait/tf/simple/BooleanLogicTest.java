@@ -521,4 +521,74 @@ public class BooleanLogicTest {
 				.getByte("or");
 		Assert.assertEquals((byte) 1, result);
 	}
+
+	@Test
+	public void intArrayAndIntArrayOutputInt() {
+		int result = model.in("input1", new int[] { 1, 0 }).in("input2", new int[] { 1, 1 }).out("and").run()
+				.getInt("and");
+		Assert.assertEquals(1, result);
+	}
+
+	@Test
+	public void intArrayOrIntArrayOutputInt() {
+		int result = model.in("input1", new int[] { 1, 0 }).in("input2", new int[] { 1, 1 }).out("or").run()
+				.getInt("or");
+		Assert.assertEquals(1, result);
+	}
+
+	@Test
+	public void longArrayAndLongArrayOutputLong() {
+		long result = model.in("input1", new long[] { 1L, 0L }).in("input2", new long[] { 1L, 1L }).out("and").run()
+				.getLong("and");
+		Assert.assertEquals(1L, result);
+	}
+
+	@Test
+	public void longArrayOrLongArrayOutputLong() {
+		long result = model.in("input1", new long[] { 1L, 0L }).in("input2", new long[] { 1L, 1L }).out("or").run()
+				.getLong("or");
+		Assert.assertEquals(1L, result);
+	}
+
+	@Test
+	public void floatArrayAndFloatArrayOutputFloat() {
+		float result = model.in("input1", new float[] { 1.0f, 0.0f }).in("input2", new float[] { 1.0f, 1.0f })
+				.out("and").run().getFloat("and");
+		Assert.assertEquals(1.0f, result, 0.0f);
+	}
+
+	@Test
+	public void floatArrayOrFloatArrayOutputFloat() {
+		float result = model.in("input1", new float[] { 1.0f, 0.0f }).in("input2", new float[] { 1.0f, 1.0f }).out("or")
+				.run().getFloat("or");
+		Assert.assertEquals(1.0f, result, 0.0f);
+	}
+
+	@Test
+	public void doubleArrayAndDoubleArrayOutputDouble() {
+		double result = model.in("input1", new double[] { 1.0d, 0.0d }).in("input2", new double[] { 1.0d, 1.0d })
+				.out("and").run().getDouble("and");
+		Assert.assertEquals(1.0d, result, 0.0d);
+	}
+
+	@Test
+	public void doubleArrayOrDoubleArrayOutputDouble() {
+		double result = model.in("input1", new double[] { 1.0d, 0.0d }).in("input2", new double[] { 1.0d, 1.0d })
+				.out("or").run().getDouble("or");
+		Assert.assertEquals(1.0d, result, 0.0d);
+	}
+
+	@Test
+	public void stringArrayAndStringArrayOutputString() {
+		String result = model.in("input1", new String[] { "true", "false" })
+				.in("input2", new String[] { "true", "true" }).out("and").run().getString("and");
+		Assert.assertTrue("true".equals(result));
+	}
+
+	@Test
+	public void stringArrayOrStringArrayOutputString() {
+		String result = model.in("input1", new String[] { "true", "false" })
+				.in("input2", new String[] { "true", "true" }).out("or").run().getString("or");
+		Assert.assertTrue("true".equals(result));
+	}
 }
