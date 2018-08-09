@@ -467,4 +467,55 @@ public class AddInt64Test {
 		byte result = model.in("input1", input1).in("input2", input2).out("output").run().getByte("output");
 		Assert.assertTrue(expected == result);
 	}
+
+	// 1 + 0 = 1
+	@Test
+	public void inputBooleanTrueBooleanFalseOutputBooleanTrue() {
+		boolean result = model.in("input1", true).in("input2", false).out("output").run().getBoolean("output");
+		Assert.assertEquals(true, result);
+	}
+
+	// 0 + 0 = 0
+	@Test
+	public void inputBooleanFalseBooleanFalseOutputBooleanFalse() {
+		boolean result = model.in("input1", false).in("input2", false).out("output").run().getBoolean("output");
+		Assert.assertEquals(false, result);
+	}
+
+	// 1 + 0 = 1, 0 + 1 = 1
+	@Test
+	public void inputBooleanArraysOutputBooleanArray() {
+		boolean[] result = model.in("input1", new boolean[] { true, false }).in("input2", new boolean[] { false, true })
+				.out("output").run().getBooleanArray("output");
+		BooleanLogicTest.assertArrayEquals(new boolean[] { true, true }, result);
+	}
+
+	// 1 + 0 = 1, 1 + 0 = 1, 0 + 1 = 1, 0 + 0 = 0
+	@Test
+	public void inputMultiBooleanArraysOutputMultiBooleanArray() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { false, false }, { true, false } };
+		boolean[][] expected = new boolean[][] { { true, true }, { true, false } };
+		boolean[][] result = (boolean[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getBooleanArrayMultidimensional("output");
+		BooleanLogicTest.assertArrayEquals(expected, result);
+	}
+
+	// 1 + 0 = 1
+	@Test
+	public void inputBooleanArraysOutputBoolean() {
+		boolean result = model.in("input1", new boolean[] { true, false }).in("input2", new boolean[] { false, true })
+				.out("output").run().getBoolean("output");
+		Assert.assertEquals(true, result);
+	}
+
+	// 1 + 0 = 1
+	@Test
+	public void inputMultiBooleanArraysOutputMultiBoolean() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { false, false }, { true, false } };
+		boolean expected = true;
+		boolean result = model.in("input1", input1).in("input2", input2).out("output").run().getBoolean("output");
+		Assert.assertEquals(expected, result);
+	}
 }

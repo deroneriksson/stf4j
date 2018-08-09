@@ -306,6 +306,15 @@ public class TFUtil {
 				Object longArray = ArrayUtil.convertArrayType(value, long.class);
 				tensor = Tensor.create(longArray, Long.class);
 			}
+		} else if (DataType.DT_INT64 == dtype && isBooleanType(value)) {
+			if (value instanceof Boolean) {
+				long val = ((Boolean) value).booleanValue() == true ? 1L : 0L;
+				tensor = Tensor.create(val, Long.class);
+			} else {
+				log.warn("Implicitly converting boolean array to long array");
+				Object longArray = ArrayUtil.convertArrayType(value, long.class);
+				tensor = Tensor.create(longArray, Long.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_INT32 == dtype && isLongType(value)) {
 			if (value instanceof Long) {
