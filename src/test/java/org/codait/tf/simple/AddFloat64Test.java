@@ -372,4 +372,45 @@ public class AddFloat64Test {
 		String result = model.in("input1", input1).in("input2", input2).out("output").run().getString("output");
 		Assert.assertTrue("2.0".equals(result));
 	}
+
+	@Test
+	public void inputBytesOutputByte() {
+		byte result = model.in("input1", (byte) 1).in("input2", (byte) 2).out("output").run().getByte("output");
+		Assert.assertTrue((byte) 3 == result);
+	}
+
+	@Test
+	public void inputByteArraysOutputByteArray() {
+		byte[] result = model.in("input1", new byte[] { (byte) 1, (byte) 2 })
+				.in("input2", new byte[] { (byte) 3, (byte) 4 }).out("output").run().getByteArray("output");
+		Assert.assertArrayEquals(new byte[] { (byte) 4, (byte) 6 }, result);
+	}
+
+	@Test
+	public void inputMultiByteArraysOutputMultiByteArray() {
+		byte[][] input1 = new byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		byte[][] input2 = new byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		byte[][] expected = new byte[][] { { (byte) 2, (byte) 4 }, { (byte) 6, (byte) 8 } };
+		byte[][] result = (byte[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getByteArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputByteArraysOutputByte() {
+		byte result = model.in("input1", new byte[] { (byte) 1, (byte) 2 })
+				.in("input2", new byte[] { (byte) 3, (byte) 4 }).out("output").run().getByte("output");
+		Assert.assertEquals((byte) 4, result);
+	}
+
+	@Test
+	public void inputMultiByteArraysOutputMultiByte() {
+		byte[][] input1 = new byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		byte[][] input2 = new byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		byte expected = (byte) 2;
+		byte result = model.in("input1", input1).in("input2", input2).out("output").run().getByte("output");
+		Assert.assertTrue(expected == result);
+	}
 }

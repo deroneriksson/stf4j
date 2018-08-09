@@ -1237,6 +1237,18 @@ public class TFResults {
 				float f = (float) ArrayUtil.firstElementValueOfMultidimArray(fArray);
 				return ((Float) f).byteValue();
 			}
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				byte b = ((Double) tensor.doubleValue()).byteValue();
+				return b;
+			} else {
+				Object dArray = getDoubleArrayMultidimensional(key);
+				double d = (double) ArrayUtil.firstElementValueOfMultidimArray(dArray);
+				return ((Double) d).byteValue();
+			}
 		} else {
 			throw new TFException("getByte not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -1289,6 +1301,12 @@ public class TFResults {
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			float[] f = ArrayUtil.floatTensorToFloatArray(tensor);
 			byte[] b = (byte[]) ArrayUtil.convertArrayType(f, byte.class);
+			return b;
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			double[] d = ArrayUtil.doubleTensorToDoubleArray(tensor);
+			byte[] b = (byte[]) ArrayUtil.convertArrayType(d, byte.class);
 			return b;
 		} else {
 			throw new TFException("getByteArray not implemented for '" + key + "' data type: " + dtype);
@@ -1344,6 +1362,12 @@ public class TFResults {
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			Object f = ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
 			Object b = ArrayUtil.convertArrayType(f, byte.class);
+			return b;
+		} else if (dtype == DataType.DT_DOUBLE) {
+			@SuppressWarnings("unchecked")
+			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);
+			Object d = ArrayUtil.doubleTensorToMultidimensionalDoubleArray(tensor);
+			Object b = ArrayUtil.convertArrayType(d, byte.class);
 			return b;
 		} else {
 			throw new TFException("getByteArrayMultidimensional not implemented for '" + key + "' data type: " + dtype);

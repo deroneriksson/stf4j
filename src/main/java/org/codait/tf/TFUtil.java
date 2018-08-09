@@ -199,8 +199,8 @@ public class TFUtil {
 				tensor = Tensor.create(val, Float.class);
 			} else {
 				log.warn("Implicitly converting byte array to float array");
-				Object booleanArray = ArrayUtil.convertArrayType(value, float.class);
-				tensor = Tensor.create(booleanArray, Float.class);
+				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
+				tensor = Tensor.create(floatArray, Float.class);
 			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_DOUBLE == dtype && isLongType(value)) {
@@ -242,6 +242,15 @@ public class TFUtil {
 				tensor = Tensor.create(val, Double.class);
 			} else {
 				log.warn("Implicitly converting String array to double array");
+				Object doubleArray = ArrayUtil.convertArrayType(value, double.class);
+				tensor = Tensor.create(doubleArray, Double.class);
+			}
+		} else if (DataType.DT_DOUBLE == dtype && isByteType(value)) {
+			if (value instanceof Byte) {
+				double val = ((Byte) value).doubleValue();
+				tensor = Tensor.create(val, Double.class);
+			} else {
+				log.warn("Implicitly converting byte array to double array");
 				Object doubleArray = ArrayUtil.convertArrayType(value, double.class);
 				tensor = Tensor.create(doubleArray, Double.class);
 			}
