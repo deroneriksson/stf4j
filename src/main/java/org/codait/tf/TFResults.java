@@ -1258,6 +1258,11 @@ public class TFResults {
 			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
 			byte[] b = ArrayUtil.booleanTensorToByteArray(tensor);
 			return b;
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			byte[] b = ArrayUtil.uint8TensorToByteArray(tensor);
+			return b;
 		} else {
 			throw new TFException("getByteArray not implemented for '" + key + "' data type: " + dtype);
 		}
@@ -1301,6 +1306,11 @@ public class TFResults {
 			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
 			Object booleanArray = ArrayUtil.booleanTensorToMultidimensionalBooleanArray(tensor);
 			Object byteArray = ArrayUtil.convertArrayType(booleanArray, byte.class);
+			return byteArray;
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			Object byteArray = ArrayUtil.uint8TensorToMultidimensionalByteArray(tensor);
 			return byteArray;
 		} else {
 			throw new TFException("getByteArrayMultidimensional not implemented for '" + key + "' data type: " + dtype);

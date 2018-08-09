@@ -374,4 +374,41 @@ public class AddUInt8Test {
 		}
 	}
 
+	@Test
+	public void inputByteArraysOutputByteArray_1_2__3_4__4_6() {
+		byte[] result = model.in("input1", new byte[] { (byte) 1, (byte) 2 })
+				.in("input2", new byte[] { (byte) 3, (byte) 4 }).out("output").run().getByteArray("output");
+		Assert.assertArrayEquals(new byte[] { (byte) 4, (byte) 6 }, result);
+	}
+
+	@Test
+	public void inputByteArraysOutputByteArray_127_254__1_1__128_255() {
+		byte[] result = model.in("input1", new byte[] { (byte) 127, (byte) 254 })
+				.in("input2", new byte[] { (byte) 1, (byte) 1 }).out("output").run().getByteArray("output");
+		Assert.assertArrayEquals(new byte[] { (byte) 128, (byte) 255 }, result);
+	}
+
+	@Test
+	public void inputMultiByteArraysOutputMultiByteArray_1_2_3_4__5_6_7_8__6_8_10_12() {
+		byte[][] input1 = new byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		byte[][] input2 = new byte[][] { { (byte) 5, (byte) 6 }, { (byte) 7, (byte) 8 } };
+		byte[][] expected = new byte[][] { { (byte) 6, (byte) 8 }, { (byte) 10, (byte) 12 } };
+		byte[][] result = (byte[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getByteArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiByteArraysOutputMultiByteArray_127_254_255_128__1_1_1_127__128_255_0_255() {
+		byte[][] input1 = new byte[][] { { (byte) 127, (byte) 254 }, { (byte) 255, (byte) 128 } };
+		byte[][] input2 = new byte[][] { { (byte) 1, (byte) 1 }, { (byte) 1, (byte) 127 } };
+		byte[][] expected = new byte[][] { { (byte) 128, (byte) 255 }, { (byte) 0, (byte) 255 } };
+		byte[][] result = (byte[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getByteArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }
