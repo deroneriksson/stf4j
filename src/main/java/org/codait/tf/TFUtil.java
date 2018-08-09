@@ -368,13 +368,13 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_UINT8 == dtype && isStringType(value)) {
 			if (value instanceof String) {
-				// Use Integer byteValue rather than Byte byteValue > 127 (Byte.MAX_VALUE)
+				// Use Integer byteValue rather than Byte byteValue to handle > 127
 				byte val = new Integer((String) value).byteValue();
 				tensor = Tensor.create(val, UInt8.class);
 			} else {
 				log.warn("Implicitly converting String array to byte array (for UInt8)");
-				Object intArray = ArrayUtil.convertArrayType(value, byte.class);
-				tensor = Tensor.create(intArray, Integer.class);
+				Object byteArray = ArrayUtil.convertArrayType(value, byte.class);
+				tensor = Tensor.create(byteArray, UInt8.class);
 			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {

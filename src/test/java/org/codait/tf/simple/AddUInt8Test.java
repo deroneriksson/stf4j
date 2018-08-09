@@ -239,4 +239,18 @@ public class AddUInt8Test {
 				.out("output").run().getDoubleArray("output");
 		Assert.assertArrayEquals(new double[] { 128.0d, 255.0d }, result, 0.0d);
 	}
+
+	@Test
+	public void inputStringArraysOutputStringArray_1_2__3_4__4_6() {
+		String[] result = model.in("input1", new String[] { "1", "2" }).in("input2", new String[] { "3", "4" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "4", "6" }, result);
+	}
+
+	@Test
+	public void inputStringArraysOutputStringArray_127_254__1_1__128_255() {
+		String[] result = model.in("input1", new String[] { "127", "254" }).in("input2", new String[] { "1", "1" })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "128", "255" }, result);
+	}
 }

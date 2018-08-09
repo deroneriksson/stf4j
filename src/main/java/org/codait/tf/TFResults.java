@@ -957,6 +957,12 @@ public class TFResults {
 			int[] i = ArrayUtil.intTensorToIntArray(tensor);
 			String[] s = (String[]) ArrayUtil.convertArrayType(i, String.class);
 			return s;
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			byte[] b = ArrayUtil.uint8TensorToByteArray(tensor);
+			String[] s = (String[]) ArrayUtil.convertUnsignedArrayType(b, String.class);
+			return s;
 		} else if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);

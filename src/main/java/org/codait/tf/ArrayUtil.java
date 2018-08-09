@@ -165,6 +165,9 @@ public class ArrayUtil {
 						Array.set(dest, i, ((Float) v).byteValue());
 					} else if ("double".equals(o) && "byte".equals(d)) {
 						Array.set(dest, i, ((Double) v).byteValue());
+					} else if ("String".equals(o) && "byte".equals(d)) {
+						// Use Integer byteValue rather than Byte byteValue to handle > 127
+						Array.set(dest, i, new Integer((String) v).byteValue());
 					} else {
 						Array.set(dest, i, v);
 					}
@@ -220,6 +223,8 @@ public class ArrayUtil {
 						Array.set(dest, i, (float) (((byte) v) & 0xFF));
 					} else if ("byte".equals(o) && "double".equals(d)) {
 						Array.set(dest, i, (double) (((byte) v) & 0xFF));
+					} else if ("byte".equals(o) && "String".equals(d)) {
+						Array.set(dest, i, Integer.toString((int) ((byte) v & 0xFF)));
 					} else {
 						Array.set(dest, i, v);
 					}
