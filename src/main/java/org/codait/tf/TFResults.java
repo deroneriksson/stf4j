@@ -436,6 +436,12 @@ public class TFResults {
 			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
 			int[] i = ArrayUtil.intTensorToIntArray(tensor);
 			return ArrayUtil.iToF(i);
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			byte[] b = ArrayUtil.uint8TensorToByteArray(tensor);
+			float[] f = (float[]) ArrayUtil.convertUnsignedArrayType(b, float.class);
+			return f;
 		} else if (dtype == DataType.DT_STRING) {
 			String[] s = getStringArray(key);
 			float[] f = (float[]) ArrayUtil.convertArrayType(s, float.class);

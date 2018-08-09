@@ -211,4 +211,18 @@ public class AddUInt8Test {
 				.run().getLongArray("output");
 		Assert.assertArrayEquals(new long[] { 128L, 255L }, result);
 	}
+
+	@Test
+	public void inputFloatArraysOutputFloatArray_1_2__3_4__4_6() {
+		float[] result = model.in("input1", new float[] { 1.0f, 2.0f }).in("input2", new float[] { 3.0f, 4.0f })
+				.out("output").run().getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 4.0f, 6.0f }, result, 0.0f);
+	}
+
+	@Test
+	public void inputFloatArraysOutputFloatArray_127_254__1_1__128_255() {
+		float[] result = model.in("input1", new float[] { 127.0f, 254.0f }).in("input2", new float[] { 1.0f, 1.0f })
+				.out("output").run().getFloatArray("output");
+		Assert.assertArrayEquals(new float[] { 128.0f, 255.0f }, result, 0.0f);
+	}
 }
