@@ -297,6 +297,15 @@ public class TFUtil {
 				Object longArray = ArrayUtil.convertArrayType(value, long.class);
 				tensor = Tensor.create(longArray, Long.class);
 			}
+		} else if (DataType.DT_INT64 == dtype && isByteType(value)) {
+			if (value instanceof Byte) {
+				long val = ((Byte) value).longValue();
+				tensor = Tensor.create(val, Long.class);
+			} else {
+				log.warn("Implicitly converting byte array to long array");
+				Object longArray = ArrayUtil.convertArrayType(value, long.class);
+				tensor = Tensor.create(longArray, Long.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_INT32 == dtype && isLongType(value)) {
 			if (value instanceof Long) {
