@@ -163,6 +163,8 @@ public class ArrayUtil {
 						Array.set(dest, i, ((Long) v).byteValue());
 					} else if ("float".equals(o) && "byte".equals(d)) {
 						Array.set(dest, i, ((Float) v).byteValue());
+					} else if ("double".equals(o) && "byte".equals(d)) {
+						Array.set(dest, i, ((Double) v).byteValue());
 					} else {
 						Array.set(dest, i, v);
 					}
@@ -216,6 +218,8 @@ public class ArrayUtil {
 						Array.set(dest, i, (long) (((byte) v) & 0xFF));
 					} else if ("byte".equals(o) && "float".equals(d)) {
 						Array.set(dest, i, (float) (((byte) v) & 0xFF));
+					} else if ("byte".equals(o) && "double".equals(d)) {
+						Array.set(dest, i, (double) (((byte) v) & 0xFF));
 					} else {
 						Array.set(dest, i, v);
 					}
