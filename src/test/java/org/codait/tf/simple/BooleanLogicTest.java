@@ -156,14 +156,14 @@ public class BooleanLogicTest {
 		}
 	}
 
-	protected void assertArrayEquals(boolean[][] expecteds, boolean[][] actuals) {
+	public static void assertArrayEquals(boolean[][] expecteds, boolean[][] actuals) {
 		Assert.assertTrue(expecteds.length == actuals.length);
 		for (int i = 0; i < expecteds.length; i++) {
 			assertArrayEquals(expecteds[i], actuals[i]);
 		}
 	}
 
-	protected void assertArrayEquals(boolean[] expecteds, boolean[] actuals) {
+	public static void assertArrayEquals(boolean[] expecteds, boolean[] actuals) {
 		Assert.assertTrue(expecteds.length == actuals.length);
 		for (int i = 0; i < expecteds.length; i++) {
 			Assert.assertTrue(expecteds[i] == actuals[i]);

@@ -358,6 +358,15 @@ public class TFUtil {
 				Object intArray = ArrayUtil.convertArrayType(value, int.class);
 				tensor = Tensor.create(intArray, Integer.class);
 			}
+		} else if (DataType.DT_INT32 == dtype && isBooleanType(value)) {
+			if (value instanceof Boolean) {
+				int val = ((Boolean) value).booleanValue() == true ? 1 : 0;
+				tensor = Tensor.create(val, Integer.class);
+			} else {
+				log.warn("Implicitly converting boolean array to int array");
+				Object intArray = ArrayUtil.convertArrayType(value, int.class);
+				tensor = Tensor.create(intArray, Integer.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_UINT8 == dtype && isByteType(value)) {
 			if (value instanceof Byte) {
@@ -565,8 +574,8 @@ public class TFUtil {
 			}
 		}
 		if (tensor == null) {
-			throw new TFException(
-					"Could not convert input key '" + key + "' (name: '" + name + "') value '" + value + "' to Tensor");
+			throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') value '" + value
+					+ "' (" + value.getClass().getName() + ") to Tensor (data type: " + dtype + ")");
 		}
 		return tensor;
 	}
