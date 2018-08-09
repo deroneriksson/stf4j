@@ -397,4 +397,20 @@ public class AddFloat32Test {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void inputByteArraysOutputByte() {
+		byte result = model.in("input1", new byte[] { (byte) 1, (byte) 2 })
+				.in("input2", new byte[] { (byte) 3, (byte) 4 }).out("output").run().getByte("output");
+		Assert.assertEquals((byte) 4, result);
+	}
+
+	@Test
+	public void inputMultiByteArraysOutputMultiByte() {
+		byte[][] input1 = new byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		byte[][] input2 = new byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		byte expected = (byte) 2;
+		byte result = model.in("input1", input1).in("input2", input2).out("output").run().getByte("output");
+		Assert.assertTrue(expected == result);
+	}
 }
