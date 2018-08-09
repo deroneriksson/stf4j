@@ -235,6 +235,12 @@ public class TFResults {
 			// alternative option
 			// long[] l = (long[]) ArrayUtil.convertArrayType(i, long.class);
 			return l;
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			byte[] b = ArrayUtil.uint8TensorToByteArray(tensor);
+			long[] l = (long[]) ArrayUtil.convertUnsignedArrayType(b, long.class);
+			return l;
 		} else if (dtype == DataType.DT_STRING) {
 			String[] s = getStringArray(key);
 			long[] l = (long[]) ArrayUtil.convertArrayType(s, long.class);
