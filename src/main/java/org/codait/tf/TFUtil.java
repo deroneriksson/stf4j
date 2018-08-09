@@ -340,6 +340,15 @@ public class TFUtil {
 				Object intArray = ArrayUtil.convertArrayType(value, int.class);
 				tensor = Tensor.create(intArray, Integer.class);
 			}
+		} else if (DataType.DT_INT32 == dtype && isByteType(value)) {
+			if (value instanceof Byte) {
+				int val = ((Byte) value).intValue();
+				tensor = Tensor.create(val, Integer.class);
+			} else {
+				log.warn("Implicitly converting byte array to int array");
+				Object intArray = ArrayUtil.convertArrayType(value, int.class);
+				tensor = Tensor.create(intArray, Integer.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_UINT8 == dtype && isByteType(value)) {
 			if (value instanceof Byte) {

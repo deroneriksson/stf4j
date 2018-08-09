@@ -1225,6 +1225,18 @@ public class TFResults {
 				byte b = (byte) ArrayUtil.firstElementValueOfMultidimArray(bArray);
 				return b;
 			}
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				byte b = ((Integer) tensor.intValue()).byteValue();
+				return b;
+			} else {
+				Object iArray = getIntArrayMultidimensional(key);
+				int i = (int) ArrayUtil.firstElementValueOfMultidimArray(iArray);
+				return ((Integer) i).byteValue();
+			}
 		} else if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
@@ -1296,6 +1308,12 @@ public class TFResults {
 			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
 			byte[] b = ArrayUtil.uint8TensorToByteArray(tensor);
 			return b;
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			int[] i = ArrayUtil.intTensorToIntArray(tensor);
+			byte[] b = (byte[]) ArrayUtil.convertArrayType(i, byte.class);
+			return b;
 		} else if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
@@ -1357,6 +1375,12 @@ public class TFResults {
 			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
 			Object byteArray = ArrayUtil.uint8TensorToMultidimensionalByteArray(tensor);
 			return byteArray;
+		} else if (dtype == DataType.DT_INT32) {
+			@SuppressWarnings("unchecked")
+			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
+			Object i = ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
+			Object b = ArrayUtil.convertArrayType(i, byte.class);
+			return b;
 		} else if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
