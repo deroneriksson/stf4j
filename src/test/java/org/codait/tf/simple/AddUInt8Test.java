@@ -446,4 +446,12 @@ public class AddUInt8Test {
 				.out("output").run().getString("output");
 		Assert.assertTrue("4".equals(result));
 	}
+
+	@Test
+	public void inputByteArraysOutputByte_1_2__3_4__4() {
+		byte result = model.in("input1", new byte[] { (byte) 1, (byte) 2 })
+				.in("input2", new byte[] { (byte) 3, (byte) 4 }).out("output").run().getByte("output");
+		Assert.assertEquals((byte) 4, result);
+	}
+
 }

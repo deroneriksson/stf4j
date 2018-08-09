@@ -1208,7 +1208,7 @@ public class TFResults {
 				boolean b = tensor.booleanValue();
 				return b ? (byte) 1 : (byte) 0;
 			} else {
-				throw new TFException("getBoolean not implemented for '" + key + "' data type " + dtype
+				throw new TFException("getByte not implemented for '" + key + "' data type " + dtype
 						+ " with shape length " + shapeLength);
 			}
 		} else if (dtype == DataType.DT_UINT8) {
@@ -1219,11 +1219,12 @@ public class TFResults {
 				byte b = TFUtil.byteScalarFromUInt8Tensor(tensor);
 				return b;
 			} else {
-				throw new TFException("getBoolean not implemented for '" + key + "' data type " + dtype
-						+ " with shape length " + shapeLength);
+				Object bArray = getByteArrayMultidimensional(key);
+				byte b = (byte) ArrayUtil.firstElementValueOfMultidimArray(bArray);
+				return b;
 			}
 		} else {
-			throw new TFException("getBoolean not implemented for '" + key + "' data type: " + dtype);
+			throw new TFException("getByte not implemented for '" + key + "' data type: " + dtype);
 		}
 	}
 
