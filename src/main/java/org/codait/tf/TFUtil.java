@@ -202,6 +202,15 @@ public class TFUtil {
 				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
 				tensor = Tensor.create(floatArray, Float.class);
 			}
+		} else if (DataType.DT_FLOAT == dtype && isBooleanType(value)) {
+			if (value instanceof Boolean) {
+				float val = ((Boolean) value).booleanValue() == true ? 1.0f : 0.0f;
+				tensor = Tensor.create(val, Float.class);
+			} else {
+				log.warn("Implicitly converting boolean array to float array");
+				Object floatArray = ArrayUtil.convertArrayType(value, float.class);
+				tensor = Tensor.create(floatArray, Float.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_DOUBLE == dtype && isLongType(value)) {
 			if (value instanceof Long) {
