@@ -277,4 +277,28 @@ public class AddUInt8Test {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
 	}
+
+	@Test
+	public void inputMultiLongArraysOutputMultiLongArray_1_2_3_4__5_6_7_8__6_8_10_12() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 5L, 6L }, { 7L, 8L } };
+		long[][] expected = new long[][] { { 6L, 8L }, { 10L, 12L } };
+		long[][] result = (long[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getLongArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiLongArraysOutputMultiLongArray_127_254_255_128__1_1_1_127__128_255_0_255() {
+		long[][] input1 = new long[][] { { 127L, 254L }, { 255L, 128L } };
+		long[][] input2 = new long[][] { { 1L, 1L }, { 1L, 127L } };
+		long[][] expected = new long[][] { { 128L, 255L }, { 0L, 255L } };
+		long[][] result = (long[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getLongArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }

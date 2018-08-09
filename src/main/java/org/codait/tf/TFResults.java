@@ -290,6 +290,12 @@ public class TFResults {
 			Object i = ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
 			Object l = ArrayUtil.convertArrayType(i, long.class);
 			return l;
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			Object b = ArrayUtil.uint8TensorToMultidimensionalByteArray(tensor);
+			Object l = ArrayUtil.convertUnsignedArrayType(b, long.class);
+			return l;
 		} else if (dtype == DataType.DT_STRING) {
 			Object s = getStringArrayMultidimensional(key);
 			Object l = ArrayUtil.convertArrayType(s, long.class);
