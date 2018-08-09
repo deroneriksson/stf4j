@@ -349,4 +349,29 @@ public class AddUInt8Test {
 			Assert.assertArrayEquals(expected[i], result[i], 0.0f);
 		}
 	}
+
+	@Test
+	public void inputMultiStringArraysOutputMultiStringArray_1_2_3_4__5_6_7_8__6_8_10_12() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] input2 = new String[][] { { "5", "6" }, { "7", "8" } };
+		String[][] expected = new String[][] { { "6", "8" }, { "10", "12" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getStringArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiStringArraysOutputMultiStringArray_127_254_255_128__1_1_1_127__128_255_0_255() {
+		String[][] input1 = new String[][] { { "127", "254" }, { "255", "128" } };
+		String[][] input2 = new String[][] { { "1", "1" }, { "1", "127" } };
+		String[][] expected = new String[][] { { "128", "255" }, { "0", "255" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getStringArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
 }

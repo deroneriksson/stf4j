@@ -1038,6 +1038,12 @@ public class TFResults {
 			Object i = ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
 			Object s = ArrayUtil.convertArrayType(i, String.class);
 			return s;
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			Object b = ArrayUtil.uint8TensorToMultidimensionalByteArray(tensor);
+			Object s = ArrayUtil.convertUnsignedArrayType(b, String.class);
+			return s;
 		} else if (dtype == DataType.DT_FLOAT) {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
