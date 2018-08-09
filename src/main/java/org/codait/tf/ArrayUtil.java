@@ -213,7 +213,7 @@ public class ArrayUtil {
 			Object vd = Array.get(dest, i);
 			try {
 				if (v.getClass().isArray()) {
-					copyArrayVals(v, vd);
+					copyUnsignedArrayVals(v, vd);
 				} else {
 					if ("byte".equals(o) && "int".equals(d)) {
 						Array.set(dest, i, (int) (((byte) v) & 0xFF));
@@ -577,6 +577,20 @@ public class ArrayUtil {
 	public static Object intTensorToMultidimensionalIntArray(Tensor<Integer> tensor) {
 		int[] shape = lToI(tensor.shape());
 		Object i = Array.newInstance(int.class, shape);
+		tensor.copyTo(i);
+		return i;
+	}
+
+	/**
+	 * Convert {@code Tensor<UInt8>} to multidimensional byte array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of UInt8 values
+	 * @return Multidimensional primitive byte array as an Object
+	 */
+	public static Object uint8TensorToMultidimensionalByteArray(Tensor<UInt8> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object i = Array.newInstance(byte.class, shape);
 		tensor.copyTo(i);
 		return i;
 	}

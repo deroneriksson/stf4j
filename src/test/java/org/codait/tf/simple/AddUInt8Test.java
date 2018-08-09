@@ -253,4 +253,28 @@ public class AddUInt8Test {
 				.out("output").run().getStringArray("output");
 		Assert.assertArrayEquals(new String[] { "128", "255" }, result);
 	}
+
+	@Test
+	public void inputMultiIntArraysOutputMultiIntArray_1_2_3_4__5_6_7_8__6_8_10_12() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 5, 6 }, { 7, 8 } };
+		int[][] expected = new int[][] { { 6, 8 }, { 10, 12 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
+
+	@Test
+	public void inputMultiIntArraysOutputMultiIntArray_127_254_255_128__1_1_1_127__128_255_0_255() {
+		int[][] input1 = new int[][] { { 127, 254 }, { 255, 128 } };
+		int[][] input2 = new int[][] { { 1, 1 }, { 1, 127 } };
+		int[][] expected = new int[][] { { 128, 255 }, { 0, 255 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }
