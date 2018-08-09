@@ -454,4 +454,57 @@ public class AddUInt8Test {
 		Assert.assertEquals((byte) 4, result);
 	}
 
+	@Test
+	public void inputMultiIntArraysOutputInt_1_2_3_4__5_6_7_8__6() {
+		int[][] input1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] input2 = new int[][] { { 5, 6 }, { 7, 8 } };
+		int expected = 6;
+		int result = model.in("input1", input1).in("input2", input2).out("output").run().getInt("output");
+		Assert.assertEquals(expected, result);
+	}
+
+	@Test
+	public void inputMultiLongArraysOutputLong_1_2_3_4__5_6_7_8__6() {
+		long[][] input1 = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] input2 = new long[][] { { 5L, 6L }, { 7L, 8L } };
+		long expected = 6L;
+		long result = model.in("input1", input1).in("input2", input2).out("output").run().getLong("output");
+		Assert.assertEquals(expected, result);
+	}
+
+	@Test
+	public void inputMultiFloatArraysOutputFloat_1_2_3_4__5_6_7_8__6() {
+		float[][] input1 = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		float[][] input2 = new float[][] { { 5.0f, 6.0f }, { 7.0f, 8.0f } };
+		float expected = 6.0f;
+		float result = model.in("input1", input1).in("input2", input2).out("output").run().getFloat("output");
+		Assert.assertEquals(expected, result, 0.0f);
+	}
+
+	@Test
+	public void inputMultiDoubleArraysOutputDouble_1_2_3_4__5_6_7_8__6() {
+		double[][] input1 = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		double[][] input2 = new double[][] { { 5.0d, 6.0d }, { 7.0d, 8.0d } };
+		double expected = 6.0d;
+		double result = model.in("input1", input1).in("input2", input2).out("output").run().getDouble("output");
+		Assert.assertEquals(expected, result, 0.0d);
+	}
+
+	@Test
+	public void inputMultiStringArraysOutputString_1_2_3_4__5_6_7_8__6() {
+		String[][] input1 = new String[][] { { "1", "2" }, { "3", "4" } };
+		String[][] input2 = new String[][] { { "5", "6" }, { "7", "8" } };
+		String expected = "6";
+		String result = model.in("input1", input1).in("input2", input2).out("output").run().getString("output");
+		Assert.assertEquals(expected, result);
+	}
+
+	@Test
+	public void inputMultiByteArraysOutputByte_1_2_3_4__5_6_7_8__6() {
+		byte[][] input1 = new byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		byte[][] input2 = new byte[][] { { (byte) 5, (byte) 6 }, { (byte) 7, (byte) 8 } };
+		byte expected = (byte) 6;
+		byte result = model.in("input1", input1).in("input2", input2).out("output").run().getByte("output");
+		Assert.assertEquals(expected, result);
+	}
 }
