@@ -658,4 +658,22 @@ public class AddInt32Test {
 				.getBooleanArrayMultidimensional("output");
 		BooleanLogicTest.assertArrayEquals(expected, result);
 	}
+
+	// 1 + 0 = 1
+	@Test
+	public void inputBooleanArraysOutputBoolean() {
+		boolean result = model.in("input1", new boolean[] { true, false }).in("input2", new boolean[] { false, true })
+				.out("output").run().getBoolean("output");
+		Assert.assertEquals(true, result);
+	}
+
+	// 1 + 0 = 1
+	@Test
+	public void inputMultiBooleanArraysOutputMultiBoolean() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { false, false }, { true, false } };
+		boolean expected = true;
+		boolean result = model.in("input1", input1).in("input2", input2).out("output").run().getBoolean("output");
+		Assert.assertEquals(expected, result);
+	}
 }
