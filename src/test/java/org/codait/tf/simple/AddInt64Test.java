@@ -6,6 +6,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.codait.tf.TFException;
 import org.codait.tf.TFModel;
+import org.codait.tf.TFResults;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -256,6 +257,20 @@ public class AddInt64Test {
 	@Test(expected = TFException.class)
 	public void badSignatureDefKey() {
 		model.sig("bad_sig_def_key");
+	}
+
+	@Test
+	public void inputLongsOutputLongCheckKeyExists() {
+		TFResults result = model.in("input1", 1L).in("input2", 2L).out("output").run();
+		boolean keyExists = result.keyExists("output");
+		Assert.assertTrue(keyExists);
+	}
+
+	@Test
+	public void inputLongsOutputLongCheckKeyDoesNotExist() {
+		TFResults result = model.in("input1", 1L).in("input2", 2L).out("output").run();
+		boolean keyExists = result.keyExists("bad_output");
+		Assert.assertFalse(keyExists);
 	}
 
 	@Test

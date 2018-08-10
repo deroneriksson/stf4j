@@ -49,9 +49,20 @@ public class TFResults {
 	 *            The output key
 	 */
 	protected void checkKey(String key) {
-		if (!outputKeyToName.containsKey(key)) {
+		if (!keyExists(key)) {
 			throw new TFException("Output '" + key + "' not found in results");
 		}
+	}
+
+	/**
+	 * Return true if the output key exists in the result map, false otherwise.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return true if the output key exists in the result map, false otherwise.
+	 */
+	public boolean keyExists(String key) {
+		return outputKeyToName.containsKey(key);
 	}
 
 	/**
