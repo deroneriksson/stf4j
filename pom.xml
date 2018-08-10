@@ -6,20 +6,24 @@
 	<artifactId>stf4j</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
 	<name>Simplified TensorFlow for Java</name>
-
+	<description>API to simplify interacting with prebuilt TensorFlow models from Java.</description>
 	<licenses>
 		<license>
 			<name>Apache 2.0 License</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
 		</license>
 	</licenses>
-
+	<developers>
+		<developer>
+			<name>Deron Eriksson</name>
+			<organization>IBM CODAIT</organization>
+			<organizationUrl>http://codait.org/</organizationUrl>
+		</developer>
+	</developers>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
