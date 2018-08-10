@@ -27,7 +27,7 @@ public class CIFAR10Test {
 	public void init() throws IOException {
 		labels = CIFAR10Util.getLabels(CIFAR10_TEST_BATCH_BIN);
 		images = CIFAR10Util.getPreprocessedImages(CIFAR10_TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
-		model = new TFModel(CIFAR10_SAVED_MODEL_DIR);
+		model = new TFModel(CIFAR10_SAVED_MODEL_DIR).sig("serving_default");
 	}
 
 	@After
