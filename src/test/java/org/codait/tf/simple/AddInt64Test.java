@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.codait.tf.TFException;
 import org.codait.tf.TFModel;
 import org.codait.tf.TFResults;
 import org.junit.After;
@@ -211,52 +210,6 @@ public class AddInt64Test {
 		for (int i = 0; i < expected.length; i++) {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
-	}
-
-	@Test(expected = TFException.class)
-	public void inputsNull() {
-		model.in("input1", null).in("input2", null).out("output").run();
-	}
-
-	@Test(expected = TFException.class)
-	public void missingInputs() {
-		model.out("output").run();
-	}
-
-	@Test(expected = TFException.class)
-	public void missingOutput() {
-		model.in("input1", 1L).in("input2", 2L).run();
-	}
-
-	@Test(expected = TFException.class)
-	public void badInputKey() {
-		model.in("bad_input", 1L).in("input2", 2L).out("output").run();
-	}
-
-	@Test(expected = TFException.class)
-	public void badOutputKey() {
-		model.in("input1", 1L).in("input2", 2L).out("bad_output").run();
-	}
-
-	@Test
-	public void inputLongsOutputLongNoSignatureDefKey() {
-		long result = model.sig(null).in("input1", 1L).in("input2", 2L).out("output").run().getLong("output");
-		Assert.assertTrue(3L == result);
-	}
-
-	@Test(expected = TFException.class)
-	public void badInputNoSignatureDefKey() {
-		model.sig(null).in("bad_input", 1L).in("input2", 2L).out("output").run();
-	}
-
-	@Test(expected = TFException.class)
-	public void badOutputNoSignatureDefKey() {
-		model.sig(null).in("input1", 1L).in("input2", 2L).out("bad_output").run();
-	}
-
-	@Test(expected = TFException.class)
-	public void badSignatureDefKey() {
-		model.sig("bad_sig_def_key");
 	}
 
 	@Test

@@ -116,7 +116,7 @@ public class TFModel {
 	 */
 	protected void checkInputKeys() {
 		if (signatureDefKey == null) {
-			log.debug("No SignatureDef key specified, so won't validate input keys for SignatureDef");
+			log.warn("No SignatureDef key specified, so won't validate input keys for SignatureDef");
 			return;
 		}
 
@@ -285,7 +285,12 @@ public class TFModel {
 		for (String oName : oNames) {
 			runner.fetch(oName);
 		}
-		List<Tensor<?>> res = runner.run();
+		List<Tensor<?>> res = null;
+		try {
+			res = runner.run();
+		} catch (Exception e) {
+			throw new TFException("Problem executing TensorFlow graph: " + e.getMessage(), e);
+		}
 		int i = 0;
 		for (String oName : oNames) {
 			outputNameToValue.put(oName, res.get(i++));
