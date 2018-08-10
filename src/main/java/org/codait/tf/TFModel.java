@@ -346,6 +346,22 @@ public class TFModel {
 	}
 
 	/**
+	 * Return the set of SignatureDef keys as a String.
+	 * 
+	 * @return The SignatureDef keys as a String
+	 */
+	public String signatureDefKeys() {
+		MetaGraphDef mgd = metaGraphDef();
+		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
+		Set<String> signatureDefKeys = sdm.keySet();
+		if (signatureDefKeys == null || signatureDefKeys.isEmpty()) {
+			return "No SignatureDef keys found";
+		} else {
+			return signatureDefKeys.toString();
+		}
+	}
+
+	/**
 	 * Obtain SignatureDef metadata as a String.
 	 * 
 	 * @return The SignatureDef metadata as a String
