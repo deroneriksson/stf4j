@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codait.tf.TFBaseTest;
 import org.codait.tf.TFException;
 import org.codait.tf.TFModel;
 import org.codait.tf.TFResults;
@@ -14,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.tensorflow.Tensor;
 
-public class MNISTTest {
+public class MNISTTest extends TFBaseTest {
 
 	protected static Logger log = LogManager.getLogger(MNISTTest.class);
 
@@ -193,45 +194,6 @@ public class MNISTTest {
 		long[] predictions = model.in("image", fImages).out("classes").run().getLongArray("classes");
 		displayDebug(lbls, predictions);
 		Assert.assertArrayEquals(lbls, predictions);
-	}
-
-	private void displayDebug(long[] labels, long[] predictions) {
-		for (int i = 0; i < labels.length; i++) {
-			long label = labels[i];
-			long prediction = predictions[i];
-			displayDebug(label, prediction);
-		}
-	}
-
-	private void displayDebug(int[] labels, int[] predictions) {
-		for (int i = 0; i < labels.length; i++) {
-			long label = labels[i];
-			long prediction = predictions[i];
-			displayDebug(label, prediction);
-		}
-	}
-
-	private void displayDebug(long label, long prediction) {
-		log.debug(String.format("Label: %d, Prediction: %d", label, prediction));
-	}
-
-	private void displayDebug(float label, float prediction) {
-		log.debug(String.format("Label: %f, Prediction: %f", label, prediction));
-	}
-
-	private void displayDebug(double label, double prediction) {
-		log.debug(String.format("Label: %f, Prediction: %f", label, prediction));
-	}
-
-	private void displayDebug(long label, long cPrediction, long pPrediction) {
-		log.debug(String.format("Label: %d, Classes Prediction: %d, Probabilities Prediction: %d", label, cPrediction,
-				pPrediction));
-	}
-
-	private void displayDebug(int[] labels, int[] cPredictions, int[] pPredictions) {
-		for (int i = 0; i < labels.length; i++) {
-			displayDebug(labels[i], cPredictions[i], pPredictions[i]);
-		}
 	}
 
 	@Test

@@ -5,13 +5,14 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codait.tf.TFBaseTest;
 import org.codait.tf.TFModel;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HiggsBoostedTreesTest {
+public class HiggsBoostedTreesTest extends TFBaseTest {
 
 	protected static Logger log = LogManager.getLogger(HiggsBoostedTreesTest.class);
 
@@ -450,59 +451,4 @@ public class HiggsBoostedTreesTest {
 		}
 	}
 
-	private void displayDebug(long[] expected, long[] predictions) {
-		for (int i = 0; i < expected.length; i++) {
-			long exp = expected[i];
-			long prediction = predictions[i];
-			displayDebug(exp, prediction);
-		}
-	}
-
-	private void displayDebug(long expected, long prediction) {
-		log.debug(String.format("Expected: %d, Prediction: %d", expected, prediction));
-	}
-
-	private void displayDebug(int[] expected, int[] predictions) {
-		for (int i = 0; i < expected.length; i++) {
-			long exp = expected[i];
-			long prediction = predictions[i];
-			displayDebug(exp, prediction);
-		}
-	}
-
-	private void displayDebug(String[] expected, String[] predictions) {
-		for (int i = 0; i < expected.length; i++) {
-			String exp = expected[i];
-			String prediction = predictions[i];
-			displayDebug(exp, prediction);
-		}
-	}
-
-	private void displayDebug(String expected, String prediction) {
-		log.debug(String.format("Expected: %s, Prediction: %s", expected, prediction));
-	}
-
-	private void displayDebug(float[] expected, float[] predictions) {
-		for (int i = 0; i < expected.length; i++) {
-			float exp = expected[i];
-			float prediction = predictions[i];
-			displayDebug(exp, prediction);
-		}
-	}
-
-	private void displayDebug(float expected, float prediction) {
-		log.debug(String.format("Expected: %f, Prediction: %f", expected, prediction));
-	}
-
-	private void displayDebug(double[] expected, double[] predictions) {
-		for (int i = 0; i < expected.length; i++) {
-			double exp = expected[i];
-			double prediction = predictions[i];
-			displayDebug(exp, prediction);
-		}
-	}
-
-	private void displayDebug(double expected, double prediction) {
-		log.debug(String.format("Expected: %f, Prediction: %f", expected, prediction));
-	}
 }
