@@ -1,4 +1,4 @@
-package org.codait.tf;
+package org.codait.tf.util;
 
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codait.tf.TFException;
 import org.tensorflow.Tensor;
 import org.tensorflow.types.UInt8;
 

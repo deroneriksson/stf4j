@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.codait.tf.util.ArrayUtil;
+import org.codait.tf.util.TFUtil;
 import org.tensorflow.Tensor;
 import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.TensorInfo;

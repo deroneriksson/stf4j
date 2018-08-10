@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.codait.tf.ArrayUtil;
 import org.codait.tf.TFModel;
 import org.codait.tf.cifar_10.CIFAR10Util.DimOrder;
+import org.codait.tf.util.ArrayUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

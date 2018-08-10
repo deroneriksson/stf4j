@@ -3,7 +3,7 @@ package org.codait.tf.mnist;
 import java.io.IOException;
 import java.util.List;
 
-import org.codait.tf.ArrayUtil;
+import org.codait.tf.util.ArrayUtil;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
 import org.tensorflow.Session.Runner;
