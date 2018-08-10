@@ -25,7 +25,7 @@ import org.tensorflow.types.UInt8;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 /**
- * Utility class for various TF API functionality.
+ * Utility class for various TensorFlow API functionality.
  *
  */
 public class TFUtil {
@@ -36,100 +36,45 @@ public class TFUtil {
 	protected static Logger log = LogManager.getLogger(TFUtil.class);
 
 	/**
-	 * Obtain SignatureDef information from SavedModelBundle.
+	 * HACK ALERT. Tensorflow (1.9.0) does not seem to allow the obtaining of a scalar byte (UInt8 value) from a UInt8
+	 * Tensor. Therefore, use reflection to obtain the value using the private Tensor buffer() method.
 	 * 
-	 * @param savedModelBundle
-	 *            The SavedModelBundle object
-	 * @return SignatureDef information as a String
-	 * @throws InvalidProtocolBufferException
-	 *             If problem occurred reading protobuf object
+	 * @param tensor
+	 *            The UInt8 tensor
+	 * @return The UInt8 value as a byte
 	 */
-	public static String signatureDefInfo(SavedModelBundle savedModelBundle) throws InvalidProtocolBufferException {
-		return signatureDefInfo(savedModelBundle.metaGraphDef());
-	}
+	public static byte byteScalarFromUInt8Tensor(Tensor<UInt8> tensor) {
+		// Could not do this:
+		// Message: Tensor is not a string/bytes scalar
+		// byte[] b = tensor.bytesValue();
 
-	/**
-	 * Obtain SignatureDef information from MetaGraphDef bytes.
-	 * 
-	 * @param metaGraphDefBytes
-	 *            Byte array representing MetaGraphDef object
-	 * @return SignatureDef information as a String
-	 * @throws InvalidProtocolBufferException
-	 *             If problem occurred reading protobuf object
-	 */
-	public static String signatureDefInfo(byte[] metaGraphDefBytes) throws InvalidProtocolBufferException {
-		MetaGraphDef mgd = MetaGraphDef.parseFrom(metaGraphDefBytes);
-		return signatureDefInfo(mgd);
-	}
+		// Could not do this:
+		// Message: BufferUnderflowException
+		// ByteBuffer bb = ByteBuffer.allocate(tensor.numBytes());
+		// tensor.writeTo(bb);
+		// byte b = bb.get();
 
-	/**
-	 * Obtain SignatureDef information from MetaGraphDef object.
-	 * 
-	 * @param mgd
-	 *            The MetaGraphDef object
-	 * @return SignatureDef information as a String
-	 * @throws InvalidProtocolBufferException
-	 *             If problem occurred reading protobuf object
-	 */
-	public static String signatureDefInfo(MetaGraphDef mgd) throws InvalidProtocolBufferException {
-		StringBuilder sb = new StringBuilder();
-		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
-		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
-		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
-			sb.append("\nSignatureDef key: " + sdmEntry.getKey());
-			SignatureDef sigDef = sdmEntry.getValue();
-			String methodName = sigDef.getMethodName();
-			sb.append("\nmethod name: " + methodName);
+		// Could not do this:
+		// Message: cannot copy Tensor with 0 dimensions into an object with 1
+		// byte[] b = tensor.copyTo(new byte[tensor.numBytes()]);
 
-			sb.append("\ninputs:");
-			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
-			Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
-			for (Entry<String, TensorInfo> inputEntry : inputEntries) {
-				sb.append("\n  input key: " + inputEntry.getKey());
-				TensorInfo inputTensorInfo = inputEntry.getValue();
-				DataType inputTensorDtype = inputTensorInfo.getDtype();
-				sb.append("\n    dtype: " + inputTensorDtype);
-				sb.append("\n    shape: (");
-				TensorShapeProto inputTensorShape = inputTensorInfo.getTensorShape();
-				int dimCount = inputTensorShape.getDimCount();
-				for (int i = 0; i < dimCount; i++) {
-					Dim dim = inputTensorShape.getDim(i);
-					long dimSize = dim.getSize();
-					if (i > 0) {
-						sb.append(", ");
-					}
-					sb.append(dimSize);
-				}
-				sb.append(")");
-				String inputTensorName = inputTensorInfo.getName();
-				sb.append("\n    name: " + inputTensorName);
-			}
-
-			sb.append("\noutputs:");
-			Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
-			Set<Entry<String, TensorInfo>> outputEntries = outputsMap.entrySet();
-			for (Entry<String, TensorInfo> outputEntry : outputEntries) {
-				sb.append("\n  output key: " + outputEntry.getKey());
-				TensorInfo outputTensorInfo = outputEntry.getValue();
-				DataType outputTensorDtype = outputTensorInfo.getDtype();
-				sb.append("\n    dtype: " + outputTensorDtype);
-				sb.append("\n    shape: (");
-				TensorShapeProto outputTensorShape = outputTensorInfo.getTensorShape();
-				int dimCount = outputTensorShape.getDimCount();
-				for (int i = 0; i < dimCount; i++) {
-					Dim dim = outputTensorShape.getDim(i);
-					long dimSize = dim.getSize();
-					if (i > 0) {
-						sb.append(", ");
-					}
-					sb.append(dimSize);
-				}
-				sb.append(")");
-				String inputTensorName = outputTensorInfo.getName();
-				sb.append("\n    name: " + inputTensorName);
-			}
+		try {
+			Method method = tensor.getClass().getDeclaredMethod("buffer");
+			method.setAccessible(true);
+			ByteBuffer bb = (ByteBuffer) method.invoke(tensor, new Object[] {});
+			return bb.get();
+		} catch (NoSuchMethodException e) {
+			log.error(e);
+		} catch (SecurityException e) {
+			log.error(e);
+		} catch (IllegalAccessException e) {
+			log.error(e);
+		} catch (IllegalArgumentException e) {
+			log.error(e);
+		} catch (InvocationTargetException e) {
+			log.error(e);
 		}
-		return sb.toString();
+		throw new TFException("Could not obtain byte scalar from UInt8 tensor");
 	}
 
 	/**
@@ -630,192 +575,6 @@ public class TFUtil {
 	}
 
 	/**
-	 * Return true if the object is a Long instance or a long/Long array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Long type, false otherwise
-	 */
-	public static boolean isLongType(Object value) {
-		if (value instanceof Long) {
-			return true;
-		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("long[") || typeName.startsWith("java.lang.Long[")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Return true if the object is an Integer instance or an int/Integer array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is an Integer type, false otherwise
-	 */
-	public static boolean isIntType(Object value) {
-		if (value instanceof Integer) {
-			return true;
-		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("int[") || typeName.startsWith("java.lang.Integer[")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Return true if the object is a Boolean instance or an boolean/Boolean array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Boolean type, false otherwise
-	 */
-	public static boolean isBooleanType(Object value) {
-		if (value instanceof Boolean) {
-			return true;
-		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("boolean[") || typeName.startsWith("java.lang.Boolean[")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Return true if the object is a Byte instance or an byte/Byte array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Byte type, false otherwise
-	 */
-	public static boolean isByteType(Object value) {
-		if (value instanceof Byte) {
-			return true;
-		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("byte[") || typeName.startsWith("java.lang.Byte[")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Return true if the object is a String or a String array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a String type, false otherwise
-	 */
-	public static boolean isStringType(Object value) {
-		if (value instanceof String) {
-			return true;
-		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("java.lang.String[")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Return true if the object is a Float array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Float Object array, false otherwise
-	 */
-	public static boolean isFloatObjectArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		return typeName.startsWith("java.lang.Float[");
-	}
-
-	/**
-	 * Return true if the object is a Byte array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Byte Object array, false otherwise
-	 */
-	public static boolean isByteObjectArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		return typeName.startsWith("java.lang.Byte[");
-	}
-
-	/**
-	 * Return true if the object is a Float instance or a float/Float array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Float type, false otherwise
-	 */
-	public static boolean isFloatType(Object value) {
-		if (value instanceof Float) {
-			return true;
-		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("float[") || typeName.startsWith("java.lang.Float[")) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Return true if the object is a Double instance or a double/Double array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Double type, false otherwise
-	 */
-	public static boolean isDoubleType(Object value) {
-		if (value instanceof Double) {
-			return true;
-		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("double[") || typeName.startsWith("java.lang.Double[")) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Return true if the object is a byte/Byte array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a byte/Byte array, false otherwise
-	 */
-	public static boolean isByteArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("byte[") || typeName.startsWith("java.lang.Byte[")) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Obtain the input name corresponding to an input key. If no SignatureDef key is specified, an input key can
-	 * potentially return an unexpected name since an input key is not necessarily uniquely paired with an input name.
-	 * 
-	 * @param signatureDefKey
-	 *            The SignatureDef key
-	 * @param inputKey
-	 *            The input key
-	 * @param metaGraphDef
-	 *            The MetaGraphDef object
-	 * @return The input name corresponding to the input key
-	 */
-	public static String inputKeyToName(String signatureDefKey, String inputKey, TFModel model) {
-		return inputKeyToName(signatureDefKey, inputKey, model.metaGraphDef());
-	}
-
-	/**
 	 * Obtain the input name corresponding to an input key. If no SignatureDef key is specified, an input key can
 	 * potentially return an unexpected name since an input key is not necessarily uniquely paired with an input name.
 	 * 
@@ -853,18 +612,19 @@ public class TFUtil {
 	}
 
 	/**
-	 * Obtain the TensorInfo object corresponding to an input key.
+	 * Obtain the input name corresponding to an input key. If no SignatureDef key is specified, an input key can
+	 * potentially return an unexpected name since an input key is not necessarily uniquely paired with an input name.
 	 * 
 	 * @param signatureDefKey
 	 *            The SignatureDef key
 	 * @param inputKey
 	 *            The input key
-	 * @param model
-	 *            The TFModel object
-	 * @return The TensorInfo object corresponding to the input key
+	 * @param metaGraphDef
+	 *            The MetaGraphDef object
+	 * @return The input name corresponding to the input key
 	 */
-	public static TensorInfo inputKeyToTensorInfo(String signatureDefKey, String inputKey, TFModel model) {
-		return inputKeyToTensorInfo(signatureDefKey, inputKey, model.metaGraphDef());
+	public static String inputKeyToName(String signatureDefKey, String inputKey, TFModel model) {
+		return inputKeyToName(signatureDefKey, inputKey, model.metaGraphDef());
 	}
 
 	/**
@@ -905,18 +665,188 @@ public class TFUtil {
 	}
 
 	/**
-	 * Obtain the output name corresponding to an output key.
+	 * Obtain the TensorInfo object corresponding to an input key.
 	 * 
 	 * @param signatureDefKey
 	 *            The SignatureDef key
-	 * @param outputKey
-	 *            The output key
+	 * @param inputKey
+	 *            The input key
 	 * @param model
 	 *            The TFModel object
-	 * @return The output name corresponding to the output key
+	 * @return The TensorInfo object corresponding to the input key
 	 */
-	public static String outputKeyToName(String signatureDefKey, String outputKey, TFModel model) {
-		return outputKeyToName(signatureDefKey, outputKey, model.metaGraphDef());
+	public static TensorInfo inputKeyToTensorInfo(String signatureDefKey, String inputKey, TFModel model) {
+		return inputKeyToTensorInfo(signatureDefKey, inputKey, model.metaGraphDef());
+	}
+
+	/**
+	 * Return true if the object is a Boolean instance or an boolean/Boolean array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Boolean type, false otherwise
+	 */
+	public static boolean isBooleanType(Object value) {
+		if (value instanceof Boolean) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("boolean[") || typeName.startsWith("java.lang.Boolean[")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Return true if the object is a byte/Byte array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a byte/Byte array, false otherwise
+	 */
+	public static boolean isByteArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("byte[") || typeName.startsWith("java.lang.Byte[")) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Return true if the object is a Byte array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Byte Object array, false otherwise
+	 */
+	public static boolean isByteObjectArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		return typeName.startsWith("java.lang.Byte[");
+	}
+
+	/**
+	 * Return true if the object is a Byte instance or an byte/Byte array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Byte type, false otherwise
+	 */
+	public static boolean isByteType(Object value) {
+		if (value instanceof Byte) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("byte[") || typeName.startsWith("java.lang.Byte[")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Return true if the object is a Double instance or a double/Double array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Double type, false otherwise
+	 */
+	public static boolean isDoubleType(Object value) {
+		if (value instanceof Double) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("double[") || typeName.startsWith("java.lang.Double[")) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Return true if the object is a Float array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Float Object array, false otherwise
+	 */
+	public static boolean isFloatObjectArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		return typeName.startsWith("java.lang.Float[");
+	}
+
+	/**
+	 * Return true if the object is a Float instance or a float/Float array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Float type, false otherwise
+	 */
+	public static boolean isFloatType(Object value) {
+		if (value instanceof Float) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("float[") || typeName.startsWith("java.lang.Float[")) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Return true if the object is an Integer instance or an int/Integer array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is an Integer type, false otherwise
+	 */
+	public static boolean isIntType(Object value) {
+		if (value instanceof Integer) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("int[") || typeName.startsWith("java.lang.Integer[")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Return true if the object is a Long instance or a long/Long array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Long type, false otherwise
+	 */
+	public static boolean isLongType(Object value) {
+		if (value instanceof Long) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("long[") || typeName.startsWith("java.lang.Long[")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Return true if the object is a String or a String array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a String type, false otherwise
+	 */
+	public static boolean isStringType(Object value) {
+		if (value instanceof String) {
+			return true;
+		}
+		String typeName = value.getClass().getTypeName();
+		if (typeName.startsWith("java.lang.String[")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -958,16 +888,18 @@ public class TFUtil {
 	}
 
 	/**
-	 * Obtain the TensorInfo object corresponding to an output key.
+	 * Obtain the output name corresponding to an output key.
 	 * 
-	 * @param key
+	 * @param signatureDefKey
+	 *            The SignatureDef key
+	 * @param outputKey
 	 *            The output key
 	 * @param model
 	 *            The TFModel object
-	 * @return The TensorInfo object corresponding to the output key
+	 * @return The output name corresponding to the output key
 	 */
-	public static TensorInfo outputKeyToTensorInfo(String key, TFModel model) {
-		return outputKeyToTensorInfo(key, model.metaGraphDef());
+	public static String outputKeyToName(String signatureDefKey, String outputKey, TFModel model) {
+		return outputKeyToName(signatureDefKey, outputKey, model.metaGraphDef());
 	}
 
 	/**
@@ -994,44 +926,112 @@ public class TFUtil {
 	}
 
 	/**
-	 * HACK ALERT. Tensorflow (1.9.0) does not seem to allow the obtaining of a scalar byte (UInt8 value) from a UInt8
-	 * Tensor. Therefore, use reflection to obtain the value using the private Tensor buffer() method.
+	 * Obtain the TensorInfo object corresponding to an output key.
 	 * 
-	 * @param tensor
-	 *            The UInt8 tensor
-	 * @return The UInt8 value as a byte
+	 * @param key
+	 *            The output key
+	 * @param model
+	 *            The TFModel object
+	 * @return The TensorInfo object corresponding to the output key
 	 */
-	public static byte byteScalarFromUInt8Tensor(Tensor<UInt8> tensor) {
-		// Could not do this:
-		// Message: Tensor is not a string/bytes scalar
-		// byte[] b = tensor.bytesValue();
+	public static TensorInfo outputKeyToTensorInfo(String key, TFModel model) {
+		return outputKeyToTensorInfo(key, model.metaGraphDef());
+	}
 
-		// Could not do this:
-		// Message: BufferUnderflowException
-		// ByteBuffer bb = ByteBuffer.allocate(tensor.numBytes());
-		// tensor.writeTo(bb);
-		// byte b = bb.get();
+	/**
+	 * Obtain SignatureDef information from MetaGraphDef bytes.
+	 * 
+	 * @param metaGraphDefBytes
+	 *            Byte array representing MetaGraphDef object
+	 * @return SignatureDef information as a String
+	 * @throws InvalidProtocolBufferException
+	 *             If problem occurred reading protobuf object
+	 */
+	public static String signatureDefInfo(byte[] metaGraphDefBytes) throws InvalidProtocolBufferException {
+		MetaGraphDef mgd = MetaGraphDef.parseFrom(metaGraphDefBytes);
+		return signatureDefInfo(mgd);
+	}
 
-		// Could not do this:
-		// Message: cannot copy Tensor with 0 dimensions into an object with 1
-		// byte[] b = tensor.copyTo(new byte[tensor.numBytes()]);
+	/**
+	 * Obtain SignatureDef information from MetaGraphDef object.
+	 * 
+	 * @param mgd
+	 *            The MetaGraphDef object
+	 * @return SignatureDef information as a String
+	 * @throws InvalidProtocolBufferException
+	 *             If problem occurred reading protobuf object
+	 */
+	public static String signatureDefInfo(MetaGraphDef mgd) throws InvalidProtocolBufferException {
+		StringBuilder sb = new StringBuilder();
+		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
+		Set<Entry<String, SignatureDef>> sdmEntries = sdm.entrySet();
+		for (Entry<String, SignatureDef> sdmEntry : sdmEntries) {
+			sb.append("\nSignatureDef key: " + sdmEntry.getKey());
+			SignatureDef sigDef = sdmEntry.getValue();
+			String methodName = sigDef.getMethodName();
+			sb.append("\nmethod name: " + methodName);
 
-		try {
-			Method method = tensor.getClass().getDeclaredMethod("buffer");
-			method.setAccessible(true);
-			ByteBuffer bb = (ByteBuffer) method.invoke(tensor, new Object[] {});
-			return bb.get();
-		} catch (NoSuchMethodException e) {
-			log.error(e);
-		} catch (SecurityException e) {
-			log.error(e);
-		} catch (IllegalAccessException e) {
-			log.error(e);
-		} catch (IllegalArgumentException e) {
-			log.error(e);
-		} catch (InvocationTargetException e) {
-			log.error(e);
+			sb.append("\ninputs:");
+			Map<String, TensorInfo> inputsMap = sigDef.getInputsMap();
+			Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
+			for (Entry<String, TensorInfo> inputEntry : inputEntries) {
+				sb.append("\n  input key: " + inputEntry.getKey());
+				TensorInfo inputTensorInfo = inputEntry.getValue();
+				DataType inputTensorDtype = inputTensorInfo.getDtype();
+				sb.append("\n    dtype: " + inputTensorDtype);
+				sb.append("\n    shape: (");
+				TensorShapeProto inputTensorShape = inputTensorInfo.getTensorShape();
+				int dimCount = inputTensorShape.getDimCount();
+				for (int i = 0; i < dimCount; i++) {
+					Dim dim = inputTensorShape.getDim(i);
+					long dimSize = dim.getSize();
+					if (i > 0) {
+						sb.append(", ");
+					}
+					sb.append(dimSize);
+				}
+				sb.append(")");
+				String inputTensorName = inputTensorInfo.getName();
+				sb.append("\n    name: " + inputTensorName);
+			}
+
+			sb.append("\noutputs:");
+			Map<String, TensorInfo> outputsMap = sigDef.getOutputsMap();
+			Set<Entry<String, TensorInfo>> outputEntries = outputsMap.entrySet();
+			for (Entry<String, TensorInfo> outputEntry : outputEntries) {
+				sb.append("\n  output key: " + outputEntry.getKey());
+				TensorInfo outputTensorInfo = outputEntry.getValue();
+				DataType outputTensorDtype = outputTensorInfo.getDtype();
+				sb.append("\n    dtype: " + outputTensorDtype);
+				sb.append("\n    shape: (");
+				TensorShapeProto outputTensorShape = outputTensorInfo.getTensorShape();
+				int dimCount = outputTensorShape.getDimCount();
+				for (int i = 0; i < dimCount; i++) {
+					Dim dim = outputTensorShape.getDim(i);
+					long dimSize = dim.getSize();
+					if (i > 0) {
+						sb.append(", ");
+					}
+					sb.append(dimSize);
+				}
+				sb.append(")");
+				String inputTensorName = outputTensorInfo.getName();
+				sb.append("\n    name: " + inputTensorName);
+			}
 		}
-		throw new TFException("Could not obtain byte scalar from UInt8 tensor");
+		return sb.toString();
+	}
+
+	/**
+	 * Obtain SignatureDef information from SavedModelBundle.
+	 * 
+	 * @param savedModelBundle
+	 *            The SavedModelBundle object
+	 * @return SignatureDef information as a String
+	 * @throws InvalidProtocolBufferException
+	 *             If problem occurred reading protobuf object
+	 */
+	public static String signatureDefInfo(SavedModelBundle savedModelBundle) throws InvalidProtocolBufferException {
+		return signatureDefInfo(savedModelBundle.metaGraphDef());
 	}
 }

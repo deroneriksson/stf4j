@@ -17,6 +17,10 @@ import org.codait.tf.TFException;
 import org.tensorflow.Tensor;
 import org.tensorflow.types.UInt8;
 
+/**
+ * Utility class for working with Arrays related to TensorFlow.
+ *
+ */
 public class ArrayUtil {
 
 	/**
@@ -25,43 +29,75 @@ public class ArrayUtil {
 	protected static Logger log = LogManager.getLogger(ArrayUtil.class);
 
 	/**
-	 * Obtain a list of array dimensions based on an input array.
+	 * Convert {@code Tensor<Boolean>} to boolean array.
 	 * 
-	 * @param array
-	 *            Input array as as object
-	 * @return List of array dimensions
+	 * @param tensor
+	 *            The Tensor of Boolean values
+	 * @return Primitive boolean array
 	 */
-	public static List<Integer> getArrayDimensionsList(Object array) {
-		if (array.getClass().isArray()) {
-			List<Integer> dim = new ArrayList<Integer>();
-			int length = Array.getLength(array);
-			dim.add(length);
-			Object v = Array.get(array, 0); // assume all have expected lengths
-			List<Integer> dims = getArrayDimensionsList(v);
-			if (dims != null) {
-				dim.addAll(dims);
+	public static boolean[] booleanTensorToBooleanArray(Tensor<Boolean> tensor) {
+		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
+		tensor.writeTo(bb);
+		byte[] byteArray = bb.array();
+		boolean[] booleanArray = new boolean[byteArray.length];
+		for (int i = 0; i < byteArray.length; i++) {
+			if (byteArray[i] == 0) {
+				booleanArray[i] = false;
+			} else if (byteArray[i] == 1) {
+				booleanArray[i] = true;
+			} else {
+				throw new TFException(
+						"Byte value at position " + i + " was " + byteArray[i] + " when 0 or 1 was expected");
 			}
-			return dim;
-		} else {
-			return null;
 		}
-
+		return booleanArray;
 	}
 
 	/**
-	 * Obtain dimensions of an array.
+	 * Convert {@code Tensor<Boolean>} to byte array.
 	 * 
-	 * @param array
-	 *            Input array as an object
-	 * @return Array dimensions as an array
+	 * @param tensor
+	 *            The Tensor of Boolean values
+	 * @return Primitive byte array
 	 */
-	public static int[] getArrayDimensions(Object array) {
-		List<Integer> dimList = getArrayDimensionsList(array);
-		int[] dimensions = new int[dimList.size()];
-		for (int i = 0; i < dimList.size(); i++) {
-			dimensions[i] = dimList.get(i);
+	public static byte[] booleanTensorToByteArray(Tensor<Boolean> tensor) {
+		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
+		tensor.writeTo(bb);
+		return bb.array();
+	}
+
+	/**
+	 * Convert {@code Tensor<Boolean>} to multidimensional boolean array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Boolean values
+	 * @return Multidimensional primitive boolean array as an Object
+	 */
+	public static Object booleanTensorToMultidimensionalBooleanArray(Tensor<Boolean> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object b = Array.newInstance(boolean.class, shape);
+		tensor.copyTo(b);
+		return b;
+	}
+
+	/**
+	 * Convert individual 2d int arrays with same dimensions to a single 3d int array.
+	 * 
+	 * @param arrays
+	 *            2d int arrays of the same dimensions
+	 * @return 3d int array that combines the individual 2d int arrays
+	 */
+	public static int[][][] convert2dIntArraysTo3dIntArray(int[][]... arrays) {
+		int[][][] array = new int[arrays.length][arrays[0].length][arrays[0][0].length];
+		for (int i = 0; i < arrays.length; i++) {
+			int[][] ar = arrays[i];
+			for (int r = 0; r < ar.length; r++) {
+				for (int c = 0; c < ar[0].length; c++) {
+					array[i][r][c] = ar[r][c];
+				}
+			}
 		}
-		return dimensions;
+		return array;
 	}
 
 	/**
@@ -77,6 +113,23 @@ public class ArrayUtil {
 		int[] dimensions = getArrayDimensions(orig);
 		Object dest = Array.newInstance(destType, dimensions);
 		copyArrayVals(orig, dest);
+		return dest;
+	}
+
+	/**
+	 * Convert an unsigned array from one type to another, where the destination type is specified by the destType
+	 * parameter.
+	 * 
+	 * @param orig
+	 *            The original array of unsigned values
+	 * @param destType
+	 *            The type (class) that the original array should be converted to
+	 * @return The resulting array
+	 */
+	public static Object convertUnsignedArrayType(Object orig, Class<?> destType) {
+		int[] dimensions = getArrayDimensions(orig);
+		Object dest = Array.newInstance(destType, dimensions);
+		copyUnsignedArrayVals(orig, dest);
 		return dest;
 	}
 
@@ -182,20 +235,55 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Convert an unsigned array from one type to another, where the destination type is specified by the destType
-	 * parameter.
+	 * Convert byte values in a multidimensional (dim) array to String values in a multidimensional (dim-1) array. The
+	 * multidimensional byte array has 1 more dimension than the multidimensional String array since a 1D byte array is
+	 * converted to a String.
 	 * 
 	 * @param orig
-	 *            The original array of unsigned values
-	 * @param destType
-	 *            The type (class) that the original array should be converted to
-	 * @return The resulting array
+	 *            The multidimensional (dim) byte array
+	 * @param dest
+	 *            The multidimensional (dim-1) String array
+	 * @param dimCount
+	 *            String dimension count for recursion. If greater than one, recurse through multidimensional byte
+	 *            array. Otherwise, copy 1D byte array to corresponding String and place in multidimensional String
+	 *            array.
 	 */
-	public static Object convertUnsignedArrayType(Object orig, Class<?> destType) {
-		int[] dimensions = getArrayDimensions(orig);
-		Object dest = Array.newInstance(destType, dimensions);
-		copyUnsignedArrayVals(orig, dest);
-		return dest;
+	protected static void copyByteArrayToStringArrayVals(Object orig, Object dest, int dimCount) {
+		for (int i = 0; i < Array.getLength(orig); i++) {
+			Object v = Array.get(orig, i);
+			Object vd = Array.get(dest, i);
+			if (dimCount > 1) {
+				int newDim = dimCount - 1;
+				copyByteArrayToStringArrayVals(v, vd, newDim);
+			} else {
+				String s = new String((byte[]) v, StandardCharsets.UTF_8);
+				Array.set(dest, i, s);
+			}
+		}
+	}
+
+	/**
+	 * Convert String values in a multidimensional (dim) array to byte values in a multidimensional (dim+1) array. The
+	 * multidimensional byte array has 1 more dimension than the multidimensional String array since a String is
+	 * converted to a byte array.
+	 * 
+	 * @param orig
+	 *            The multidimensional (dim) String array
+	 * @param dest
+	 *            The multidimensional (dim+1) byte array
+	 */
+	protected static void copyStringArrayToByteArrayVals(Object orig, Object dest) {
+		for (int i = 0; i < Array.getLength(orig); i++) {
+			Object v = Array.get(orig, i);
+			Object vd = Array.get(dest, i);
+			if (v.getClass().isArray()) {
+				copyStringArrayToByteArrayVals(v, vd);
+			} else {
+				String s = (String) v;
+				byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
+				Array.set(dest, i, bytes);
+			}
+		}
 	}
 
 	/**
@@ -239,53 +327,45 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Convert individual 2d int arrays with same dimensions to a single 3d int array.
+	 * Convert {@code Tensor<Double>} to double array.
 	 * 
-	 * @param arrays
-	 *            2d int arrays of the same dimensions
-	 * @return 3d int array that combines the individual 2d int arrays
+	 * @param tensor
+	 *            The Tensor of Double values
+	 * @return Primitive double array
 	 */
-	public static int[][][] convert2dIntArraysTo3dIntArray(int[][]... arrays) {
-		int[][][] array = new int[arrays.length][arrays[0].length][arrays[0][0].length];
-		for (int i = 0; i < arrays.length; i++) {
-			int[][] ar = arrays[i];
-			for (int r = 0; r < ar.length; r++) {
-				for (int c = 0; c < ar[0].length; c++) {
-					array[i][r][c] = ar[r][c];
-				}
-			}
-		}
-		return array;
+	public static double[] doubleTensorToDoubleArray(Tensor<Double> tensor) {
+		DoubleBuffer db = DoubleBuffer.allocate(tensor.numElements());
+		tensor.writeTo(db);
+		return db.array();
 	}
 
 	/**
-	 * Convert 1d long array to int array.
+	 * Convert {@code Tensor<Double>} to multidimensional double array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Double values
+	 * @return Multidimensional primitive double array as an Object
+	 */
+	public static Object doubleTensorToMultidimensionalDoubleArray(Tensor<Double> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object d = Array.newInstance(double.class, shape);
+		tensor.copyTo(d);
+		return d;
+	}
+
+	/**
+	 * Convert 1d double array to float array.
 	 * 
 	 * @param lArray
-	 *            Primitive long array
-	 * @return Primitive int array
+	 *            Primitive double array
+	 * @return Primitive float array
 	 */
-	public static int[] lToI(long[] lArray) {
-		int[] iArray = new int[lArray.length];
-		for (int i = 0; i < lArray.length; i++) {
-			iArray[i] = (int) lArray[i];
+	public static float[] dToF(double[] dArray) {
+		float[] fArray = new float[dArray.length];
+		for (int i = 0; i < dArray.length; i++) {
+			fArray[i] = (float) dArray[i];
 		}
-		return iArray;
-	}
-
-	/**
-	 * Convert 1d float array to int array.
-	 * 
-	 * @param fArray
-	 *            Primitive float array
-	 * @return Primitive int array
-	 */
-	public static int[] fToI(float[] fArray) {
-		int[] iArray = new int[fArray.length];
-		for (int i = 0; i < fArray.length; i++) {
-			iArray[i] = (int) fArray[i];
-		}
-		return iArray;
+		return fArray;
 	}
 
 	/**
@@ -299,6 +379,80 @@ public class ArrayUtil {
 		int[] iArray = new int[dArray.length];
 		for (int i = 0; i < dArray.length; i++) {
 			iArray[i] = (int) dArray[i];
+		}
+		return iArray;
+	}
+
+	/**
+	 * Convert 1d double array to long array.
+	 * 
+	 * @param dArray
+	 *            Primitive double array
+	 * @return Primitive long array
+	 */
+	public static long[] dToL(double[] dArray) {
+		long[] lArray = new long[dArray.length];
+		for (int i = 0; i < dArray.length; i++) {
+			lArray[i] = (long) dArray[i];
+		}
+		return lArray;
+	}
+
+	/**
+	 * Obtain the value of the first element of a (multidimensional) array.
+	 * 
+	 * @param obj
+	 *            The multidimensional array
+	 * @return The value of the first element of the multidimensional array
+	 */
+	public static Object firstElementValueOfMultidimArray(Object obj) {
+		if (obj == null) {
+			return null;
+		} else if (obj.getClass().isArray()) {
+			return firstElementValueOfMultidimArray(Array.get(obj, 0));
+		} else {
+			return obj;
+		}
+	}
+
+	/**
+	 * Convert {@code Tensor<Float>} to float array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Float values
+	 * @return Primitive float array
+	 */
+	public static float[] floatTensorToFloatArray(Tensor<Float> tensor) {
+		FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
+		tensor.writeTo(fb);
+		return fb.array();
+	}
+
+	/**
+	 * Convert {@code Tensor<Float>} to multidimensional float array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of Float values
+	 * @return Multidimensional primitive float array as an Object
+	 */
+	public static Object floatTensorToMultidimensionalFloatArray(Tensor<Float> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object f = Array.newInstance(float.class, shape);
+		tensor.copyTo(f);
+		return f;
+	}
+
+	/**
+	 * Convert 1d float array to int array.
+	 * 
+	 * @param fArray
+	 *            Primitive float array
+	 * @return Primitive int array
+	 */
+	public static int[] fToI(float[] fArray) {
+		int[] iArray = new int[fArray.length];
+		for (int i = 0; i < fArray.length; i++) {
+			iArray[i] = (int) fArray[i];
 		}
 		return iArray;
 	}
@@ -319,93 +473,70 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Convert 1d double array to long array.
+	 * Obtain dimensions of an array.
 	 * 
-	 * @param dArray
-	 *            Primitive double array
-	 * @return Primitive long array
+	 * @param array
+	 *            Input array as an object
+	 * @return Array dimensions as an array
 	 */
-	public static long[] dToL(double[] dArray) {
-		long[] lArray = new long[dArray.length];
-		for (int i = 0; i < dArray.length; i++) {
-			lArray[i] = (long) dArray[i];
+	public static int[] getArrayDimensions(Object array) {
+		List<Integer> dimList = getArrayDimensionsList(array);
+		int[] dimensions = new int[dimList.size()];
+		for (int i = 0; i < dimList.size(); i++) {
+			dimensions[i] = dimList.get(i);
 		}
-		return lArray;
+		return dimensions;
 	}
 
 	/**
-	 * Convert 1d int array to long array.
+	 * Obtain a list of array dimensions based on an input array.
 	 * 
-	 * @param iArray
-	 *            Primitive int array
-	 * @return Primitive long array
+	 * @param array
+	 *            Input array as as object
+	 * @return List of array dimensions
 	 */
-	public static long[] iToL(int[] iArray) {
-		long[] lArray = new long[iArray.length];
-		for (int i = 0; i < iArray.length; i++) {
-			lArray[i] = (long) iArray[i];
+	public static List<Integer> getArrayDimensionsList(Object array) {
+		if (array.getClass().isArray()) {
+			List<Integer> dim = new ArrayList<Integer>();
+			int length = Array.getLength(array);
+			dim.add(length);
+			Object v = Array.get(array, 0); // assume all have expected lengths
+			List<Integer> dims = getArrayDimensionsList(v);
+			if (dims != null) {
+				dim.addAll(dims);
+			}
+			return dim;
+		} else {
+			return null;
 		}
-		return lArray;
+
 	}
 
 	/**
-	 * Convert 1d int array to float array.
+	 * Convert {@code Tensor<Integer>} to int array.
 	 * 
-	 * @param iArray
-	 *            Primitive int array
-	 * @return Primitive float array
+	 * @param tensor
+	 *            The Tensor of Integer values
+	 * @return Primitive int array
 	 */
-	public static float[] iToF(int[] iArray) {
-		float[] fArray = new float[iArray.length];
-		for (int i = 0; i < iArray.length; i++) {
-			fArray[i] = (float) iArray[i];
-		}
-		return fArray;
+	public static int[] intTensorToIntArray(Tensor<Integer> tensor) {
+		IntBuffer ib = IntBuffer.allocate(tensor.numElements());
+		tensor.writeTo(ib);
+		return ib.array();
 	}
 
 	/**
-	 * Convert 1d long array to float array.
+	 * Convert {@code Tensor<Integer>} to multidimensional int array.
 	 * 
-	 * @param lArray
-	 *            Primitive long array
-	 * @return Primitive float array
+	 * @param tensor
+	 *            The Tensor of Integer values
+	 * @return Multidimensional primitive int array as an Object
 	 */
-	public static float[] lToF(long[] lArray) {
-		float[] fArray = new float[lArray.length];
-		for (int i = 0; i < lArray.length; i++) {
-			fArray[i] = (float) lArray[i];
-		}
-		return fArray;
-	}
-
-	/**
-	 * Convert 1d double array to float array.
-	 * 
-	 * @param lArray
-	 *            Primitive double array
-	 * @return Primitive float array
-	 */
-	public static float[] dToF(double[] dArray) {
-		float[] fArray = new float[dArray.length];
-		for (int i = 0; i < dArray.length; i++) {
-			fArray[i] = (float) dArray[i];
-		}
-		return fArray;
-	}
-
-	/**
-	 * Convert 1d long array to double array.
-	 * 
-	 * @param lArray
-	 *            Primitive long array
-	 * @return Primitive double array
-	 */
-	public static double[] lToD(long[] lArray) {
-		double[] dArray = new double[lArray.length];
-		for (int i = 0; i < lArray.length; i++) {
-			dArray[i] = (double) lArray[i];
-		}
-		return dArray;
+	public static Object intTensorToMultidimensionalIntArray(Tensor<Integer> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object i = Array.newInstance(int.class, shape);
+		tensor.copyTo(i);
+		return i;
 	}
 
 	/**
@@ -424,6 +555,36 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert 1d int array to float array.
+	 * 
+	 * @param iArray
+	 *            Primitive int array
+	 * @return Primitive float array
+	 */
+	public static float[] iToF(int[] iArray) {
+		float[] fArray = new float[iArray.length];
+		for (int i = 0; i < iArray.length; i++) {
+			fArray[i] = (float) iArray[i];
+		}
+		return fArray;
+	}
+
+	/**
+	 * Convert 1d int array to long array.
+	 * 
+	 * @param iArray
+	 *            Primitive int array
+	 * @return Primitive long array
+	 */
+	public static long[] iToL(int[] iArray) {
+		long[] lArray = new long[iArray.length];
+		for (int i = 0; i < iArray.length; i++) {
+			lArray[i] = (long) iArray[i];
+		}
+		return lArray;
+	}
+
+	/**
 	 * Convert {@code Tensor<Long>} to long array.
 	 * 
 	 * @param tensor
@@ -434,124 +595,6 @@ public class ArrayUtil {
 		LongBuffer lb = LongBuffer.allocate(tensor.numElements());
 		tensor.writeTo(lb);
 		return lb.array();
-	}
-
-	/**
-	 * Convert {@code Tensor<Integer>} to int array.
-	 * 
-	 * @param tensor
-	 *            The Tensor of Integer values
-	 * @return Primitive int array
-	 */
-	public static int[] intTensorToIntArray(Tensor<Integer> tensor) {
-		IntBuffer ib = IntBuffer.allocate(tensor.numElements());
-		tensor.writeTo(ib);
-		return ib.array();
-	}
-
-	/**
-	 * Convert {@code Tensor<UInt8>} to byte array.
-	 * 
-	 * @param tensor
-	 *            The Tensor of UInt8 values
-	 * @return Primitive byte array
-	 */
-	public static byte[] uint8TensorToByteArray(Tensor<UInt8> tensor) {
-		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
-		tensor.writeTo(bb);
-		return bb.array();
-	}
-
-	/**
-	 * Convert {@code Tensor<Boolean>} to boolean array.
-	 * 
-	 * @param tensor
-	 *            The Tensor of Boolean values
-	 * @return Primitive boolean array
-	 */
-	public static boolean[] booleanTensorToBooleanArray(Tensor<Boolean> tensor) {
-		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
-		tensor.writeTo(bb);
-		byte[] byteArray = bb.array();
-		boolean[] booleanArray = new boolean[byteArray.length];
-		for (int i = 0; i < byteArray.length; i++) {
-			if (byteArray[i] == 0) {
-				booleanArray[i] = false;
-			} else if (byteArray[i] == 1) {
-				booleanArray[i] = true;
-			} else {
-				throw new TFException(
-						"Byte value at position " + i + " was " + byteArray[i] + " when 0 or 1 was expected");
-			}
-		}
-		return booleanArray;
-	}
-
-	/**
-	 * Convert {@code Tensor<Boolean>} to byte array.
-	 * 
-	 * @param tensor
-	 *            The Tensor of Boolean values
-	 * @return Primitive byte array
-	 */
-	public static byte[] booleanTensorToByteArray(Tensor<Boolean> tensor) {
-		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
-		tensor.writeTo(bb);
-		return bb.array();
-	}
-
-	/**
-	 * Convert {@code Tensor<Float>} to float array.
-	 * 
-	 * @param tensor
-	 *            The Tensor of Float values
-	 * @return Primitive float array
-	 */
-	public static float[] floatTensorToFloatArray(Tensor<Float> tensor) {
-		FloatBuffer fb = FloatBuffer.allocate(tensor.numElements());
-		tensor.writeTo(fb);
-		return fb.array();
-	}
-
-	/**
-	 * Convert {@code Tensor<Double>} to double array.
-	 * 
-	 * @param tensor
-	 *            The Tensor of Double values
-	 * @return Primitive double array
-	 */
-	public static double[] doubleTensorToDoubleArray(Tensor<Double> tensor) {
-		DoubleBuffer db = DoubleBuffer.allocate(tensor.numElements());
-		tensor.writeTo(db);
-		return db.array();
-	}
-
-	/**
-	 * Convert {@code Tensor<Float>} to multidimensional float array.
-	 * 
-	 * @param tensor
-	 *            The Tensor of Float values
-	 * @return Multidimensional primitive float array as an Object
-	 */
-	public static Object floatTensorToMultidimensionalFloatArray(Tensor<Float> tensor) {
-		int[] shape = lToI(tensor.shape());
-		Object f = Array.newInstance(float.class, shape);
-		tensor.copyTo(f);
-		return f;
-	}
-
-	/**
-	 * Convert {@code Tensor<Double>} to multidimensional double array.
-	 * 
-	 * @param tensor
-	 *            The Tensor of Double values
-	 * @return Multidimensional primitive double array as an Object
-	 */
-	public static Object doubleTensorToMultidimensionalDoubleArray(Tensor<Double> tensor) {
-		int[] shape = lToI(tensor.shape());
-		Object d = Array.newInstance(double.class, shape);
-		tensor.copyTo(d);
-		return d;
 	}
 
 	/**
@@ -569,61 +612,67 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Convert {@code Tensor<Integer>} to multidimensional int array.
+	 * Convert 1d long array to double array.
 	 * 
-	 * @param tensor
-	 *            The Tensor of Integer values
-	 * @return Multidimensional primitive int array as an Object
+	 * @param lArray
+	 *            Primitive long array
+	 * @return Primitive double array
 	 */
-	public static Object intTensorToMultidimensionalIntArray(Tensor<Integer> tensor) {
-		int[] shape = lToI(tensor.shape());
-		Object i = Array.newInstance(int.class, shape);
-		tensor.copyTo(i);
-		return i;
+	public static double[] lToD(long[] lArray) {
+		double[] dArray = new double[lArray.length];
+		for (int i = 0; i < lArray.length; i++) {
+			dArray[i] = (double) lArray[i];
+		}
+		return dArray;
 	}
 
 	/**
-	 * Convert {@code Tensor<UInt8>} to multidimensional byte array.
+	 * Convert 1d long array to float array.
 	 * 
-	 * @param tensor
-	 *            The Tensor of UInt8 values
-	 * @return Multidimensional primitive byte array as an Object
+	 * @param lArray
+	 *            Primitive long array
+	 * @return Primitive float array
 	 */
-	public static Object uint8TensorToMultidimensionalByteArray(Tensor<UInt8> tensor) {
-		int[] shape = lToI(tensor.shape());
-		Object i = Array.newInstance(byte.class, shape);
-		tensor.copyTo(i);
-		return i;
+	public static float[] lToF(long[] lArray) {
+		float[] fArray = new float[lArray.length];
+		for (int i = 0; i < lArray.length; i++) {
+			fArray[i] = (float) lArray[i];
+		}
+		return fArray;
 	}
 
 	/**
-	 * Convert {@code Tensor<Boolean>} to multidimensional boolean array.
+	 * Convert 1d long array to int array.
 	 * 
-	 * @param tensor
-	 *            The Tensor of Boolean values
-	 * @return Multidimensional primitive boolean array as an Object
+	 * @param lArray
+	 *            Primitive long array
+	 * @return Primitive int array
 	 */
-	public static Object booleanTensorToMultidimensionalBooleanArray(Tensor<Boolean> tensor) {
-		int[] shape = lToI(tensor.shape());
-		Object b = Array.newInstance(boolean.class, shape);
-		tensor.copyTo(b);
-		return b;
+	public static int[] lToI(long[] lArray) {
+		int[] iArray = new int[lArray.length];
+		for (int i = 0; i < lArray.length; i++) {
+			iArray[i] = (int) lArray[i];
+		}
+		return iArray;
 	}
 
 	/**
-	 * Convert {@code Tensor<String>} to multidimensional String array.
+	 * Obtain the index at which the maximum value occurs in an array.
 	 * 
-	 * @param tensor
-	 *            The Tensor of String values
-	 * @return Multidimensional String array as an Object
+	 * @param d
+	 *            The double array
+	 * @return The index at which the maximum value occurs
 	 */
-	public static Object stringTensorToMultidimensionalStringArray(Tensor<String> tensor) {
-		int[] sShape = lToI(tensor.shape());
-		int[] bShape = Arrays.copyOf(sShape, sShape.length + 1);
-		Object b = Array.newInstance(byte.class, bShape);
-		tensor.copyTo(b);
-		Object s = multidimBytesToMultidimStrings(b);
-		return s;
+	public static int maxIndex(double[] d) {
+		int maxIndex = 0;
+		double maxValue = Double.MIN_VALUE;
+		for (int i = 0; i < d.length; i++) {
+			if (d[i] > maxValue) {
+				maxIndex = i;
+				maxValue = d[i];
+			}
+		}
+		return maxIndex;
 	}
 
 	/**
@@ -648,40 +697,6 @@ public class ArrayUtil {
 	/**
 	 * Obtain the indices at which the maximum values occur in the rows of a 2d array.
 	 * 
-	 * @param f
-	 *            The float array
-	 * @return The indices at which the maximum row values occur
-	 */
-	public static int[] maxIndices(float[][] f) {
-		int[] maxIndices = new int[f.length];
-		for (int i = 0; i < f.length; i++) {
-			maxIndices[i] = maxIndex(f[i]);
-		}
-		return maxIndices;
-	}
-
-	/**
-	 * Obtain the index at which the maximum value occurs in an array.
-	 * 
-	 * @param d
-	 *            The double array
-	 * @return The index at which the maximum value occurs
-	 */
-	public static int maxIndex(double[] d) {
-		int maxIndex = 0;
-		double maxValue = Double.MIN_VALUE;
-		for (int i = 0; i < d.length; i++) {
-			if (d[i] > maxValue) {
-				maxIndex = i;
-				maxValue = d[i];
-			}
-		}
-		return maxIndex;
-	}
-
-	/**
-	 * Obtain the indices at which the maximum values occur in the rows of a 2d array.
-	 * 
 	 * @param d
 	 *            The double array
 	 * @return The indices at which the maximum row values occur
@@ -695,43 +710,18 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Convert a multidimensional (dim) String array to a multidimensional (dim+1) byte array. The multidimensional byte
-	 * array will have 1 more dimension than the String array since a String is converted to a byte array.
+	 * Obtain the indices at which the maximum values occur in the rows of a 2d array.
 	 * 
-	 * @param s
-	 *            The multidimensional String array
-	 * @return The multidimensional (dim+1) byte array equivalent of the multidimensional (dim) String array
+	 * @param f
+	 *            The float array
+	 * @return The indices at which the maximum row values occur
 	 */
-	public static Object multidimStringsToMultidimBytes(Object s) {
-		int[] sDim = getArrayDimensions(s);
-		int[] bDim = Arrays.copyOf(sDim, sDim.length + 1);
-		Object b = Array.newInstance(byte.class, bDim);
-		copyStringArrayToByteArrayVals(s, b);
-		return b;
-	}
-
-	/**
-	 * Convert String values in a multidimensional (dim) array to byte values in a multidimensional (dim+1) array. The
-	 * multidimensional byte array has 1 more dimension than the multidimensional String array since a String is
-	 * converted to a byte array.
-	 * 
-	 * @param orig
-	 *            The multidimensional (dim) String array
-	 * @param dest
-	 *            The multidimensional (dim+1) byte array
-	 */
-	protected static void copyStringArrayToByteArrayVals(Object orig, Object dest) {
-		for (int i = 0; i < Array.getLength(orig); i++) {
-			Object v = Array.get(orig, i);
-			Object vd = Array.get(dest, i);
-			if (v.getClass().isArray()) {
-				copyStringArrayToByteArrayVals(v, vd);
-			} else {
-				String s = (String) v;
-				byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
-				Array.set(dest, i, bytes);
-			}
+	public static int[] maxIndices(float[][] f) {
+		int[] maxIndices = new int[f.length];
+		for (int i = 0; i < f.length; i++) {
+			maxIndices[i] = maxIndex(f[i]);
 		}
+		return maxIndices;
 	}
 
 	/**
@@ -752,47 +742,61 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * Convert byte values in a multidimensional (dim) array to String values in a multidimensional (dim-1) array. The
-	 * multidimensional byte array has 1 more dimension than the multidimensional String array since a 1D byte array is
-	 * converted to a String.
+	 * Convert a multidimensional (dim) String array to a multidimensional (dim+1) byte array. The multidimensional byte
+	 * array will have 1 more dimension than the String array since a String is converted to a byte array.
 	 * 
-	 * @param orig
-	 *            The multidimensional (dim) byte array
-	 * @param dest
-	 *            The multidimensional (dim-1) String array
-	 * @param dimCount
-	 *            String dimension count for recursion. If greater than one, recurse through multidimensional byte
-	 *            array. Otherwise, copy 1D byte array to corresponding String and place in multidimensional String
-	 *            array.
+	 * @param s
+	 *            The multidimensional String array
+	 * @return The multidimensional (dim+1) byte array equivalent of the multidimensional (dim) String array
 	 */
-	protected static void copyByteArrayToStringArrayVals(Object orig, Object dest, int dimCount) {
-		for (int i = 0; i < Array.getLength(orig); i++) {
-			Object v = Array.get(orig, i);
-			Object vd = Array.get(dest, i);
-			if (dimCount > 1) {
-				int newDim = dimCount - 1;
-				copyByteArrayToStringArrayVals(v, vd, newDim);
-			} else {
-				String s = new String((byte[]) v, StandardCharsets.UTF_8);
-				Array.set(dest, i, s);
-			}
-		}
+	public static Object multidimStringsToMultidimBytes(Object s) {
+		int[] sDim = getArrayDimensions(s);
+		int[] bDim = Arrays.copyOf(sDim, sDim.length + 1);
+		Object b = Array.newInstance(byte.class, bDim);
+		copyStringArrayToByteArrayVals(s, b);
+		return b;
 	}
 
 	/**
-	 * Obtain the value of the first element of a (multidimensional) array.
+	 * Convert {@code Tensor<String>} to multidimensional String array.
 	 * 
-	 * @param obj
-	 *            The multidimensional array
-	 * @return The value of the first element of the multidimensional array
+	 * @param tensor
+	 *            The Tensor of String values
+	 * @return Multidimensional String array as an Object
 	 */
-	public static Object firstElementValueOfMultidimArray(Object obj) {
-		if (obj == null) {
-			return null;
-		} else if (obj.getClass().isArray()) {
-			return firstElementValueOfMultidimArray(Array.get(obj, 0));
-		} else {
-			return obj;
-		}
+	public static Object stringTensorToMultidimensionalStringArray(Tensor<String> tensor) {
+		int[] sShape = lToI(tensor.shape());
+		int[] bShape = Arrays.copyOf(sShape, sShape.length + 1);
+		Object b = Array.newInstance(byte.class, bShape);
+		tensor.copyTo(b);
+		Object s = multidimBytesToMultidimStrings(b);
+		return s;
+	}
+
+	/**
+	 * Convert {@code Tensor<UInt8>} to byte array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of UInt8 values
+	 * @return Primitive byte array
+	 */
+	public static byte[] uint8TensorToByteArray(Tensor<UInt8> tensor) {
+		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
+		tensor.writeTo(bb);
+		return bb.array();
+	}
+
+	/**
+	 * Convert {@code Tensor<UInt8>} to multidimensional byte array.
+	 * 
+	 * @param tensor
+	 *            The Tensor of UInt8 values
+	 * @return Multidimensional primitive byte array as an Object
+	 */
+	public static Object uint8TensorToMultidimensionalByteArray(Tensor<UInt8> tensor) {
+		int[] shape = lToI(tensor.shape());
+		Object i = Array.newInstance(byte.class, shape);
+		tensor.copyTo(i);
+		return i;
 	}
 }
