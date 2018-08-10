@@ -79,6 +79,16 @@ public class TFModel {
 	Set<String> possibleOutputKeys = new LinkedHashSet<String>();
 
 	/**
+	 * Load TensorFlow model located at modelDir with tag "serve".
+	 * 
+	 * @param modelDir
+	 *            SavedModel directory
+	 */
+	public TFModel(String modelDir) {
+		this(modelDir, "serve");
+	}
+
+	/**
 	 * Load TensorFlow model located at modelDir with specified MetaGraphDef tags.
 	 * 
 	 * @param modelDir
@@ -90,188 +100,6 @@ public class TFModel {
 		log.debug("Creating TFModel object");
 		savedModelDir = modelDir;
 		savedModel = SavedModelBundle.load(modelDir, metaGraphDefTags);
-	}
-
-	/**
-	 * Load TensorFlow model located at modelDir with tag "serve".
-	 * 
-	 * @param modelDir
-	 *            SavedModel directory
-	 */
-	public TFModel(String modelDir) {
-		this(modelDir, "serve");
-	}
-
-	/**
-	 * Obtain the SavedModel.
-	 * 
-	 * @return The SavedModelBundle
-	 */
-	public SavedModelBundle model() {
-		return savedModel;
-	}
-
-	/**
-	 * Obtain the SavedModel directory.
-	 * 
-	 * @return SavedModel directory
-	 */
-	public String modelDir() {
-		return savedModelDir;
-	}
-
-	/**
-	 * Obtain a Session to allow computations to be performed on the SavedModel.
-	 * 
-	 * @return A Session to the SavedModel.
-	 */
-	public Session session() {
-		return savedModel.session();
-	}
-
-	/**
-	 * Obtain a Runner to run the TensorFlow model graph operations and retrieve the results.
-	 * 
-	 * @return A Runner to the SavedModel.
-	 */
-	public Runner runner() {
-		return session().runner();
-	}
-
-	/**
-	 * Add an input to the model by specifying an input key and the corresponding value. If a SignatureDef key has been
-	 * specified using the TFModel sig() method, the input key will be specific to the SignatureDef key.
-	 * 
-	 * @param inputKey
-	 *            The input key
-	 * @param inputValue
-	 *            The input value
-	 * @return {@code this} TFModel object to allow chaining of methods
-	 */
-	public TFModel in(String inputKey, Object inputValue) {
-		if (inputValue == null) {
-			throw new TFException("Input value cannot be null");
-		}
-		log.debug("Register input key '" + inputKey + "' with object type " + inputValue.getClass().getName());
-		if (inputValue instanceof Tensor) {
-			String inputName = TFUtil.inputKeyToName(signatureDefKey, inputKey, metaGraphDef());
-			inputNameToValue.put(inputName, inputValue);
-			inputKeyToName.put(inputKey, inputName);
-		} else {
-			TensorInfo ti = TFUtil.inputKeyToTensorInfo(signatureDefKey, inputKey, metaGraphDef());
-			String inputName = ti.getName();
-			Tensor<?> tensor = TFUtil.convertToTensor(inputKey, inputName, inputValue, ti);
-			inputNameToValue.put(inputName, tensor);
-			inputKeyToName.put(inputKey, inputName);
-		}
-		return this;
-	}
-
-	/**
-	 * Add an output from the model by specifying an output key. If a SignatureDef key has been specified using the
-	 * TFModel sig() method, the output key will be specific to the SignatureDef key.
-	 * 
-	 * @param outputKey
-	 *            The output key
-	 * @return {@code this} TFModel object to allow chaining of methods
-	 */
-	public TFModel out(String outputKey) {
-		log.debug("Register output key '" + outputKey + "'");
-		String outputName = TFUtil.outputKeyToName(signatureDefKey, outputKey, metaGraphDef());
-		outputKeyToName.put(outputKey, outputName);
-		outputNameToValue.put(outputName, null);
-		return this;
-	}
-
-	/**
-	 * Add outputs from the model by specifying output keys. If a SignatureDef key has been specified using the TFModel
-	 * sig() method, the output key will be specific to the SignatureDef key.
-	 * 
-	 * @param outputKeys
-	 *            The output keys
-	 * @return {@code this} TFModel object to allow chaining of methods
-	 */
-	public TFModel out(String... outputKeys) {
-		for (String outputKey : outputKeys) {
-			out(outputKey);
-		}
-		return this;
-	}
-
-	/**
-	 * Specify a particular SignatureDef key which allows for specificity in terms of inputs and outputs.
-	 * 
-	 * @param signatureDefKey
-	 *            The SignatureDef key
-	 * @return {@code this} TFModel object to allow chaining of methods
-	 */
-	public TFModel sig(String signatureDefKey) {
-		this.signatureDefKey = signatureDefKey;
-		requiredInputKeys.clear();
-		if (signatureDefKey == null) {
-			return this;
-		}
-
-		MetaGraphDef mgd = metaGraphDef();
-		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
-		SignatureDef signatureDef = sdm.get(signatureDefKey);
-
-		if (signatureDef == null) {
-			Set<String> signatureDefKeys = sdm.keySet();
-			throw new TFException("SignatureDef key '" + signatureDefKey + "' not found. Possible keys: "
-					+ signatureDefKeys.toString());
-		}
-		Map<String, TensorInfo> inputsMap = signatureDef.getInputsMap();
-		Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
-		for (Entry<String, TensorInfo> inputEntry : inputEntries) {
-			String requiredInputKey = inputEntry.getKey();
-			requiredInputKeys.add(requiredInputKey);
-		}
-
-		Map<String, TensorInfo> outputsMap = signatureDef.getOutputsMap();
-		Set<Entry<String, TensorInfo>> outputEntries = outputsMap.entrySet();
-		for (Entry<String, TensorInfo> outputEntry : outputEntries) {
-			String possibleOutputKey = outputEntry.getKey();
-			possibleOutputKeys.add(possibleOutputKey);
-		}
-
-		return this;
-	}
-
-	/**
-	 * Execute the model graph operations. The results will be returned as a TFResults object, which is a mapping of
-	 * output keys to output names to output values. Specific outputs are retrieved by output keys.
-	 * 
-	 * @return The results as a TFResults object.
-	 */
-	public TFResults run() {
-		if (signatureDefKey == null) {
-			log.warn(
-					"No SignatureDef key is specified. It is highly recommended that you specify the SignatureDef key using the sig() method");
-		}
-		checkInputKeys();
-		checkOutputKeys();
-
-		log.debug("Running model");
-		Runner runner = runner();
-		Set<Entry<String, Object>> iEntries = inputNameToValue.entrySet();
-		for (Entry<String, Object> iEntry : iEntries) {
-			String name = iEntry.getKey();
-			Object value = iEntry.getValue();
-			runner.feed(name, (Tensor<?>) value);
-		}
-		Set<String> oNames = outputNameToValue.keySet();
-		for (String oName : oNames) {
-			runner.fetch(oName);
-		}
-		List<Tensor<?>> res = runner.run();
-		int i = 0;
-		for (String oName : oNames) {
-			outputNameToValue.put(oName, res.get(i++));
-		}
-		results = new TFResults(this);
-		log.debug("Model results:\n" + results);
-		return results;
 	}
 
 	/**
@@ -312,6 +140,51 @@ public class TFModel {
 	}
 
 	/**
+	 * Clear the SignatureDef key, the input and output key-to-name-to-value mappings, and the results.
+	 */
+	public void clear() {
+		inputKeyToName.clear();
+		inputNameToValue.clear();
+		outputKeyToName.clear();
+		outputNameToValue.clear();
+		requiredInputKeys.clear();
+		if (results != null) {
+			results.outputKeyToName.clear();
+			results.outputNameToValue.clear();
+		}
+		signatureDefKey = null;
+	}
+
+	/**
+	 * Add an input to the model by specifying an input key and the corresponding value. If a SignatureDef key has been
+	 * specified using the TFModel sig() method, the input key will be specific to the SignatureDef key.
+	 * 
+	 * @param inputKey
+	 *            The input key
+	 * @param inputValue
+	 *            The input value
+	 * @return {@code this} TFModel object to allow chaining of methods
+	 */
+	public TFModel in(String inputKey, Object inputValue) {
+		if (inputValue == null) {
+			throw new TFException("Input value cannot be null");
+		}
+		log.debug("Register input key '" + inputKey + "' with object type " + inputValue.getClass().getName());
+		if (inputValue instanceof Tensor) {
+			String inputName = TFUtil.inputKeyToName(signatureDefKey, inputKey, metaGraphDef());
+			inputNameToValue.put(inputName, inputValue);
+			inputKeyToName.put(inputKey, inputName);
+		} else {
+			TensorInfo ti = TFUtil.inputKeyToTensorInfo(signatureDefKey, inputKey, metaGraphDef());
+			String inputName = ti.getName();
+			Tensor<?> tensor = TFUtil.convertToTensor(inputKey, inputName, inputValue, ti);
+			inputNameToValue.put(inputName, tensor);
+			inputKeyToName.put(inputKey, inputName);
+		}
+		return this;
+	}
+
+	/**
 	 * Obtain the model metadata description.
 	 * 
 	 * @return The model metadata description as a MetaGraphDef object
@@ -327,6 +200,149 @@ public class TFModel {
 		} catch (InvalidProtocolBufferException e) {
 			throw new TFException("Exception obtaining MetaGraphDef from saved model", e);
 		}
+	}
+
+	/**
+	 * Obtain the SavedModel.
+	 * 
+	 * @return The SavedModelBundle
+	 */
+	public SavedModelBundle model() {
+		return savedModel;
+	}
+
+	/**
+	 * Obtain the SavedModel directory.
+	 * 
+	 * @return SavedModel directory
+	 */
+	public String modelDir() {
+		return savedModelDir;
+	}
+
+	/**
+	 * Add an output from the model by specifying an output key. If a SignatureDef key has been specified using the
+	 * TFModel sig() method, the output key will be specific to the SignatureDef key.
+	 * 
+	 * @param outputKey
+	 *            The output key
+	 * @return {@code this} TFModel object to allow chaining of methods
+	 */
+	public TFModel out(String outputKey) {
+		log.debug("Register output key '" + outputKey + "'");
+		String outputName = TFUtil.outputKeyToName(signatureDefKey, outputKey, metaGraphDef());
+		outputKeyToName.put(outputKey, outputName);
+		outputNameToValue.put(outputName, null);
+		return this;
+	}
+
+	/**
+	 * Add outputs from the model by specifying output keys. If a SignatureDef key has been specified using the TFModel
+	 * sig() method, the output key will be specific to the SignatureDef key.
+	 * 
+	 * @param outputKeys
+	 *            The output keys
+	 * @return {@code this} TFModel object to allow chaining of methods
+	 */
+	public TFModel out(String... outputKeys) {
+		for (String outputKey : outputKeys) {
+			out(outputKey);
+		}
+		return this;
+	}
+
+	/**
+	 * Execute the model graph operations. The results will be returned as a TFResults object, which is a mapping of
+	 * output keys to output names to output values. Specific outputs are retrieved by output keys.
+	 * 
+	 * @return The results as a TFResults object.
+	 */
+	public TFResults run() {
+		if (signatureDefKey == null) {
+			log.warn(
+					"No SignatureDef key is specified. It is highly recommended that you specify the SignatureDef key using the sig() method");
+		}
+		checkInputKeys();
+		checkOutputKeys();
+
+		log.debug("Running model");
+		Runner runner = runner();
+		Set<Entry<String, Object>> iEntries = inputNameToValue.entrySet();
+		for (Entry<String, Object> iEntry : iEntries) {
+			String name = iEntry.getKey();
+			Object value = iEntry.getValue();
+			runner.feed(name, (Tensor<?>) value);
+		}
+		Set<String> oNames = outputNameToValue.keySet();
+		for (String oName : oNames) {
+			runner.fetch(oName);
+		}
+		List<Tensor<?>> res = runner.run();
+		int i = 0;
+		for (String oName : oNames) {
+			outputNameToValue.put(oName, res.get(i++));
+		}
+		results = new TFResults(this);
+		log.debug("Model results:\n" + results);
+		return results;
+	}
+
+	/**
+	 * Obtain a Runner to run the TensorFlow model graph operations and retrieve the results.
+	 * 
+	 * @return A Runner to the SavedModel.
+	 */
+	public Runner runner() {
+		return session().runner();
+	}
+
+	/**
+	 * Obtain a Session to allow computations to be performed on the SavedModel.
+	 * 
+	 * @return A Session to the SavedModel.
+	 */
+	public Session session() {
+		return savedModel.session();
+	}
+
+	/**
+	 * Specify a particular SignatureDef key which allows for specificity in terms of inputs and outputs.
+	 * 
+	 * @param signatureDefKey
+	 *            The SignatureDef key
+	 * @return {@code this} TFModel object to allow chaining of methods
+	 */
+	public TFModel sig(String signatureDefKey) {
+		this.signatureDefKey = signatureDefKey;
+		requiredInputKeys.clear();
+		if (signatureDefKey == null) {
+			return this;
+		}
+
+		MetaGraphDef mgd = metaGraphDef();
+		Map<String, SignatureDef> sdm = mgd.getSignatureDefMap();
+		SignatureDef signatureDef = sdm.get(signatureDefKey);
+
+		if (signatureDef == null) {
+			Set<String> signatureDefKeys = sdm.keySet();
+			throw new TFException("SignatureDef key '" + signatureDefKey + "' not found. Possible keys: "
+					+ signatureDefKeys.toString());
+		}
+		Map<String, TensorInfo> inputsMap = signatureDef.getInputsMap();
+		Set<Entry<String, TensorInfo>> inputEntries = inputsMap.entrySet();
+		for (Entry<String, TensorInfo> inputEntry : inputEntries) {
+			String requiredInputKey = inputEntry.getKey();
+			requiredInputKeys.add(requiredInputKey);
+		}
+
+		Map<String, TensorInfo> outputsMap = signatureDef.getOutputsMap();
+		Set<Entry<String, TensorInfo>> outputEntries = outputsMap.entrySet();
+		for (Entry<String, TensorInfo> outputEntry : outputEntries) {
+			String possibleOutputKey = outputEntry.getKey();
+			possibleOutputKeys.add(possibleOutputKey);
+		}
+
+		return this;
 	}
 
 	/**
@@ -412,21 +428,5 @@ public class TFModel {
 		}
 
 		return sb.toString();
-	}
-
-	/**
-	 * Clear the SignatureDef key, the input and output key-to-name-to-value mappings, and the results.
-	 */
-	public void clear() {
-		inputKeyToName.clear();
-		inputNameToValue.clear();
-		outputKeyToName.clear();
-		outputNameToValue.clear();
-		requiredInputKeys.clear();
-		if (results != null) {
-			results.outputKeyToName.clear();
-			results.outputNameToValue.clear();
-		}
-		signatureDefKey = null;
 	}
 }
