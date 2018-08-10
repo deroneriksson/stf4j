@@ -46,7 +46,7 @@ public class CIFAR10Test {
 		Assert.assertTrue(isClassificationCorrect(label, prediction, imageNum, true));
 	}
 
-	public void cifarMultiImageInputClassesOutput(int index, int size) {
+	private void cifarMultiImageInputClassesOutput(int index, int size) {
 		log.debug("CIFAR10 - input images (" + size + ") as 4d primitive float array, output classes");
 		log.debug(String.format("Image batch index: %d, size: %d", index, size));
 		float[][][][] imageBatch = getImageBatch(index, size);
@@ -99,7 +99,7 @@ public class CIFAR10Test {
 		Assert.assertTrue(isClassificationCorrect(label, prediction, imageNum, true));
 	}
 
-	public void cifarMultiImageInputProbabilitiesOutput(int index, int size) {
+	private void cifarMultiImageInputProbabilitiesOutput(int index, int size) {
 		log.debug("CIFAR10 - input images (" + size + ") as 4d primitive float array, output probabilities");
 		log.debug(String.format("Image batch index: %d, size: %d", index, size));
 		float[][][][] imageBatch = getImageBatch(index, size);
