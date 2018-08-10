@@ -1,5 +1,6 @@
 package org.codait.tf;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -97,6 +98,13 @@ public class TFModel {
 	 *            The MetaGraphDef tags
 	 */
 	public TFModel(String modelDir, String... metaGraphDefTags) {
+		if (modelDir == null) {
+			throw new TFException("Model directory is null");
+		}
+		File f = new File(modelDir);
+		if (!f.exists()) {
+			throw new TFException("Model directory '" + modelDir + "' could not be found");
+		}
 		log.debug("Creating TFModel object");
 		savedModelDir = modelDir;
 		savedModel = SavedModelBundle.load(modelDir, metaGraphDefTags);
