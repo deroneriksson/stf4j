@@ -447,6 +447,15 @@ public class TFUtil {
 				Object byteArray = ArrayUtil.convertArrayType(value, byte.class);
 				tensor = Tensor.create(byteArray, UInt8.class);
 			}
+		} else if (DataType.DT_UINT8 == dtype && isBooleanType(value)) {
+			if (value instanceof Boolean) {
+				byte val = ((Boolean) value).booleanValue() == true ? (byte) 1 : (byte) 0;
+				tensor = Tensor.create(val, UInt8.class);
+			} else {
+				log.warn("Implicitly converting boolean array to byte array (for UInt8)");
+				Object byteArray = ArrayUtil.convertArrayType(value, byte.class);
+				tensor = Tensor.create(byteArray, UInt8.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_STRING == dtype && isByteArray(value)) {
 			if (isByteObjectArray(value)) {

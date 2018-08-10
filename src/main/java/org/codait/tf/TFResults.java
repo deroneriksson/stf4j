@@ -1185,6 +1185,20 @@ public class TFResults {
 				boolean b = (boolean) ArrayUtil.firstElementValueOfMultidimArray(bArray);
 				return b;
 			}
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			int shapeLength = tensor.shape().length;
+			if (shapeLength == 0) {
+				byte b = TFUtil.byteScalarFromUInt8Tensor(tensor);
+				boolean bool = b == 0 ? false : true;
+				return bool;
+			} else {
+				Object bArray = getByteArrayMultidimensional(key);
+				byte b = (byte) ArrayUtil.firstElementValueOfMultidimArray(bArray);
+				boolean bool = b == 0 ? false : true;
+				return bool;
+			}
 		} else if (dtype == DataType.DT_INT32) {
 			@SuppressWarnings("unchecked")
 			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
@@ -1370,6 +1384,12 @@ public class TFResults {
 			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
 			boolean[] b = ArrayUtil.booleanTensorToBooleanArray(tensor);
 			return b;
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			byte[] byteArray = ArrayUtil.uint8TensorToByteArray(tensor);
+			boolean[] boolArray = (boolean[]) ArrayUtil.convertArrayType(byteArray, boolean.class);
+			return boolArray;
 		} else if (dtype == DataType.DT_INT32) {
 			@SuppressWarnings("unchecked")
 			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
@@ -1469,6 +1489,12 @@ public class TFResults {
 			Tensor<Boolean> tensor = (Tensor<Boolean>) keyToOutput(key);
 			Object b = ArrayUtil.booleanTensorToMultidimensionalBooleanArray(tensor);
 			return b;
+		} else if (dtype == DataType.DT_UINT8) {
+			@SuppressWarnings("unchecked")
+			Tensor<UInt8> tensor = (Tensor<UInt8>) keyToOutput(key);
+			Object byteArray = ArrayUtil.uint8TensorToMultidimensionalByteArray(tensor);
+			Object booleanArray = ArrayUtil.convertArrayType(byteArray, boolean.class);
+			return booleanArray;
 		} else if (dtype == DataType.DT_INT32) {
 			@SuppressWarnings("unchecked")
 			Tensor<Integer> tensor = (Tensor<Integer>) keyToOutput(key);
