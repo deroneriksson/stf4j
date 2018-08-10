@@ -3,28 +3,22 @@ package org.codait.tf.mnist;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.codait.tf.util.ArrayUtil;
 import org.codait.tf.util.MNISTUtil;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
 import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
 
-/**
- * Try an MNIST saved model created in Tensorflow from Java.
- * 
- * For more Python and model information, see info.txt.
- * 
- */
-public class MNISTExample {
+public class MNISTUnderlyingAPITest {
 
-	public static final String MNIST_DATA_DIR = "./mnist_data/";
-	public static final String MNIST_SAVED_MODEL_DIR = "./mnist_model/";
-
-	public static final String TRAIN_IMAGES = "train-images-idx3-ubyte";
-	public static final String TRAIN_LABELS = "train-labels-idx1-ubyte";
-	public static final String TEST_IMAGES = "t10k-images-idx3-ubyte";
-	public static final String TEST_LABELS = "t10k-labels-idx1-ubyte";
+	protected static Logger log = LogManager.getLogger(MNISTUnderlyingAPITest.class);
 
 	private static SavedModelBundle model = null;
 	private static String mDir = null;
@@ -32,36 +26,166 @@ public class MNISTExample {
 	private static int[] labels = null;
 	private static int[][][] images = null;
 
-	public static void main(String[] args) throws IOException {
-		labels = MNISTUtil.getLabels(MNIST_DATA_DIR + TEST_LABELS);
-		images = MNISTUtil.getImages(MNIST_DATA_DIR + TEST_IMAGES);
+	@Before
+	public void init() throws IOException {
+		labels = MNISTUtil.getLabels(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_LABELS);
+		images = MNISTUtil.getImages(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_IMAGES);
 
-		tfModel(MNIST_SAVED_MODEL_DIR);
+		tfModel(MNISTTest.MNIST_SAVED_MODEL_DIR);
+	}
 
+	@After
+	public void after() {
+	}
+
+	@Test
+	public void singlePredictionClassesTest0() {
 		singlePredictionClasses(0);
+	}
+
+	@Test
+	public void singlePredictionClassesTest1() {
 		singlePredictionClasses(1);
+	}
+
+	@Test
+	public void singlePredictionClassesTest2() {
 		singlePredictionClasses(2);
+	}
+
+	@Test
+	public void singlePredictionClassesTest3() {
 		singlePredictionClasses(3);
+	}
+
+	@Test
+	public void singlePredictionClassesTest4() {
 		singlePredictionClasses(4);
+	}
 
+	@Test
+	public void singlePredictionProbabilitiesTest5() {
 		singlePredictionProbabilities(5);
+	}
+
+	@Test
+	public void singlePredictionProbabilitiesTest6() {
 		singlePredictionProbabilities(6);
+	}
+
+	@Test
+	public void singlePredictionProbabilitiesTest7() {
 		singlePredictionProbabilities(7);
+	}
+
+	@Test
+	public void singlePredictionProbabilitiesTest8() {
 		singlePredictionProbabilities(8);
+	}
+
+	@Test
+	public void singlePredictionProbabilitiesTest9() {
 		singlePredictionProbabilities(9);
+	}
 
+	@Test
+	public void singlePredictionClassesProbabilitiesTest10() {
 		singlePredictionClassesProbabilities(10);
-		singlePredictionClassesProbabilities(11);
-		singlePredictionClassesProbabilities(12);
-		singlePredictionClassesProbabilities(13);
-		singlePredictionClassesProbabilities(14);
+	}
 
+	@Test
+	public void singlePredictionClassesProbabilitiesTest11() {
+		singlePredictionClassesProbabilities(11);
+	}
+
+	@Test
+	public void singlePredictionClassesProbabilitiesTest12() {
+		singlePredictionClassesProbabilities(12);
+	}
+
+	@Test
+	public void singlePredictionClassesProbabilitiesTest13() {
+		singlePredictionClassesProbabilities(13);
+	}
+
+	@Test
+	public void singlePredictionClassesProbabilitiesTest14() {
+		singlePredictionClassesProbabilities(14);
+	}
+
+	@Test
+	public void multiplePredictionClassesTest() {
 		multiplePredictionClasses(15, 16, 17, 18, 19);
+	}
+
+	@Test
+	public void multiplePredictionProbabilitiesTest() {
 		multiplePredictionProbabilities(20, 21, 22, 23, 24);
+	}
+
+	@Test
+	public void multiplePredictionClassesProbabilitiesTest() {
 		multiplePredictionClassesProbabilities(25, 26, 27, 28, 29);
 	}
 
-	public static void singlePredictionClasses(int testImageNum) throws IOException {
+	protected SavedModelBundle tfModel() {
+		return model;
+	}
+
+	protected SavedModelBundle tfModel(String modelDir) {
+		return tfModel(modelDir, "serve");
+	}
+
+	protected SavedModelBundle tfModel(String modelDir, String... metaGraphDefTags) {
+		if (modelDir == null) {
+			return null;
+		}
+		if (!modelDir.equals(mDir)) {
+			model = SavedModelBundle.load(modelDir, metaGraphDefTags);
+			mDir = modelDir;
+		}
+		return model;
+	}
+
+	protected Session tfSession() {
+		return model.session();
+	}
+
+	protected Runner tfRunner() {
+		return tfSession().runner();
+	}
+
+	protected float[][][] getTestImages(int... imageNums) {
+		float[][][] images = new float[imageNums.length][][];
+		for (int i = 0; i < imageNums.length; i++) {
+			images[i] = getTestImage(imageNums[i]);
+		}
+		return images;
+	}
+
+	protected float[][] getTestImage(int imageNum) {
+		int[][] iImage = getTestImageAsInts(imageNum);
+		float[][] fImage = (float[][]) ArrayUtil.convertArrayType(iImage, float.class);
+		return fImage;
+	}
+
+	protected int[][] getTestImageAsInts(int imageNum) {
+		return images[imageNum];
+	}
+
+	protected int getTestImageLabel(int imageNum) {
+		return labels[imageNum];
+	}
+
+	protected int[] getTestImageLabels(int... imageNums) {
+		int[] testLabels = new int[imageNums.length];
+		for (int i = 0; i < imageNums.length; i++) {
+			testLabels[i] = labels[imageNums[i]];
+		}
+		return testLabels;
+	}
+
+	protected void singlePredictionClasses(int testImageNum) {
 		float[][] image = getTestImage(testImageNum);
 		int label = getTestImageLabel(testImageNum);
 
@@ -70,15 +194,16 @@ public class MNISTExample {
 				.expect(Long.class).copyTo(new long[1])[0];
 
 		if (label == prediction) {
-			System.out.println(String.format("Success, image (#%d) classes prediction (%d) matches label (%d)",
-					testImageNum, prediction, label));
+			log.debug(String.format("Success, image (#%d) classes prediction (%d) matches label (%d)", testImageNum,
+					prediction, label));
 		} else {
-			System.out.println(String.format("Failure, image (#%d) classes prediction (%d) does not match label (%d)",
+			log.debug(String.format("Failure, image (#%d) classes prediction (%d) does not match label (%d)",
 					testImageNum, prediction, label));
 		}
+		Assert.assertEquals(label, prediction);
 	}
 
-	public static void singlePredictionProbabilities(int testImageNum) throws IOException {
+	protected void singlePredictionProbabilities(int testImageNum) {
 		float[][] image = getTestImage(testImageNum);
 		int label = getTestImageLabel(testImageNum);
 
@@ -96,21 +221,20 @@ public class MNISTExample {
 		}
 
 		if (label == prediction) {
-			System.out.println(String.format("Success, image (#%d) probabilities prediction (%d) matches label (%d)",
+			log.debug(String.format("Success, image (#%d) probabilities prediction (%d) matches label (%d)",
 					testImageNum, prediction, label));
 		} else {
-			System.out.println(
-					String.format("Failure, image (#%d) probabilities prediction (%d) does not match label (%d)",
-							testImageNum, prediction, label));
+			log.debug(String.format("Failure, image (#%d) probabilities prediction (%d) does not match label (%d)",
+					testImageNum, prediction, label));
 		}
+		Assert.assertEquals(label, prediction);
 	}
 
-	public static void singlePredictionClassesProbabilities(int testImageNum) throws IOException {
+	protected void singlePredictionClassesProbabilities(int testImageNum) {
 		float[][] image = getTestImage(testImageNum);
 		int label = getTestImageLabel(testImageNum);
 
 		Tensor<Float> imageTensor = Tensor.create(image, Float.class);
-
 		List<Tensor<?>> result = tfRunner().feed("Placeholder", imageTensor).fetch("ArgMax").fetch("Softmax").run();
 		int argMaxPrediction = (int) result.get(0).expect(Long.class).copyTo(new long[1])[0];
 
@@ -125,17 +249,16 @@ public class MNISTExample {
 		}
 
 		if ((label == argMaxPrediction) && (label == softmaxPrediction)) {
-			System.out.println(String.format("Success, image (#%d) ArgMax (%d) and Softmax (%d) match label (%d)",
-					testImageNum, argMaxPrediction, softmaxPrediction, label));
+			log.debug(String.format("Success, image (#%d) ArgMax (%d) and Softmax (%d) match label (%d)", testImageNum,
+					argMaxPrediction, softmaxPrediction, label));
 		} else {
-			System.out.println(
-					String.format("Failure, image (#%d) ArgMax (%d), Softmax (%d) and label (%d) do not all match",
-							testImageNum, argMaxPrediction, softmaxPrediction, label));
+			log.debug(String.format("Failure, image (#%d) ArgMax (%d), Softmax (%d) and label (%d) do not all match",
+					testImageNum, argMaxPrediction, softmaxPrediction, label));
 		}
+		Assert.assertTrue((label == argMaxPrediction) && (label == softmaxPrediction));
 	}
 
-	public static void multiplePredictionClasses(int... testImageNums) throws IOException {
-
+	protected void multiplePredictionClasses(int... testImageNums) {
 		float[][][] images = getTestImages(testImageNums);
 		int[] labels = getTestImageLabels(testImageNums);
 
@@ -146,24 +269,22 @@ public class MNISTExample {
 
 		for (int i = 0; i < labels.length; i++) {
 			if (labels[i] == predictions[i]) {
-				System.out.println(
-						String.format("Success, multiple image (#%d) classes prediction (%d) matches label (%d)",
-								testImageNums[i], predictions[i], labels[i]));
+				log.debug(String.format("Success, multiple image (#%d) classes prediction (%d) matches label (%d)",
+						testImageNums[i], predictions[i], labels[i]));
 			} else {
-				System.out.println(
+				log.debug(
 						String.format("Failure, multiple image (#%d) classes prediction (%d) does not match label (%d)",
 								testImageNums[i], predictions[i], labels[i]));
 			}
+			Assert.assertEquals(labels[i], predictions[i]);
 		}
 	}
 
-	public static void multiplePredictionProbabilities(int... testImageNums) throws IOException {
-
+	protected void multiplePredictionProbabilities(int... testImageNums) {
 		float[][][] images = getTestImages(testImageNums);
 		int[] labels = getTestImageLabels(testImageNums);
 
 		Tensor<Float> imageTensor = Tensor.create(images, Float.class);
-
 		Tensor<Float> tResult = tfRunner().feed("Placeholder", imageTensor).fetch("Softmax").run().get(0)
 				.expect(Float.class);
 		float[][] fResult = tResult.copyTo(new float[testImageNums.length][10]);
@@ -180,24 +301,23 @@ public class MNISTExample {
 
 		for (int i = 0; i < labels.length; i++) {
 			if (labels[i] == predictions[i]) {
-				System.out.println(
+				log.debug(
 						String.format("Success, multiple image (#%d) probabilities prediction (%d) matches label (%d)",
 								testImageNums[i], predictions[i], labels[i]));
 			} else {
-				System.out.println(String.format(
+				log.debug(String.format(
 						"Failure, multiple image (#%d) probabilities prediction (%d) does not match label (%d)",
 						testImageNums[i], predictions[i], labels[i]));
 			}
+			Assert.assertEquals(labels[i], predictions[i]);
 		}
 	}
 
-	public static void multiplePredictionClassesProbabilities(int... testImageNums) throws IOException {
-
+	protected void multiplePredictionClassesProbabilities(int... testImageNums) {
 		float[][][] images = getTestImages(testImageNums);
 		int[] labels = getTestImageLabels(testImageNums);
 
 		Tensor<Float> imageTensor = Tensor.create(images, Float.class);
-
 		List<Tensor<?>> result = tfRunner().feed("Placeholder", imageTensor).fetch("ArgMax").fetch("Softmax").run();
 		long[] argMaxPredictions = result.get(0).expect(Long.class).copyTo(new long[testImageNums.length]);
 
@@ -219,71 +339,15 @@ public class MNISTExample {
 			int argMaxPrediction = (int) argMaxPredictions[i];
 			int softmaxPrediction = softmaxPredictions[i];
 			if ((label == argMaxPrediction) && (label == softmaxPrediction)) {
-				System.out.println(
-						String.format("Success, multiple image (#%d) ArgMax (%d) and Softmax (%d) match label (%d)",
-								testImageNum, argMaxPrediction, softmaxPrediction, label));
+				log.debug(String.format("Success, multiple image (#%d) ArgMax (%d) and Softmax (%d) match label (%d)",
+						testImageNum, argMaxPrediction, softmaxPrediction, label));
 			} else {
-				System.out.println(String.format(
+				log.debug(String.format(
 						"Failure, multiple image (#%d) ArgMax (%d), Softmax (%d) and label (%d) do not all match",
 						testImageNum, argMaxPrediction, softmaxPrediction, label));
 			}
+			Assert.assertTrue((label == argMaxPrediction) && (label == softmaxPrediction));
 		}
 	}
 
-	public static SavedModelBundle tfModel() {
-		return model;
-	}
-
-	public static SavedModelBundle tfModel(String modelDir) {
-		return tfModel(modelDir, "serve");
-	}
-
-	public static SavedModelBundle tfModel(String modelDir, String... metaGraphDefTags) {
-		if (modelDir == null) {
-			return null;
-		}
-		if (!modelDir.equals(mDir)) {
-			model = SavedModelBundle.load(modelDir, metaGraphDefTags);
-			mDir = modelDir;
-		}
-		return model;
-	}
-
-	public static Session tfSession() {
-		return model.session();
-	}
-
-	public static Runner tfRunner() {
-		return tfSession().runner();
-	}
-
-	public static float[][][] getTestImages(int... imageNums) throws IOException {
-		float[][][] images = new float[imageNums.length][][];
-		for (int i = 0; i < imageNums.length; i++) {
-			images[i] = getTestImage(imageNums[i]);
-		}
-		return images;
-	}
-
-	public static float[][] getTestImage(int imageNum) throws IOException {
-		int[][] iImage = getTestImageAsInts(imageNum);
-		float[][] fImage = (float[][]) ArrayUtil.convertArrayType(iImage, float.class);
-		return fImage;
-	}
-
-	public static int[][] getTestImageAsInts(int imageNum) throws IOException {
-		return images[imageNum];
-	}
-
-	public static int getTestImageLabel(int imageNum) throws IOException {
-		return labels[imageNum];
-	}
-
-	public static int[] getTestImageLabels(int... imageNums) throws IOException {
-		int[] testLabels = new int[imageNums.length];
-		for (int i = 0; i < imageNums.length; i++) {
-			testLabels[i] = labels[imageNums[i]];
-		}
-		return testLabels;
-	}
 }
