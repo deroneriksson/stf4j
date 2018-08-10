@@ -39,3 +39,9 @@ $ python3 data_download.py
 $ python3 train_higgs.py --export_dir /higgs_boosted_trees_saved_model
 ```
 
+
+## Simple SavedModels
+
+To build the simple SavedModels utilized for testing, run the
+`src/test/resources/python/simple_saved_models.py` file.
+
