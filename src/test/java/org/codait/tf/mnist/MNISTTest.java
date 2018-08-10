@@ -34,7 +34,7 @@ public class MNISTTest {
 	public void init() throws IOException {
 		labels = MNISTUtil.getLabels(MNIST_DATA_DIR + TEST_LABELS);
 		images = MNISTUtil.getImages(MNIST_DATA_DIR + TEST_IMAGES);
-		model = new TFModel(MNIST_SAVED_MODEL_DIR);
+		model = new TFModel(MNIST_SAVED_MODEL_DIR).sig("serving_default");
 	}
 
 	@After
