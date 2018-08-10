@@ -623,4 +623,58 @@ public class AddStringTest {
 		String result = model.in("input1", input1).in("input2", input2).out("output").run().getString("output");
 		Assert.assertTrue("ae".equals(result));
 	}
+
+	@Test
+	public void inputStringsOutputBooleanTrue() {
+		boolean result = model.in("input1", "tr").in("input2", "ue").out("output").run().getBoolean("output");
+		Assert.assertEquals(true, result);
+	}
+
+	@Test
+	public void inputStringArraysOutputBooleanArray() {
+		boolean[] result = model.in("input1", new String[] { "tr", "fal" }).in("input2", new String[] { "ue", "se" })
+				.out("output").run().getBooleanArray("output");
+		BooleanLogicTest.assertArrayEquals(new boolean[] { true, false }, result);
+	}
+
+	@Test
+	public void inputStringArraysOutputBooleanArray2() {
+		boolean[] result = model.in("input1", new String[] { "tr", "t" }).in("input2", new String[] { "ue", "rue" })
+				.out("output").run().getBooleanArray("output");
+		BooleanLogicTest.assertArrayEquals(new boolean[] { true, true }, result);
+	}
+
+	@Test
+	public void inputMultidimStringArraysOutputMultidimBooleanArray() {
+		String[][] input1 = new String[][] { { "t", "fals" }, { "f", "tr" } };
+		String[][] input2 = new String[][] { { "rue", "e" }, { "alse", "ue" } };
+		boolean[][] expected = new boolean[][] { { true, false }, { false, true } };
+		boolean[][] result = (boolean[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getBooleanArrayMultidimensional("output");
+		BooleanLogicTest.assertArrayEquals(expected, result);
+	}
+
+	@Test
+	public void inputBooleansOutputString() {
+		String result = model.in("input1", true).in("input2", false).out("output").run().getString("output");
+		Assert.assertTrue("truefalse".equals(result));
+	}
+
+	@Test
+	public void inputBooleanArraysOutputBooleanArray() {
+		String[] result = model.in("input1", new boolean[] { true, false }).in("input2", new boolean[] { false, true })
+				.out("output").run().getStringArray("output");
+		Assert.assertArrayEquals(new String[] { "truefalse", "falsetrue" }, result);
+	}
+
+	@Test
+	public void inputMultiBooleanArraysOutputMultiStringArray() {
+		boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+		boolean[][] input2 = new boolean[][] { { false, false }, { true, false } };
+		String[][] expected = new String[][] { { "truefalse", "truefalse" }, { "falsetrue", "falsefalse" } };
+		String[][] result = (String[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getStringArrayMultidimensional("output");
+		Assert.assertArrayEquals(expected, result);
+	}
+
 }

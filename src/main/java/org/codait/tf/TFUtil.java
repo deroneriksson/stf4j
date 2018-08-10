@@ -504,6 +504,17 @@ public class TFUtil {
 				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(stringArray);
 				tensor = Tensor.create(byteArray, String.class);
 			}
+		} else if (DataType.DT_STRING == dtype && isBooleanType(value)) {
+			if (value instanceof Boolean) {
+				String s = ((Boolean) value).booleanValue() == true ? "true" : "false";
+				byte[] b = s.getBytes(StandardCharsets.UTF_8);
+				tensor = Tensor.create(b, String.class);
+			} else {
+				log.warn("Implicitly converting boolean array to String array to byte array");
+				Object stringArray = ArrayUtil.convertArrayType(value, String.class);
+				Object byteArray = ArrayUtil.multidimStringsToMultidimBytes(stringArray);
+				tensor = Tensor.create(byteArray, String.class);
+			}
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_BOOL == dtype && isBooleanType(value)) {
 			if (value instanceof Boolean) {
