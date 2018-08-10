@@ -9,6 +9,7 @@ import org.codait.tf.TFException;
 import org.codait.tf.TFModel;
 import org.codait.tf.TFResults;
 import org.codait.tf.util.ArrayUtil;
+import org.codait.tf.util.MNISTUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

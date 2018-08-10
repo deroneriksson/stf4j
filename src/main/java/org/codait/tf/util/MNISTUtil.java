@@ -1,4 +1,4 @@
-package org.codait.tf.mnist;
+package org.codait.tf.util;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

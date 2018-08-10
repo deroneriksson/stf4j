@@ -1,4 +1,4 @@
-package org.codait.tf.cifar_10;
+package org.codait.tf.util;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
