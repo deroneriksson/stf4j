@@ -1,5 +1,6 @@
 package org.codait.tf.cifar_10;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import org.codait.tf.util.CIFAR10Util;
 import org.codait.tf.util.CIFAR10Util.DimOrder;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,6 +23,9 @@ public class CIFAR10Test {
 
 	public static final String CIFAR10_TEST_BATCH_BIN = "./cifar10_data/cifar-10-batches-bin/test_batch.bin";
 	public static final String CIFAR10_SAVED_MODEL_DIR = "./cifar10_saved_model/";
+
+	public static final String CAT_IMAGE = "images/cat.jpg";
+	public static final String DOG_IMAGE = "images/dog.jpg";
 
 	private int[] labels = null;
 	private float[][][][] images = null;
@@ -157,8 +162,9 @@ public class CIFAR10Test {
 
 	@Test
 	public void testCat() throws IOException {
+		Assume.assumeTrue("Cat image can't be found, so skipping test", new File(CAT_IMAGE).exists());
 		log.debug("CIFAR10 - input cat, output classes");
-		float[][][] image = CIFAR10Util.getScaledDownImage("images/cat.jpg", DimOrder.ROWS_COLS_CHANNELS);
+		float[][][] image = CIFAR10Util.getScaledDownImage(CAT_IMAGE, DimOrder.ROWS_COLS_CHANNELS);
 		image = CIFAR10Util.preprocessImage(image);
 		int prediction = model.in("input", image).out("classes").run().getInt("classes");
 
@@ -167,8 +173,9 @@ public class CIFAR10Test {
 
 	@Test
 	public void testDog() throws IOException {
+		Assume.assumeTrue("Dog image can't be found, so skipping test", new File(DOG_IMAGE).exists());
 		log.debug("CIFAR10 - input dog, output classes");
-		float[][][] image = CIFAR10Util.getScaledDownImage("images/dog.png", DimOrder.ROWS_COLS_CHANNELS);
+		float[][][] image = CIFAR10Util.getScaledDownImage(DOG_IMAGE, DimOrder.ROWS_COLS_CHANNELS);
 		image = CIFAR10Util.preprocessImage(image);
 		int prediction = model.in("input", image).out("classes").run().getInt("classes");
 
