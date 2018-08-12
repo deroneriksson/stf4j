@@ -146,13 +146,14 @@ public class CIFAR10Test {
 		cifarMultiImageInputProbabilitiesOutput(0, 1000);
 	}
 
-	// @Test
-	// public void cifarMultipleImage10000InputProbabilitiesOutput() {
-	// Date start = new Date();
-	// cifarMultiImageInputProbabilitiesOutput(0, 10000);
-	// Date end = new Date();
-	// System.out.println("Duration: " + (end.getTime() - start.getTime()) + " ms");
-	// }
+	@Ignore("Ignoring since currently takes ~90s on my laptop")
+	@Test
+	public void cifarMultipleImage10000InputProbabilitiesOutput() {
+		Date start = new Date();
+		cifarMultiImageInputProbabilitiesOutput(0, 10000);
+		Date end = new Date();
+		System.out.println("Duration: " + (end.getTime() - start.getTime()) + " ms");
+	}
 
 	@Test
 	public void testCat() throws IOException {
