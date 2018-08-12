@@ -299,15 +299,15 @@ public class ArrayUtil {
 					copyUnsignedArrayVals(v, vd);
 				} else {
 					if ("byte".equals(o) && "int".equals(d)) {
-						Array.set(dest, i, (int) (((byte) v) & 0xFF));
+						Array.set(dest, i, byte_unsigned_to_int((byte) v));
 					} else if ("byte".equals(o) && "long".equals(d)) {
-						Array.set(dest, i, (long) (((byte) v) & 0xFF));
+						Array.set(dest, i, byte_unsigned_to_long((byte) v));
 					} else if ("byte".equals(o) && "float".equals(d)) {
-						Array.set(dest, i, (float) (((byte) v) & 0xFF));
+						Array.set(dest, i, byte_unsigned_to_float((byte) v));
 					} else if ("byte".equals(o) && "double".equals(d)) {
-						Array.set(dest, i, (double) (((byte) v) & 0xFF));
+						Array.set(dest, i, byte_unsigned_to_double((byte) v));
 					} else if ("byte".equals(o) && "String".equals(d)) {
-						Array.set(dest, i, Integer.toString((int) ((byte) v & 0xFF)));
+						Array.set(dest, i, byte_unsigned_to_String((byte) v));
 					} else {
 						Array.set(dest, i, v);
 					}
