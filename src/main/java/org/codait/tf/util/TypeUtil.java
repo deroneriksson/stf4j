@@ -471,6 +471,18 @@ public class TypeUtil {
 	}
 
 	/**
+	 * String to primitive byte. Note that this method utilizes the Integer byteValue rather than the Byte byteValue so
+	 * as to handle values greater than 127 (greater than Byte.MAX_VALUE).
+	 * 
+	 * @param s
+	 *            String value
+	 * @return byte value
+	 */
+	public static byte String_to_byte(String s) {
+		return new Integer(s).byteValue();
+	}
+
+	/**
 	 * String to primitive double.
 	 * 
 	 * @param s
