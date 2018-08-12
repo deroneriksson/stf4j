@@ -68,7 +68,7 @@ public class TypeUtil {
 	 *            boolean value
 	 * @return String value
 	 */
-	public static String boolean_to_string(boolean b) {
+	public static String boolean_to_String(boolean b) {
 		return Boolean.toString(b);
 	}
 
@@ -136,7 +136,7 @@ public class TypeUtil {
 	 *            unsigned byte value
 	 * @return String value
 	 */
-	public static String byte_unsigned_to_string(byte b) {
+	public static String byte_unsigned_to_String(byte b) {
 		return Integer.toString((int) b & 0xFF); // unsigned
 	}
 
@@ -202,7 +202,7 @@ public class TypeUtil {
 	 *            double value
 	 * @return String value
 	 */
-	public static String double_to_string(double d) {
+	public static String double_to_String(double d) {
 		return Double.toString(d);
 	}
 
@@ -268,7 +268,7 @@ public class TypeUtil {
 	 *            float value
 	 * @return String value
 	 */
-	public static String float_to_string(float f) {
+	public static String float_to_String(float f) {
 		return Float.toString(f);
 	}
 
@@ -334,7 +334,7 @@ public class TypeUtil {
 	 *            int value
 	 * @return String value
 	 */
-	public static String int_to_string(int i) {
+	public static String int_to_String(int i) {
 		return Integer.toString(i);
 	}
 
@@ -400,7 +400,7 @@ public class TypeUtil {
 	 *            long value
 	 * @return String value
 	 */
-	public static String long_to_string(long l) {
+	public static String long_to_String(long l) {
 		return Long.toString(l);
 	}
 
@@ -411,7 +411,7 @@ public class TypeUtil {
 	 *            String primitive byte array
 	 * @return double value
 	 */
-	public static double string_bytes_to_double(byte[] b) {
+	public static double String_bytes_to_double(byte[] b) {
 		return Double.parseDouble(new String(b));
 	}
 
@@ -422,7 +422,7 @@ public class TypeUtil {
 	 *            String primitive byte array
 	 * @return float value
 	 */
-	public static float string_bytes_to_float(byte[] b) {
+	public static float String_bytes_to_float(byte[] b) {
 		return Float.parseFloat(new String(b));
 	}
 
@@ -433,7 +433,7 @@ public class TypeUtil {
 	 *            String primitive byte array
 	 * @return int value
 	 */
-	public static int string_bytes_to_int(byte[] b) {
+	public static int String_bytes_to_int(byte[] b) {
 		return Integer.parseInt(new String(b));
 	}
 
@@ -444,7 +444,7 @@ public class TypeUtil {
 	 *            String primitive byte array
 	 * @return long value
 	 */
-	public static long string_bytes_to_long(byte[] b) {
+	public static long String_bytes_to_long(byte[] b) {
 		return Long.parseLong(new String(b));
 	}
 
@@ -455,7 +455,7 @@ public class TypeUtil {
 	 *            String primitive byte array
 	 * @return String value
 	 */
-	public static String string_bytes_to_string(byte[] b) {
+	public static String String_bytes_to_String(byte[] b) {
 		return new String(b);
 	}
 
@@ -466,7 +466,7 @@ public class TypeUtil {
 	 *            String value
 	 * @return boolean value
 	 */
-	public static boolean string_to_boolean(String s) {
+	public static boolean String_to_boolean(String s) {
 		return "true".equals(s) ? true : false;
 	}
 
@@ -477,7 +477,7 @@ public class TypeUtil {
 	 *            String value
 	 * @return double value
 	 */
-	public static double string_to_double(String s) {
+	public static double String_to_double(String s) {
 		return Double.parseDouble(s);
 	}
 
@@ -488,7 +488,7 @@ public class TypeUtil {
 	 *            String value
 	 * @return float value
 	 */
-	public static float string_to_float(String s) {
+	public static float String_to_float(String s) {
 		return Float.parseFloat(s);
 	}
 
@@ -499,7 +499,7 @@ public class TypeUtil {
 	 *            String value
 	 * @return int value
 	 */
-	public static int string_to_int(String s) {
+	public static int String_to_int(String s) {
 		return Integer.parseInt(s);
 	}
 
@@ -510,7 +510,7 @@ public class TypeUtil {
 	 *            String value
 	 * @return long value
 	 */
-	public static long string_to_long(String s) {
+	public static long String_to_long(String s) {
 		return Long.parseLong(s);
 	}
 }
