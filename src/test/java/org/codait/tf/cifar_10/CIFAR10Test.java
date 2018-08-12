@@ -1,6 +1,7 @@
 package org.codait.tf.cifar_10;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -11,6 +12,7 @@ import org.codait.tf.util.CIFAR10Util.DimOrder;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class CIFAR10Test {
@@ -80,13 +82,14 @@ public class CIFAR10Test {
 		cifarMultiImageInputClassesOutput(0, 1000);
 	}
 
-	// @Test
-	// public void cifarMultipleImage10000InputClassesOutput() {
-	// Date start = new Date();
-	// cifarMultiImageInputClassesOutput(0, 10000);
-	// Date end = new Date();
-	// System.out.println("Duration: " + (end.getTime() - start.getTime()) + " ms");
-	// }
+	@Ignore("Ignoring since currently takes ~90s on my laptop")
+	@Test
+	public void cifarMultipleImage10000InputClassesOutput() {
+		Date start = new Date();
+		cifarMultiImageInputClassesOutput(0, 10000);
+		Date end = new Date();
+		System.out.println("Duration: " + (end.getTime() - start.getTime()) + " ms");
+	}
 
 	@Test
 	public void cifarSingleImageInputProbabilitiesOutput() {
