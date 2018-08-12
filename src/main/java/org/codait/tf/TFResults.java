@@ -1383,13 +1383,11 @@ public class TFResults {
 			@SuppressWarnings("unchecked")
 			Tensor<String> tensor = (Tensor<String>) keyToOutput(key);
 			int length = tensor.shape().length;
+			// generalize this to n dimensions?
 			if (length == 1) {
 				String[] s = (String[]) getStringArrayMultidimensional(key);
 				return s;
 			} else if (length == 2) {
-				// Java 8 version
-				// String[] s = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
-				// return s;
 				List<String> result = new ArrayList<String>();
 				String[][] multi = (String[][]) getStringArrayMultidimensional(key);
 				for (int i = 0; i < multi.length; i++) {
