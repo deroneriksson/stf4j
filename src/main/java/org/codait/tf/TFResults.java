@@ -1,10 +1,13 @@
 package org.codait.tf;
 
+import static org.codait.tf.util.TypeUtil.*;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.codait.tf.util.TypeUtil.*;
 import org.codait.tf.util.ArrayUtil;
 import org.codait.tf.util.TFUtil;
 import org.tensorflow.Tensor;
@@ -1383,10 +1386,21 @@ public class TFResults {
 			if (length == 1) {
 				String[] s = (String[]) getStringArrayMultidimensional(key);
 				return s;
-			} else {
+			} else if (length == 2) {
+				// Java 8 version
+				// String[] s = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
+				// return s;
+				List<String> result = new ArrayList<String>();
 				String[][] multi = (String[][]) getStringArrayMultidimensional(key);
-				String[] s = Arrays.stream(multi).flatMap(x -> Arrays.stream(x)).toArray(String[]::new);
-				return s;
+				for (int i = 0; i < multi.length; i++) {
+					for (int j = 0; j < multi[i].length; j++) {
+						result.add(multi[i][j]);
+					}
+				}
+				return result.toArray(new String[0]);
+			} else {
+				throw new TFException("getStringArray not implemented for '" + key + "' data type " + dtype
+						+ " for tensors with shape " + Arrays.toString(tensor.shape()));
 			}
 		} else if (dtype == DataType.DT_INT64) {
 			@SuppressWarnings("unchecked")
