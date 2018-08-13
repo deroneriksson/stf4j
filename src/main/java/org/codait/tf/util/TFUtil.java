@@ -212,7 +212,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_DOUBLE == dtype && isBooleanType(value)) {
 			if (value instanceof Boolean) {
-				double val = TypeUtil.boolean_to_double((boolean)value);
+				double val = TypeUtil.boolean_to_double((boolean) value);
 				tensor = Tensor.create(val, Double.class);
 			} else {
 				log.warn("Implicitly converting boolean array to double array");
@@ -228,7 +228,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT64 == dtype && isIntType(value)) {
 			if (value instanceof Integer) {
-				long val = Long.valueOf((int) value);
+				long val = TypeUtil.int_to_long((int) value);
 				tensor = Tensor.create(val, Long.class);
 			} else {
 				log.warn("Implicitly converting int array to long array");
@@ -237,7 +237,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT64 == dtype && isFloatType(value)) {
 			if (value instanceof Float) {
-				long val = ((Float) value).longValue();
+				long val = TypeUtil.float_to_long((float) value);
 				tensor = Tensor.create(val, Long.class);
 			} else {
 				log.warn("Implicitly converting float array to long array");
@@ -246,7 +246,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT64 == dtype && isDoubleType(value)) {
 			if (value instanceof Double) {
-				long val = ((Double) value).longValue();
+				long val = TypeUtil.double_to_long((double) value);
 				tensor = Tensor.create(val, Long.class);
 			} else {
 				log.warn("Implicitly converting double array to long array");
@@ -255,7 +255,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT64 == dtype && isStringType(value)) {
 			if (value instanceof String) {
-				long val = Long.parseLong((String) value);
+				long val = TypeUtil.String_to_long((String) value);
 				tensor = Tensor.create(val, Long.class);
 			} else {
 				log.warn("Implicitly converting String array to long array");
@@ -264,7 +264,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT64 == dtype && isByteType(value)) {
 			if (value instanceof Byte) {
-				long val = ((Byte) value).longValue();
+				long val = TypeUtil.byte_unsigned_to_long((byte) value);
 				tensor = Tensor.create(val, Long.class);
 			} else {
 				log.warn("Implicitly converting byte array to long array");
@@ -273,7 +273,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT64 == dtype && isBooleanType(value)) {
 			if (value instanceof Boolean) {
-				long val = ((Boolean) value).booleanValue() == true ? 1L : 0L;
+				long val = TypeUtil.boolean_to_long((boolean) value);
 				tensor = Tensor.create(val, Long.class);
 			} else {
 				log.warn("Implicitly converting boolean array to long array");
@@ -283,7 +283,7 @@ public class TFUtil {
 			//////////////////////////////////////////////////////////////////////////////
 		} else if (DataType.DT_INT32 == dtype && isLongType(value)) {
 			if (value instanceof Long) {
-				int val = ((Long) value).intValue();
+				int val = TypeUtil.long_to_int((long) value);
 				tensor = Tensor.create(val, Integer.class);
 			} else {
 				log.warn("Implicitly converting long array to int array");
@@ -298,7 +298,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT32 == dtype && isFloatType(value)) {
 			if (value instanceof Float) {
-				int val = ((Float) value).intValue();
+				int val = TypeUtil.float_to_int((float) value);
 				tensor = Tensor.create(val, Integer.class);
 			} else {
 				log.warn("Implicitly converting float array to int array");
@@ -307,7 +307,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT32 == dtype && isDoubleType(value)) {
 			if (value instanceof Double) {
-				int val = ((Double) value).intValue();
+				int val = TypeUtil.double_to_int((double) value);
 				tensor = Tensor.create(val, Integer.class);
 			} else {
 				log.warn("Implicitly converting double array to int array");
@@ -325,7 +325,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT32 == dtype && isByteType(value)) {
 			if (value instanceof Byte) {
-				int val = ((Byte) value).intValue();
+				int val = TypeUtil.byte_unsigned_to_int((byte) value);
 				tensor = Tensor.create(val, Integer.class);
 			} else {
 				log.warn("Implicitly converting byte array to int array");
@@ -334,7 +334,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_INT32 == dtype && isBooleanType(value)) {
 			if (value instanceof Boolean) {
-				int val = ((Boolean) value).booleanValue() == true ? 1 : 0;
+				int val = TypeUtil.boolean_to_int((boolean) value);
 				tensor = Tensor.create(val, Integer.class);
 			} else {
 				log.warn("Implicitly converting boolean array to int array");
