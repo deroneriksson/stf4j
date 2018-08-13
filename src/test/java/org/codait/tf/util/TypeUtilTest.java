@@ -733,4 +733,152 @@ public class TypeUtilTest {
 	public void float_to_String_NaN() {
 		Assert.assertTrue(TypeUtil.float_to_String(Float.NaN).equals("NaN"));
 	}
+
+	@Test
+	public void int_to_boolean_minus1() {
+		Assert.assertTrue(TypeUtil.int_to_boolean(-1) == true);
+	}
+
+	@Test
+	public void int_to_boolean_0() {
+		Assert.assertTrue(TypeUtil.int_to_boolean(0) == false);
+	}
+
+	@Test
+	public void int_to_boolean_1() {
+		Assert.assertTrue(TypeUtil.int_to_boolean(1) == true);
+	}
+
+	@Test
+	public void int_to_boolean_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.int_to_boolean(Integer.MAX_VALUE) == true);
+	}
+
+	@Test
+	public void int_to_boolean_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.int_to_boolean(Integer.MIN_VALUE) == true);
+	}
+
+	@Test
+	public void int_to_byte_minus1() {
+		Assert.assertTrue(TypeUtil.int_to_byte(-1) == (byte) -1);
+	}
+
+	@Test
+	public void int_to_byte_0() {
+		Assert.assertTrue(TypeUtil.int_to_byte(0) == (byte) 0);
+	}
+
+	@Test
+	public void int_to_byte_1() {
+		Assert.assertTrue(TypeUtil.int_to_byte(1) == (byte) 1);
+	}
+
+	@Test
+	public void int_to_byte_MAX_VALUE() {
+		// byteValue() of Integer.MAX_VALUE gives -1
+		Assert.assertTrue(TypeUtil.int_to_byte(Integer.MAX_VALUE) == (byte) -1);
+	}
+
+	@Test
+	public void int_to_byte_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.int_to_byte(Integer.MIN_VALUE) == (byte) 0);
+	}
+
+	@Test
+	public void int_to_float_minus1() {
+		Assert.assertTrue(TypeUtil.int_to_float(-1) == -1.0f);
+	}
+
+	@Test
+	public void int_to_float_0() {
+		Assert.assertTrue(TypeUtil.int_to_float(0) == 0.0f);
+	}
+
+	@Test
+	public void int_to_float_1() {
+		Assert.assertTrue(TypeUtil.int_to_float(1) == 1.0f);
+	}
+
+	@Test
+	public void int_to_float_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.int_to_float(Integer.MAX_VALUE) == Integer.MAX_VALUE);
+	}
+
+	@Test
+	public void int_to_float_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.int_to_float(Integer.MIN_VALUE) == Integer.MIN_VALUE);
+	}
+
+	@Test
+	public void int_to_double_minus1() {
+		Assert.assertTrue(TypeUtil.int_to_double(-1) == -1.0d);
+	}
+
+	@Test
+	public void int_to_double_0() {
+		Assert.assertTrue(TypeUtil.int_to_double(0) == 0.0d);
+	}
+
+	@Test
+	public void int_to_double_1() {
+		Assert.assertTrue(TypeUtil.int_to_double(1) == 1.0d);
+	}
+
+	@Test
+	public void int_to_double_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.int_to_double(Integer.MAX_VALUE) == Integer.MAX_VALUE);
+	}
+
+	@Test
+	public void int_to_double_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.int_to_double(Integer.MIN_VALUE) == Integer.MIN_VALUE);
+	}
+
+	@Test
+	public void int_to_long_minus1() {
+		Assert.assertTrue(TypeUtil.int_to_long(-1) == -1L);
+	}
+
+	@Test
+	public void int_to_long_0() {
+		Assert.assertTrue(TypeUtil.int_to_long(0) == 0L);
+	}
+
+	@Test
+	public void int_to_long_1() {
+		Assert.assertTrue(TypeUtil.int_to_long(1) == 1L);
+	}
+
+	@Test
+	public void int_to_long_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.int_to_long(Integer.MAX_VALUE) == Integer.MAX_VALUE);
+	}
+
+	@Test
+	public void int_to_long_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.int_to_long(Integer.MIN_VALUE) == Integer.MIN_VALUE);
+	}
+
+	@Test
+	public void int_to_String_minus1() {
+		Assert.assertTrue(TypeUtil.int_to_String(-1).equals("-1"));
+	}
+
+	@Test
+	public void int_to_String_0() {
+		Assert.assertTrue(TypeUtil.int_to_String(0).equals("0"));
+	}
+
+	@Test
+	public void int_to_String_1() {
+		Assert.assertTrue(TypeUtil.int_to_String(1).equals("1"));
+	}
+
+	@Test
+	public void int_to_String_MAX_VALUE() {
+		// See Integer.class for MAX_VALUE
+		Assert.assertTrue(TypeUtil.int_to_String(Integer.MAX_VALUE).equals("2147483647"));
+	}
+
 }
