@@ -1028,4 +1028,78 @@ public class TypeUtilTest {
 		Assert.assertTrue(TypeUtil.long_to_String(Long.MAX_VALUE).equals("9223372036854775807"));
 	}
 
+	@Test
+	public void String_to_boolean_false() {
+		Assert.assertTrue(TypeUtil.String_to_boolean("false") == false);
+	}
+
+	@Test
+	public void String_to_boolean_true() {
+		Assert.assertTrue(TypeUtil.String_to_boolean("true") == true);
+	}
+
+	@Test
+	public void String_to_boolean_FALSE() {
+		Assert.assertTrue(TypeUtil.String_to_boolean("FALSE") == false);
+	}
+
+	@Test
+	public void String_to_boolean_TRUE() {
+		Assert.assertTrue(TypeUtil.String_to_boolean("TRUE") == false);
+	}
+
+	@Test
+	public void String_to_byte_minus1() {
+		Assert.assertTrue(TypeUtil.String_to_byte("-1") == (byte) -1);
+	}
+
+	@Test
+	public void String_to_byte_0() {
+		Assert.assertTrue(TypeUtil.String_to_byte("0") == (byte) 0);
+	}
+
+	@Test
+	public void String_to_byte_1() {
+		Assert.assertTrue(TypeUtil.String_to_byte("1") == (byte) 1);
+	}
+
+	@Test
+	public void String_to_double_minus1() {
+		Assert.assertTrue(TypeUtil.String_to_double("-1.0") == -1.0d);
+	}
+
+	@Test
+	public void String_to_double_0() {
+		Assert.assertTrue(TypeUtil.String_to_double("0.0") == 0.0d);
+	}
+
+	@Test
+	public void String_to_double_1() {
+		Assert.assertTrue(TypeUtil.String_to_double("1.0") == 1.0d);
+	}
+
+	@Test
+	public void String_to_double_1point1() {
+		Assert.assertTrue(TypeUtil.String_to_double("1.1") == 1.1d);
+	}
+
+	@Test
+	public void String_to_float_minus1() {
+		Assert.assertTrue(TypeUtil.String_to_float("-1.0") == -1.0f);
+	}
+
+	@Test
+	public void String_to_float_0() {
+		Assert.assertTrue(TypeUtil.String_to_float("0.0") == 0.0f);
+	}
+
+	@Test
+	public void String_to_float_1() {
+		Assert.assertTrue(TypeUtil.String_to_float("1.0") == 1.0f);
+	}
+
+	@Test
+	public void String_to_float_1point1() {
+		Assert.assertTrue(TypeUtil.String_to_float("1.1") == 1.1f);
+	}
 }
