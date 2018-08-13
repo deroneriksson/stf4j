@@ -73,6 +73,17 @@ public class TypeUtil {
 	}
 
 	/**
+	 * Primitive boolean to String primitive byte array.
+	 * 
+	 * @param b
+	 *            boolean value
+	 * @return String primitive byte array
+	 */
+	public static byte[] boolean_to_String_bytes(boolean b) {
+		return Boolean.toString(b).getBytes();
+	}
+
+	/**
 	 * Primitive byte to primitive boolean. True will be returned for any non-zero byte.
 	 * 
 	 * @param b
@@ -207,6 +218,17 @@ public class TypeUtil {
 	}
 
 	/**
+	 * Primitive double to String primitive byte array.
+	 * 
+	 * @param d
+	 *            double value
+	 * @return String primitive byte array
+	 */
+	public static byte[] double_to_String_bytes(double d) {
+		return Double.toString(d).getBytes();
+	}
+
+	/**
 	 * Primitive float to primitive boolean.
 	 * 
 	 * @param f
@@ -270,6 +292,17 @@ public class TypeUtil {
 	 */
 	public static String float_to_String(float f) {
 		return Float.toString(f);
+	}
+
+	/**
+	 * Primitive float to String primitive byte array.
+	 * 
+	 * @param f
+	 *            float value
+	 * @return String primitive byte array
+	 */
+	public static byte[] float_to_String_bytes(float f) {
+		return Float.toString(f).getBytes();
 	}
 
 	/**
@@ -339,6 +372,17 @@ public class TypeUtil {
 	}
 
 	/**
+	 * Primitive int to String primitive byte array.
+	 * 
+	 * @param i
+	 *            int value
+	 * @return String primitive byte array
+	 */
+	public static byte[] int_to_String_bytes(int i) {
+		return Integer.toString(i).getBytes();
+	}
+
+	/**
 	 * Primitive long to primitive boolean.
 	 * 
 	 * @param l
@@ -402,6 +446,17 @@ public class TypeUtil {
 	 */
 	public static String long_to_String(long l) {
 		return Long.toString(l);
+	}
+
+	/**
+	 * Primitive long to String primitive byte array.
+	 * 
+	 * @param l
+	 *            long value
+	 * @return String primitive byte array
+	 */
+	public static byte[] long_to_String_bytes(long l) {
+		return Long.toString(l).getBytes();
 	}
 
 	/**

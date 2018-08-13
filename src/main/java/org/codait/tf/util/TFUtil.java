@@ -350,7 +350,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_UINT8 == dtype && isIntType(value)) {
 			if (value instanceof Integer) {
-				byte val = ((Integer) value).byteValue();
+				byte val = TypeUtil.int_to_byte((int) value);
 				tensor = Tensor.create(val, UInt8.class);
 			} else {
 				log.warn("Implicitly converting int array to byte array (for UInt8)");
@@ -359,7 +359,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_UINT8 == dtype && isLongType(value)) {
 			if (value instanceof Long) {
-				byte val = ((Long) value).byteValue();
+				byte val = TypeUtil.long_to_byte((long) value);
 				tensor = Tensor.create(val, UInt8.class);
 			} else {
 				log.warn("Implicitly converting long array to byte array (for UInt8)");
@@ -368,7 +368,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_UINT8 == dtype && isFloatType(value)) {
 			if (value instanceof Float) {
-				byte val = ((Float) value).byteValue();
+				byte val = TypeUtil.float_to_byte((float) value);
 				tensor = Tensor.create(val, UInt8.class);
 			} else {
 				log.warn("Implicitly converting float array to byte array (for UInt8)");
@@ -377,7 +377,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_UINT8 == dtype && isDoubleType(value)) {
 			if (value instanceof Double) {
-				byte val = ((Double) value).byteValue();
+				byte val = TypeUtil.double_to_byte((double) value);
 				tensor = Tensor.create(val, UInt8.class);
 			} else {
 				log.warn("Implicitly converting double array to byte array (for UInt8)");
@@ -386,8 +386,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_UINT8 == dtype && isStringType(value)) {
 			if (value instanceof String) {
-				// Use Integer byteValue rather than Byte byteValue to handle > 127
-				byte val = new Integer((String) value).byteValue();
+				byte val = TypeUtil.String_to_byte((String) value);
 				tensor = Tensor.create(val, UInt8.class);
 			} else {
 				log.warn("Implicitly converting String array to byte array (for UInt8)");
@@ -396,7 +395,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_UINT8 == dtype && isBooleanType(value)) {
 			if (value instanceof Boolean) {
-				byte val = ((Boolean) value).booleanValue() == true ? (byte) 1 : (byte) 0;
+				byte val = TypeUtil.boolean_to_byte((boolean) value);
 				tensor = Tensor.create(val, UInt8.class);
 			} else {
 				log.warn("Implicitly converting boolean array to byte array (for UInt8)");
@@ -422,7 +421,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_STRING == dtype && isIntType(value)) {
 			if (value instanceof Integer) {
-				byte[] b = Integer.toString((int) value).getBytes(StandardCharsets.UTF_8);
+				byte[] b = TypeUtil.int_to_String_bytes((int) value);
 				tensor = Tensor.create(b, String.class);
 			} else {
 				log.warn("Implicitly converting int array to String array to byte array");
@@ -432,7 +431,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_STRING == dtype && isLongType(value)) {
 			if (value instanceof Long) {
-				byte[] b = Long.toString((long) value).getBytes(StandardCharsets.UTF_8);
+				byte[] b = TypeUtil.long_to_String_bytes((long) value);
 				tensor = Tensor.create(b, String.class);
 			} else {
 				log.warn("Implicitly converting long array to String array to byte array");
@@ -442,7 +441,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_STRING == dtype && isFloatType(value)) {
 			if (value instanceof Float) {
-				byte[] b = Float.toString((float) value).getBytes(StandardCharsets.UTF_8);
+				byte[] b = TypeUtil.float_to_String_bytes((float) value);
 				tensor = Tensor.create(b, String.class);
 			} else {
 				log.warn("Implicitly converting float array to String array to byte array");
@@ -452,7 +451,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_STRING == dtype && isDoubleType(value)) {
 			if (value instanceof Double) {
-				byte[] b = Double.toString((double) value).getBytes(StandardCharsets.UTF_8);
+				byte[] b = TypeUtil.double_to_String_bytes((double) value);
 				tensor = Tensor.create(b, String.class);
 			} else {
 				log.warn("Implicitly converting double array to String array to byte array");
@@ -462,8 +461,7 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_STRING == dtype && isBooleanType(value)) {
 			if (value instanceof Boolean) {
-				String s = ((Boolean) value).booleanValue() == true ? "true" : "false";
-				byte[] b = s.getBytes(StandardCharsets.UTF_8);
+				byte[] b = TypeUtil.boolean_to_String_bytes((boolean) value);
 				tensor = Tensor.create(b, String.class);
 			} else {
 				log.warn("Implicitly converting boolean array to String array to byte array");
