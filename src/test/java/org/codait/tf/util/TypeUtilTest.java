@@ -881,4 +881,151 @@ public class TypeUtilTest {
 		Assert.assertTrue(TypeUtil.int_to_String(Integer.MAX_VALUE).equals("2147483647"));
 	}
 
+	@Test
+	public void long_to_boolean_minus1() {
+		Assert.assertTrue(TypeUtil.long_to_boolean(-1L) == true);
+	}
+
+	@Test
+	public void long_to_boolean_0() {
+		Assert.assertTrue(TypeUtil.long_to_boolean(0L) == false);
+	}
+
+	@Test
+	public void long_to_boolean_1() {
+		Assert.assertTrue(TypeUtil.long_to_boolean(1L) == true);
+	}
+
+	@Test
+	public void long_to_boolean_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.long_to_boolean(Long.MAX_VALUE) == true);
+	}
+
+	@Test
+	public void long_to_boolean_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.long_to_boolean(Long.MIN_VALUE) == true);
+	}
+
+	@Test
+	public void long_to_byte_minus1() {
+		Assert.assertTrue(TypeUtil.long_to_byte(-1L) == (byte) -1);
+	}
+
+	@Test
+	public void long_to_byte_0() {
+		Assert.assertTrue(TypeUtil.long_to_byte(0L) == (byte) 0);
+	}
+
+	@Test
+	public void long_to_byte_1() {
+		Assert.assertTrue(TypeUtil.long_to_byte(1L) == (byte) 1);
+	}
+
+	@Test
+	public void long_to_byte_MAX_VALUE() {
+		// byteValue() of Long.MAX_VALUE gives -1
+		Assert.assertTrue(TypeUtil.long_to_byte(Long.MAX_VALUE) == (byte) -1);
+	}
+
+	@Test
+	public void long_to_byte_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.long_to_byte(Long.MIN_VALUE) == (byte) 0);
+	}
+
+	@Test
+	public void long_to_float_minus1() {
+		Assert.assertTrue(TypeUtil.long_to_float(-1) == -1.0f);
+	}
+
+	@Test
+	public void long_to_float_0() {
+		Assert.assertTrue(TypeUtil.long_to_float(0) == 0.0f);
+	}
+
+	@Test
+	public void long_to_float_1() {
+		Assert.assertTrue(TypeUtil.long_to_float(1) == 1.0f);
+	}
+
+	@Test
+	public void long_to_float_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.long_to_float(Long.MAX_VALUE) == Long.MAX_VALUE);
+	}
+
+	@Test
+	public void long_to_float_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.long_to_float(Long.MIN_VALUE) == Long.MIN_VALUE);
+	}
+
+	@Test
+	public void long_to_double_minus1() {
+		Assert.assertTrue(TypeUtil.long_to_double(-1) == -1.0d);
+	}
+
+	@Test
+	public void long_to_double_0() {
+		Assert.assertTrue(TypeUtil.long_to_double(0) == 0.0d);
+	}
+
+	@Test
+	public void long_to_double_1() {
+		Assert.assertTrue(TypeUtil.long_to_double(1) == 1.0d);
+	}
+
+	@Test
+	public void long_to_double_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.long_to_double(Long.MAX_VALUE) == Long.MAX_VALUE);
+	}
+
+	@Test
+	public void long_to_double_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.long_to_double(Long.MIN_VALUE) == Long.MIN_VALUE);
+	}
+
+	@Test
+	public void long_to_int_minus1() {
+		Assert.assertTrue(TypeUtil.long_to_int(-1) == -1L);
+	}
+
+	@Test
+	public void long_to_int_0() {
+		Assert.assertTrue(TypeUtil.long_to_int(0) == 0L);
+	}
+
+	@Test
+	public void long_to_int_1() {
+		Assert.assertTrue(TypeUtil.long_to_int(1) == 1L);
+	}
+
+	@Test
+	public void long_to_int_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.long_to_int(Long.MAX_VALUE) == -1);
+	}
+
+	@Test
+	public void long_to_int_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.long_to_int(Long.MIN_VALUE) == 0);
+	}
+
+	@Test
+	public void long_to_String_minus1() {
+		Assert.assertTrue(TypeUtil.long_to_String(-1).equals("-1"));
+	}
+
+	@Test
+	public void long_to_String_0() {
+		Assert.assertTrue(TypeUtil.long_to_String(0).equals("0"));
+	}
+
+	@Test
+	public void long_to_String_1() {
+		Assert.assertTrue(TypeUtil.long_to_String(1).equals("1"));
+	}
+
+	@Test
+	public void long_to_String_MAX_VALUE() {
+		// See Long.class for MAX_VALUE
+		Assert.assertTrue(TypeUtil.long_to_String(Long.MAX_VALUE).equals("9223372036854775807"));
+	}
+
 }
