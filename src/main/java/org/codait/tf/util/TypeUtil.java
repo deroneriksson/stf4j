@@ -73,7 +73,7 @@ public class TypeUtil {
 	}
 
 	/**
-	 * Primitive byte to primitive boolean.
+	 * Primitive byte to primitive boolean. True will be returned for any non-zero byte.
 	 * 
 	 * @param b
 	 *            byte value
@@ -141,7 +141,7 @@ public class TypeUtil {
 	}
 
 	/**
-	 * Primitive double to primitive boolean.
+	 * Primitive double to primitive boolean. True will be returned for any non-zero double.
 	 * 
 	 * @param d
 	 *            double value
