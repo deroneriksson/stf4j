@@ -341,6 +341,42 @@ public class TypeUtilTest {
 	}
 
 	@Test
+	public void double_to_byte_minus1() {
+		Assert.assertTrue(TypeUtil.double_to_byte(-1.0d) == (byte) -1);
+	}
+
+	@Test
+	public void double_to_byte_0() {
+		Assert.assertTrue(TypeUtil.double_to_byte(0.0d) == (byte) 0);
+	}
+
+	@Test
+	public void double_to_byte_1() {
+		Assert.assertTrue(TypeUtil.double_to_byte(1.0d) == (byte) 1);
+	}
+
+	@Test
+	public void double_to_byte_1point1() {
+		Assert.assertTrue(TypeUtil.double_to_byte(1.1d) == (byte) 1);
+	}
+
+	@Test
+	public void double_to_byte_MAX_VALUE() {
+		// byteValue() of Double.MAX_VALUE gives -1
+		Assert.assertTrue(TypeUtil.double_to_byte(Double.MAX_VALUE) == (byte) -1);
+	}
+
+	@Test
+	public void double_to_byte_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.double_to_byte(Double.MIN_VALUE) == (byte) 0);
+	}
+
+	@Test
+	public void double_to_byte_NaN() {
+		Assert.assertTrue(TypeUtil.double_to_byte(Double.NaN) == 0);
+	}
+
+	@Test
 	public void double_to_float_minus1() {
 		Assert.assertTrue(TypeUtil.double_to_float(-1.0d) == -1.0f);
 	}
