@@ -478,14 +478,8 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_BOOL == dtype && isByteType(value)) {
 			if (value instanceof Byte) {
-				byte b = ((Byte) value).byteValue();
-				if (b == 0) {
-					tensor = Tensor.create(false, Boolean.class);
-				} else if (b == 1) {
-					tensor = Tensor.create(true, Boolean.class);
-				} else {
-					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
-				}
+				boolean b = TypeUtil.byte_to_boolean((byte) value);
+				tensor = Tensor.create(b, Boolean.class);
 			} else {
 				log.warn("Implicitly converting byte array to boolean array");
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
@@ -493,13 +487,8 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_BOOL == dtype && isIntType(value)) {
 			if (value instanceof Integer) {
-				if ((int) value == 0) {
-					tensor = Tensor.create(false, Boolean.class);
-				} else if ((int) value == 1) {
-					tensor = Tensor.create(true, Boolean.class);
-				} else {
-					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
-				}
+				boolean b = TypeUtil.int_to_boolean((int) value);
+				tensor = Tensor.create(b, Boolean.class);
 			} else {
 				log.warn("Implicitly converting int array to boolean array");
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
@@ -507,13 +496,8 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_BOOL == dtype && isLongType(value)) {
 			if (value instanceof Long) {
-				if ((long) value == 0L) {
-					tensor = Tensor.create(false, Boolean.class);
-				} else if ((long) value == 1L) {
-					tensor = Tensor.create(true, Boolean.class);
-				} else {
-					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') to Tensor");
-				}
+				boolean b = TypeUtil.long_to_boolean((long) value);
+				tensor = Tensor.create(b, Boolean.class);
 			} else {
 				log.warn("Implicitly converting long array to boolean array");
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
@@ -521,14 +505,8 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_BOOL == dtype && isFloatType(value)) {
 			if (value instanceof Float) {
-				if ((float) value == 0.0f) {
-					tensor = Tensor.create(false, Boolean.class);
-				} else if ((float) value == 1.0f) {
-					tensor = Tensor.create(true, Boolean.class);
-				} else {
-					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') value '"
-							+ value + "' to Tensor");
-				}
+				boolean b = TypeUtil.float_to_boolean((float) value);
+				tensor = Tensor.create(b, Boolean.class);
 			} else {
 				log.warn("Implicitly converting float array to boolean array");
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
@@ -536,14 +514,8 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_BOOL == dtype && isDoubleType(value)) {
 			if (value instanceof Double) {
-				if ((double) value == 0.0d) {
-					tensor = Tensor.create(false, Boolean.class);
-				} else if ((double) value == 1.0d) {
-					tensor = Tensor.create(true, Boolean.class);
-				} else {
-					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') value '"
-							+ value + "' to Tensor");
-				}
+				boolean b = TypeUtil.double_to_boolean((double) value);
+				tensor = Tensor.create(b, Boolean.class);
 			} else {
 				log.warn("Implicitly converting double array to boolean array");
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
@@ -551,14 +523,8 @@ public class TFUtil {
 			}
 		} else if (DataType.DT_BOOL == dtype && isStringType(value)) {
 			if (value instanceof String) {
-				if ("false".equals((String) value)) {
-					tensor = Tensor.create(false, Boolean.class);
-				} else if ("true".equals((String) value)) {
-					tensor = Tensor.create(true, Boolean.class);
-				} else {
-					throw new TFException("Could not convert input key '" + key + "' (name: '" + name + "') value '"
-							+ value + "' to Tensor");
-				}
+				boolean b = TypeUtil.String_to_boolean((String) value);
+				tensor = Tensor.create(b, Boolean.class);
 			} else {
 				log.warn("Implicitly converting String array to boolean array");
 				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
