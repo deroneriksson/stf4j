@@ -405,6 +405,29 @@ public class TypeUtil {
 	}
 
 	/**
+	 * String primitive byte array to primitive boolean.
+	 * 
+	 * @param b
+	 *            String primitive byte array
+	 * @return boolean value
+	 */
+	public static boolean String_bytes_to_boolean(byte[] b) {
+		return "true".equals(new String(b)) ? true : false;
+	}
+
+	/**
+	 * String primitive byte array to primitive byte. Note that this method utilizes the Integer byteValue rather than
+	 * the Byte byteValue so as to handle values greater than 127 (greater than Byte.MAX_VALUE).
+	 * 
+	 * @param b
+	 *            String primitive byte array
+	 * @return byte value
+	 */
+	public static byte String_bytes_to_byte(byte[] b) {
+		return new Integer(new String(b)).byteValue();
+	}
+
+	/**
 	 * String primitive byte array to primitive double.
 	 * 
 	 * @param b

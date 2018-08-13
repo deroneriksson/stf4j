@@ -1104,6 +1104,41 @@ public class TypeUtilTest {
 	}
 
 	@Test
+	public void String_bytes_to_boolean_false() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_boolean("false".getBytes()) == false);
+	}
+
+	@Test
+	public void String_bytes_to_boolean_true() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_boolean("true".getBytes()) == true);
+	}
+
+	@Test
+	public void String_bytes_to_boolean_FALSE() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_boolean("FALSE".getBytes()) == false);
+	}
+
+	@Test
+	public void String_bytes_to_boolean_TRUE() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_boolean("TRUE".getBytes()) == false);
+	}
+
+	@Test
+	public void String_bytes_to_byte_minus1() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_byte("-1".getBytes()) == (byte) -1);
+	}
+
+	@Test
+	public void String_bytes_to_byte_0() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_byte("0".getBytes()) == (byte) 0);
+	}
+
+	@Test
+	public void String_bytes_to_byte_1() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_byte("1".getBytes()) == (byte) 1);
+	}
+
+	@Test
 	public void String_bytes_to_double_minus1() {
 		Assert.assertTrue(TypeUtil.String_bytes_to_double("-1.0".getBytes()) == -1.0d);
 	}
