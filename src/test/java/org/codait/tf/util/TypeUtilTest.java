@@ -518,4 +518,219 @@ public class TypeUtilTest {
 		Assert.assertTrue(TypeUtil.double_to_String(Double.NaN).equals("NaN"));
 	}
 
+	@Test
+	public void float_to_boolean_minus1() {
+		Assert.assertTrue(TypeUtil.float_to_boolean(-1.0f) == true);
+	}
+
+	@Test
+	public void float_to_boolean_0() {
+		Assert.assertTrue(TypeUtil.float_to_boolean(0.0f) == false);
+	}
+
+	@Test
+	public void float_to_boolean_1() {
+		Assert.assertTrue(TypeUtil.float_to_boolean(1.0f) == true);
+	}
+
+	@Test
+	public void float_to_boolean_1point1() {
+		Assert.assertTrue(TypeUtil.float_to_boolean(1.1f) == true);
+	}
+
+	@Test
+	public void float_to_boolean_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.float_to_boolean(Float.MAX_VALUE) == true);
+	}
+
+	@Test
+	public void float_to_boolean_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.float_to_boolean(Float.MIN_VALUE) == true);
+	}
+
+	@Test
+	public void float_to_boolean_NaN() {
+		Assert.assertTrue(TypeUtil.float_to_boolean(Float.NaN) == true);
+	}
+
+	@Test
+	public void float_to_byte_minus1() {
+		Assert.assertTrue(TypeUtil.float_to_byte(-1.0f) == (byte) -1);
+	}
+
+	@Test
+	public void float_to_byte_0() {
+		Assert.assertTrue(TypeUtil.float_to_byte(0.0f) == (byte) 0);
+	}
+
+	@Test
+	public void float_to_byte_1() {
+		Assert.assertTrue(TypeUtil.float_to_byte(1.0f) == (byte) 1);
+	}
+
+	@Test
+	public void float_to_byte_1point1() {
+		Assert.assertTrue(TypeUtil.float_to_byte(1.1f) == (byte) 1);
+	}
+
+	@Test
+	public void float_to_byte_MAX_VALUE() {
+		// byteValue() of Float.MAX_VALUE gives -1
+		Assert.assertTrue(TypeUtil.float_to_byte(Float.MAX_VALUE) == (byte) -1);
+	}
+
+	@Test
+	public void float_to_byte_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.float_to_byte(Float.MIN_VALUE) == (byte) 0);
+	}
+
+	@Test
+	public void float_to_byte_NaN() {
+		Assert.assertTrue(TypeUtil.float_to_byte(Float.NaN) == 0);
+	}
+
+	@Test
+	public void float_to_double_minus1() {
+		Assert.assertTrue(TypeUtil.float_to_double(-1.0f) == -1.0d);
+	}
+
+	@Test
+	public void float_to_double_0() {
+		Assert.assertTrue(TypeUtil.float_to_double(0.0f) == 0.0d);
+	}
+
+	@Test
+	public void float_to_double_1() {
+		Assert.assertTrue(TypeUtil.float_to_double(1.0f) == 1.0d);
+	}
+
+	@Test
+	public void float_to_double_1point1() {
+		// Round answer since float 1.1f does not exactly equal value converted to double
+		Assert.assertTrue(Math.round(TypeUtil.float_to_double(1.1f) * 10000d) / 10000d == 1.1d);
+	}
+
+	@Test
+	public void float_to_double_MAX_VALUE() {
+		String max = Double.toString(TypeUtil.float_to_double(Float.MAX_VALUE));
+		Assert.assertTrue(max.startsWith("3.402") && max.endsWith("E38"));
+	}
+
+	@Test
+	public void float_to_double_MIN_VALUE() {
+		String min = Double.toString(TypeUtil.float_to_double(Float.MIN_VALUE));
+		Assert.assertTrue(min.startsWith("1.401") && min.endsWith("E-45"));
+	}
+
+	@Test
+	public void float_to_double_NaN() {
+		Assert.assertTrue(Double.isNaN(TypeUtil.float_to_double(Float.NaN)));
+	}
+
+	@Test
+	public void float_to_int_minus1() {
+		Assert.assertTrue(TypeUtil.float_to_int(-1.0f) == -1);
+	}
+
+	@Test
+	public void float_to_int_0() {
+		Assert.assertTrue(TypeUtil.float_to_int(0.0f) == 0);
+	}
+
+	@Test
+	public void float_to_int_1() {
+		Assert.assertTrue(TypeUtil.float_to_int(1.0f) == 1);
+	}
+
+	@Test
+	public void float_to_int_1point1() {
+		Assert.assertTrue(TypeUtil.float_to_int(1.1f) == 1);
+	}
+
+	@Test
+	public void float_to_int_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.float_to_int(Float.MAX_VALUE) == Integer.MAX_VALUE);
+	}
+
+	@Test
+	public void float_to_int_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.float_to_int(Float.MIN_VALUE) == 0);
+	}
+
+	@Test
+	public void float_to_int_NaN() {
+		Assert.assertTrue(TypeUtil.float_to_int(Float.NaN) == 0);
+	}
+
+	@Test
+	public void float_to_long_minus1() {
+		Assert.assertTrue(TypeUtil.float_to_long(-1.0f) == -1L);
+	}
+
+	@Test
+	public void float_to_long_0() {
+		Assert.assertTrue(TypeUtil.float_to_long(0.0f) == 0L);
+	}
+
+	@Test
+	public void float_to_long_1() {
+		Assert.assertTrue(TypeUtil.float_to_long(1.0f) == 1L);
+	}
+
+	@Test
+	public void float_to_long_1point1() {
+		Assert.assertTrue(TypeUtil.float_to_long(1.1f) == 1L);
+	}
+
+	@Test
+	public void float_to_long_MAX_VALUE() {
+		Assert.assertTrue(TypeUtil.float_to_long(Float.MAX_VALUE) == Long.MAX_VALUE);
+	}
+
+	@Test
+	public void float_to_long_MIN_VALUE() {
+		Assert.assertTrue(TypeUtil.float_to_long(Float.MIN_VALUE) == 0L);
+	}
+
+	@Test
+	public void float_to_long_NaN() {
+		Assert.assertTrue(TypeUtil.float_to_long(Float.NaN) == 0L);
+	}
+
+	@Test
+	public void float_to_String_minus1() {
+		Assert.assertTrue(TypeUtil.float_to_String(-1.0f).equals("-1.0"));
+	}
+
+	@Test
+	public void float_to_String_0() {
+		Assert.assertTrue(TypeUtil.float_to_String(0.0f).equals("0.0"));
+	}
+
+	@Test
+	public void float_to_String_1() {
+		Assert.assertTrue(TypeUtil.float_to_String(1.0f).equals("1.0"));
+	}
+
+	@Test
+	public void float_to_String_1point1() {
+		Assert.assertTrue(TypeUtil.float_to_String(1.1f).equals("1.1"));
+	}
+
+	@Test
+	public void float_to_String_MAX_VALUE() {
+		// See Float.class for MAX_VALUE
+		Assert.assertTrue(TypeUtil.float_to_String(Float.MAX_VALUE).equals("3.4028235E38"));
+	}
+
+	@Test
+	public void float_to_String_MIN_VALUE() {
+		// See Float.class for MIN_VALUE
+		Assert.assertTrue(TypeUtil.float_to_String(Float.MIN_VALUE).equals("1.4E-45"));
+	}
+
+	@Test
+	public void float_to_String_NaN() {
+		Assert.assertTrue(TypeUtil.float_to_String(Float.NaN).equals("NaN"));
+	}
 }
