@@ -86,6 +86,16 @@ public class TypeUtilTest {
 	}
 
 	@Test
+	public void boolean_to_String_bytes_true() {
+		Assert.assertArrayEquals(TypeUtil.boolean_to_String_bytes(true), "true".getBytes());
+	}
+
+	@Test
+	public void boolean_to_String_bytes_false() {
+		Assert.assertArrayEquals(TypeUtil.boolean_to_String_bytes(false), "false".getBytes());
+	}
+
+	@Test
 	public void byte_to_boolean_minus1() {
 		Assert.assertTrue(TypeUtil.byte_to_boolean((byte) -1) == true);
 	}
@@ -519,6 +529,16 @@ public class TypeUtilTest {
 	}
 
 	@Test
+	public void double_to_String_bytes_0() {
+		Assert.assertArrayEquals(TypeUtil.double_to_String_bytes(0.0d), "0.0".getBytes());
+	}
+
+	@Test
+	public void double_to_String_bytes_1() {
+		Assert.assertArrayEquals(TypeUtil.double_to_String_bytes(1.0d), "1.0".getBytes());
+	}
+
+	@Test
 	public void float_to_boolean_minus1() {
 		Assert.assertTrue(TypeUtil.float_to_boolean(-1.0f) == true);
 	}
@@ -735,6 +755,16 @@ public class TypeUtilTest {
 	}
 
 	@Test
+	public void float_to_String_bytes_0() {
+		Assert.assertArrayEquals(TypeUtil.float_to_String_bytes(0.0f), "0.0".getBytes());
+	}
+
+	@Test
+	public void float_to_String_bytes_1() {
+		Assert.assertArrayEquals(TypeUtil.float_to_String_bytes(1.0f), "1.0".getBytes());
+	}
+
+	@Test
 	public void int_to_boolean_minus1() {
 		Assert.assertTrue(TypeUtil.int_to_boolean(-1) == true);
 	}
@@ -873,6 +903,16 @@ public class TypeUtilTest {
 	@Test
 	public void int_to_String_1() {
 		Assert.assertTrue(TypeUtil.int_to_String(1).equals("1"));
+	}
+
+	@Test
+	public void int_to_String_bytes_0() {
+		Assert.assertArrayEquals(TypeUtil.int_to_String_bytes(0), "0".getBytes());
+	}
+
+	@Test
+	public void int_to_String_bytes_1() {
+		Assert.assertArrayEquals(TypeUtil.int_to_String_bytes(1), "1".getBytes());
 	}
 
 	@Test
@@ -1026,6 +1066,16 @@ public class TypeUtilTest {
 	public void long_to_String_MAX_VALUE() {
 		// See Long.class for MAX_VALUE
 		Assert.assertTrue(TypeUtil.long_to_String(Long.MAX_VALUE).equals("9223372036854775807"));
+	}
+
+	@Test
+	public void long_to_String_bytes_0() {
+		Assert.assertArrayEquals(TypeUtil.long_to_String_bytes(0L), "0".getBytes());
+	}
+
+	@Test
+	public void long_to_String_bytes_1() {
+		Assert.assertArrayEquals(TypeUtil.long_to_String_bytes(1L), "1".getBytes());
 	}
 
 	@Test
