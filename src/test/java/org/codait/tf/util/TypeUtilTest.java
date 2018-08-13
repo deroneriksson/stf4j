@@ -1102,4 +1102,44 @@ public class TypeUtilTest {
 	public void String_to_float_1point1() {
 		Assert.assertTrue(TypeUtil.String_to_float("1.1") == 1.1f);
 	}
+
+	@Test
+	public void String_bytes_to_double_minus1() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_double("-1.0".getBytes()) == -1.0d);
+	}
+
+	@Test
+	public void String_bytes_to_double_0() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_double("0.0".getBytes()) == 0.0d);
+	}
+
+	@Test
+	public void String_bytes_to_double_1() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_double("1.0".getBytes()) == 1.0d);
+	}
+
+	@Test
+	public void String_bytes_to_double_1point1() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_double("1.1".getBytes()) == 1.1d);
+	}
+
+	@Test
+	public void String_bytes_to_float_minus1() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_float("-1.0".getBytes()) == -1.0f);
+	}
+
+	@Test
+	public void String_bytes_to_float_0() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_float("0.0".getBytes()) == 0.0f);
+	}
+
+	@Test
+	public void String_bytes_to_float_1() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_float("1.0".getBytes()) == 1.0f);
+	}
+
+	@Test
+	public void String_bytes_to_float_1point1() {
+		Assert.assertTrue(TypeUtil.String_bytes_to_float("1.1".getBytes()) == 1.1f);
+	}
 }
