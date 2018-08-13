@@ -579,8 +579,7 @@ public class TFResults {
 			@SuppressWarnings("unchecked")
 			Tensor<Float> tensor = (Tensor<Float>) keyToOutput(key);
 			float[] f = ArrayUtil.floatTensorToFloatArray(tensor);
-			double[] d = (double[]) ArrayUtil.convertArrayType(f, double.class);
-			return d;
+			return ArrayUtil.fToD(f);
 		} else if (dtype == DataType.DT_DOUBLE) {
 			@SuppressWarnings("unchecked")
 			Tensor<Double> tensor = (Tensor<Double>) keyToOutput(key);

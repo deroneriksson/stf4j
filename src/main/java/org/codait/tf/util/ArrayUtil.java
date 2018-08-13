@@ -452,6 +452,21 @@ public class ArrayUtil {
 	}
 
 	/**
+	 * Convert 1d float array to double array.
+	 * 
+	 * @param fArray
+	 *            Primitive float array
+	 * @return Primitive double array
+	 */
+	public static double[] fToD(float[] fArray) {
+		double[] dArray = new double[fArray.length];
+		for (int i = 0; i < fArray.length; i++) {
+			dArray[i] = (double) fArray[i];
+		}
+		return dArray;
+	}
+
+	/**
 	 * Convert 1d float array to long array.
 	 * 
 	 * @param fArray
