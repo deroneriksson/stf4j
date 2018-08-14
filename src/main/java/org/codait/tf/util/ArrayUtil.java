@@ -146,17 +146,16 @@ public class ArrayUtil {
 				if (v.getClass().isArray()) {
 					copyArrayVals(v, vd);
 				} else {
-
-					if ("boolean".equals(o)) {
-						if ("byte".equals(d)) {
+					if ("boolean".equalsIgnoreCase(o)) {
+						if ("byte".equalsIgnoreCase(d)) {
 							Array.set(dest, i, boolean_to_byte((boolean) v));
-						} else if ("double".equals(d)) {
+						} else if ("double".equalsIgnoreCase(d)) {
 							Array.set(dest, i, boolean_to_double((boolean) v));
-						} else if ("float".equals(d)) {
+						} else if ("float".equalsIgnoreCase(d)) {
 							Array.set(dest, i, boolean_to_float((boolean) v));
-						} else if ("int".equals(d)) {
+						} else if ("int".equals(d) || "Integer".equals(d)) {
 							Array.set(dest, i, boolean_to_int((boolean) v));
-						} else if ("long".equals(d)) {
+						} else if ("long".equalsIgnoreCase(d)) {
 							Array.set(dest, i, boolean_to_long((boolean) v));
 						} else if ("String".equals(d)) {
 							Array.set(dest, i, boolean_to_String((boolean) v));
