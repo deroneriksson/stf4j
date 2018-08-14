@@ -146,20 +146,24 @@ public class ArrayUtil {
 				if (v.getClass().isArray()) {
 					copyArrayVals(v, vd);
 				} else {
-					if ("int".equals(o) && "Long".equals(d)) {
-						Array.set(dest, i, int_to_long((int) v));
-					} else if ("int".equals(o) && "Float".equals(d)) {
-						Array.set(dest, i, int_to_float((int) v));
+
+					if ("int".equals(o) && "boolean".equals(d)) {
+						Array.set(dest, i, int_to_boolean((int) v));
+					} else if ("int".equals(o) && "byte".equals(d)) {
+						Array.set(dest, i, int_to_byte((int) v));
 					} else if ("int".equals(o) && "Double".equalsIgnoreCase(d)) {
 						Array.set(dest, i, int_to_double((int) v));
+					} else if ("int".equals(o) && "Float".equals(d)) {
+						Array.set(dest, i, int_to_float((int) v));
+					} else if ("int".equals(o) && "Long".equals(d)) {
+						Array.set(dest, i, int_to_long((int) v));
 					} else if ("int".equals(o) && "String".equals(d)) {
 						Array.set(dest, i, int_to_String((int) v));
-					} else if ("long".equals(o) && "int".equals(d)) {
-						Array.set(dest, i, long_to_int((long) v));
-					} else if ("double".equalsIgnoreCase(o) && "float".equals(d)) {
-						Array.set(dest, i, double_to_float((double) v));
-					} else if ("Byte".equals(o) && "byte".equals(d)) {
-						Array.set(dest, i, v);
+
+					} else if ("String".equals(o) && "boolean".equals(d)) {
+						Array.set(dest, i, String_to_boolean((String) v));
+					} else if ("String".equals(o) && "byte".equals(d)) {
+						Array.set(dest, i, String_to_byte((String) v));
 					} else if ("String".equals(o) && "int".equals(d)) {
 						Array.set(dest, i, String_to_int((String) v));
 					} else if ("String".equals(o) && "long".equals(d)) {
@@ -168,54 +172,57 @@ public class ArrayUtil {
 						Array.set(dest, i, String_to_float((String) v));
 					} else if ("String".equals(o) && "double".equals(d)) {
 						Array.set(dest, i, String_to_double((String) v));
-					} else if ("long".equals(o) && "String".equals(d)) {
-						Array.set(dest, i, long_to_String((long) v));
+
+					} else if ("float".equals(o) && "boolean".equals(d)) {
+						Array.set(dest, i, float_to_boolean((float) v));
+					} else if ("float".equals(o) && "byte".equals(d)) {
+						Array.set(dest, i, float_to_byte((float) v));
+					} else if ("float".equals(o) && "int".equals(d)) {
+						Array.set(dest, i, float_to_int((float) v));
 					} else if ("float".equals(o) && "String".equals(d)) {
 						Array.set(dest, i, float_to_String((float) v));
 					} else if ("float".equals(o) && "long".equals(d)) {
 						Array.set(dest, i, float_to_long((float) v));
-					} else if ("double".equals(o) && "String".equals(d)) {
-						Array.set(dest, i, double_to_String((double) v));
-					} else if ("double".equals(o) && "long".equals(d)) {
-						Array.set(dest, i, double_to_long((double) v));
-					} else if ("float".equals(o) && "int".equals(d)) {
-						Array.set(dest, i, float_to_int((float) v));
+
+					} else if ("double".equals(o) && "boolean".equals(d)) {
+						Array.set(dest, i, double_to_boolean((double) v));
+					} else if ("double".equals(o) && "byte".equals(d)) {
+						Array.set(dest, i, double_to_byte((double) v));
+					} else if ("double".equalsIgnoreCase(o) && "float".equals(d)) {
+						Array.set(dest, i, double_to_float((double) v));
 					} else if ("double".equals(o) && "int".equals(d)) {
 						Array.set(dest, i, double_to_int((double) v));
+					} else if ("double".equals(o) && "long".equals(d)) {
+						Array.set(dest, i, double_to_long((double) v));
+					} else if ("double".equals(o) && "String".equals(d)) {
+						Array.set(dest, i, double_to_String((double) v));
+
 					} else if ("boolean".equals(o) && "byte".equals(d)) {
 						Array.set(dest, i, boolean_to_byte((boolean) v));
+					} else if ("boolean".equals(o) && "double".equals(d)) {
+						Array.set(dest, i, boolean_to_double((boolean) v));
+					} else if ("boolean".equals(o) && "float".equals(d)) {
+						Array.set(dest, i, boolean_to_float((boolean) v));
 					} else if ("boolean".equals(o) && "int".equals(d)) {
 						Array.set(dest, i, boolean_to_int((boolean) v));
 					} else if ("boolean".equals(o) && "long".equals(d)) {
 						Array.set(dest, i, boolean_to_long((boolean) v));
-					} else if ("boolean".equals(o) && "float".equals(d)) {
-						Array.set(dest, i, boolean_to_float((boolean) v));
-					} else if ("boolean".equals(o) && "double".equals(d)) {
-						Array.set(dest, i, boolean_to_double((boolean) v));
 					} else if ("boolean".equals(o) && "String".equals(d)) {
 						Array.set(dest, i, boolean_to_String((boolean) v));
-					} else if ("byte".equals(o) && "boolean".equals(d)) {
-						Array.set(dest, i, byte_to_boolean((byte) v));
-					} else if ("int".equals(o) && "boolean".equals(d)) {
-						Array.set(dest, i, int_to_boolean((int) v));
+
 					} else if ("long".equals(o) && "boolean".equals(d)) {
 						Array.set(dest, i, long_to_boolean((long) v));
-					} else if ("float".equals(o) && "boolean".equals(d)) {
-						Array.set(dest, i, float_to_boolean((float) v));
-					} else if ("double".equals(o) && "boolean".equals(d)) {
-						Array.set(dest, i, double_to_boolean((double) v));
-					} else if ("String".equals(o) && "boolean".equals(d)) {
-						Array.set(dest, i, String_to_boolean((String) v));
-					} else if ("int".equals(o) && "byte".equals(d)) {
-						Array.set(dest, i, int_to_byte((int) v));
 					} else if ("long".equals(o) && "byte".equals(d)) {
 						Array.set(dest, i, long_to_byte((long) v));
-					} else if ("float".equals(o) && "byte".equals(d)) {
-						Array.set(dest, i, float_to_byte((float) v));
-					} else if ("double".equals(o) && "byte".equals(d)) {
-						Array.set(dest, i, double_to_byte((double) v));
-					} else if ("String".equals(o) && "byte".equals(d)) {
-						Array.set(dest, i, String_to_byte((String) v));
+					} else if ("long".equals(o) && "int".equals(d)) {
+						Array.set(dest, i, long_to_int((long) v));
+					} else if ("long".equals(o) && "String".equals(d)) {
+						Array.set(dest, i, long_to_String((long) v));
+
+					} else if ("byte".equals(o) && "boolean".equals(d)) {
+						Array.set(dest, i, byte_to_boolean((byte) v));
+					} else if ("Byte".equals(o) && "byte".equals(d)) {
+						Array.set(dest, i, v);
 					} else {
 						Array.set(dest, i, v);
 					}
