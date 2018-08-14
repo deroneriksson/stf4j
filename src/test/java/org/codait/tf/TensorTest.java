@@ -1,11 +1,16 @@
 package org.codait.tf;
 
+import static org.codait.tf.util.TypeUtil.byte_to_boolean;
+
+import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codait.tf.simple.BooleanLogicTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.tensorflow.Tensor;
@@ -138,6 +143,94 @@ public class TensorTest {
 	public void createIntegerTensorWithIntegerObjectArray() {
 		Integer[] i = new Integer[] { new Integer(1), new Integer(2) };
 		Tensor.create(i, Float.class);
+	}
+
+	@Test
+	public void createLongTensorWithLong() {
+		Tensor<Long> tensor = Tensor.create(1L, Long.class);
+		long val = tensor.longValue();
+		Assert.assertEquals(1L, val);
+	}
+
+	// long objects cannot be used as elements in a TensorFlow Tensor
+	@Test(expected = IllegalArgumentException.class)
+	public void createLongTensorWithLong_PrimitiveParameter() {
+		Tensor.create(1L, long.class);
+	}
+
+	@Test
+	public void createLongTensorWithLongObject() {
+		Tensor<Long> tensor = Tensor.create(new Long(1L), Long.class);
+		long val = tensor.longValue();
+		Assert.assertEquals(1L, val);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void createLongTensorWithNull() {
+		Tensor.create(null, Long.class);
+	}
+
+	@Test
+	public void createLongTensorWithLongArray() {
+		long[] l = new long[] { 1L, 2L };
+		Tensor<Long> tensor = Tensor.create(l, Long.class);
+		LongBuffer lb = LongBuffer.allocate(tensor.numElements());
+		tensor.writeTo(lb);
+		long[] result = lb.array();
+		Assert.assertArrayEquals(l, result);
+	}
+
+	// cannot create non-scalar Tensors from arrays of boxed values
+	@Test(expected = IllegalArgumentException.class)
+	public void createLongTensorWithLongObjectArray() {
+		Long[] l = new Long[] { new Long(1L), new Long(2L) };
+		Tensor.create(l, Long.class);
+	}
+
+	@Test
+	public void createBooleanTensorWithBoolean() {
+		Tensor<Boolean> tensor = Tensor.create(true, Boolean.class);
+		boolean val = tensor.booleanValue();
+		Assert.assertEquals(true, val);
+	}
+
+	// boolean objects cannot be used as elements in a TensorFlow Tensor
+	@Test(expected = IllegalArgumentException.class)
+	public void createBooleanTensorWithBoolean_PrimitiveParameter() {
+		Tensor.create(true, boolean.class);
+	}
+
+	@Test
+	public void createBooleanTensorWithBooleanObject() {
+		Tensor<Boolean> tensor = Tensor.create(new Boolean(true), Boolean.class);
+		boolean val = tensor.booleanValue();
+		Assert.assertEquals(true, val);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void createBooleanTensorWithNull() {
+		Tensor.create(null, Boolean.class);
+	}
+
+	@Test
+	public void createBooleanTensorWithBooleanArray() {
+		boolean[] b = new boolean[] { true, false };
+		Tensor<Boolean> tensor = Tensor.create(b, Boolean.class);
+		ByteBuffer bb = ByteBuffer.allocate(tensor.numElements());
+		tensor.writeTo(bb);
+		byte[] byteArray = bb.array();
+		boolean[] booleanArray = new boolean[byteArray.length];
+		for (int i = 0; i < byteArray.length; i++) {
+			booleanArray[i] = byte_to_boolean(byteArray[i]);
+		}
+		BooleanLogicTest.assertArrayEquals(b, booleanArray);
+	}
+
+	// cannot create non-scalar Tensors from arrays of boxed values
+	@Test(expected = IllegalArgumentException.class)
+	public void createBooleanTensorWithBooleanObjectArray() {
+		Boolean[] b = new Boolean[] { new Boolean(true), new Boolean(false) };
+		Tensor.create(b, Boolean.class);
 	}
 
 }
