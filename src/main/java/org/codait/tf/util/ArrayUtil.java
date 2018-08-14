@@ -164,14 +164,14 @@ public class ArrayUtil {
 						Array.set(dest, i, String_to_boolean((String) v));
 					} else if ("String".equals(o) && "byte".equals(d)) {
 						Array.set(dest, i, String_to_byte((String) v));
+					} else if ("String".equals(o) && "double".equals(d)) {
+						Array.set(dest, i, String_to_double((String) v));
+					} else if ("String".equals(o) && "float".equals(d)) {
+						Array.set(dest, i, String_to_float((String) v));
 					} else if ("String".equals(o) && "int".equals(d)) {
 						Array.set(dest, i, String_to_int((String) v));
 					} else if ("String".equals(o) && "long".equals(d)) {
 						Array.set(dest, i, String_to_long((String) v));
-					} else if ("String".equals(o) && "float".equals(d)) {
-						Array.set(dest, i, String_to_float((String) v));
-					} else if ("String".equals(o) && "double".equals(d)) {
-						Array.set(dest, i, String_to_double((String) v));
 
 					} else if ("float".equals(o) && "boolean".equals(d)) {
 						Array.set(dest, i, float_to_boolean((float) v));
