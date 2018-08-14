@@ -11,6 +11,7 @@ import java.nio.LongBuffer;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.codait.tf.simple.BooleanLogicTest;
+import org.codait.tf.util.ArrayUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.tensorflow.Tensor;
@@ -231,6 +232,41 @@ public class TensorTest {
 	public void createBooleanTensorWithBooleanObjectArray() {
 		Boolean[] b = new Boolean[] { new Boolean(true), new Boolean(false) };
 		Tensor.create(b, Boolean.class);
+	}
+
+	@Test
+	public void createStringTensorWithStringBytes() {
+		Tensor<String> tensor = Tensor.create("test".getBytes(), String.class);
+		String val = new String(tensor.bytesValue());
+		Assert.assertEquals("test", val);
+	}
+
+	// cannot create Tensors of type java.lang.String
+	@Test(expected = IllegalArgumentException.class)
+	public void createStringTensorWithStringObject() {
+		Tensor.create("test", String.class);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void createStringTensorWithNull() {
+		Tensor.create(null, String.class);
+	}
+
+	@Test
+	public void createStringTensorWithStringByteArray() {
+		byte[][] b = new byte[][] { "hello".getBytes(), "world".getBytes() };
+		Tensor<String> tensor = Tensor.create(b, String.class);
+		String[] result = (String[]) ArrayUtil.stringTensorToMultidimensionalStringArray(tensor);
+		Assert.assertArrayEquals(new String[] { "hello", "world" }, result);
+	}
+
+	// cannot create non-scalar Tensors from arrays of boxed values
+	@Test(expected = IllegalArgumentException.class)
+	public void createStringTensorWithByteObjectArray() {
+		Byte[] b1 = new Byte[] { 65, 66 };
+		Byte[] b2 = new Byte[] { 65, 66 };
+		Byte[][] b = new Byte[][] { b1, b2 };
+		Tensor.create(b, String.class);
 	}
 
 }
