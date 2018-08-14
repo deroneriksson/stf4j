@@ -350,7 +350,7 @@ public class ArrayUtil {
 	/**
 	 * Convert 1d double array to float array.
 	 * 
-	 * @param lArray
+	 * @param dArray
 	 *            Primitive double array
 	 * @return Primitive float array
 	 */

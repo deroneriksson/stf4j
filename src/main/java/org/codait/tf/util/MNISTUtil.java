@@ -65,6 +65,7 @@ public class MNISTUtil {
 	 * 
 	 * @param image
 	 *            MNIST image as a 2-dimensional int array
+	 * @return Image represented as text
 	 */
 	public static String mnistImageAsText(int[][] image) {
 		StringBuilder sb = new StringBuilder();

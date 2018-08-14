@@ -583,8 +583,8 @@ public class TFUtil {
 	 *            The SignatureDef key
 	 * @param inputKey
 	 *            The input key
-	 * @param metaGraphDef
-	 *            The MetaGraphDef object
+	 * @param model
+	 *            The TFModel object
 	 * @return The input name corresponding to the input key
 	 */
 	public static String inputKeyToName(String signatureDefKey, String inputKey, TFModel model) {
