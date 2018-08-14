@@ -177,12 +177,14 @@ public class ArrayUtil {
 						Array.set(dest, i, float_to_boolean((float) v));
 					} else if ("float".equals(o) && "byte".equals(d)) {
 						Array.set(dest, i, float_to_byte((float) v));
+					} else if ("float".equals(o) && "double".equals(d)) {
+						Array.set(dest, i, float_to_double((float) v));
 					} else if ("float".equals(o) && "int".equals(d)) {
 						Array.set(dest, i, float_to_int((float) v));
-					} else if ("float".equals(o) && "String".equals(d)) {
-						Array.set(dest, i, float_to_String((float) v));
 					} else if ("float".equals(o) && "long".equals(d)) {
 						Array.set(dest, i, float_to_long((float) v));
+					} else if ("float".equals(o) && "String".equals(d)) {
+						Array.set(dest, i, float_to_String((float) v));
 
 					} else if ("double".equals(o) && "boolean".equals(d)) {
 						Array.set(dest, i, double_to_boolean((double) v));
@@ -214,6 +216,10 @@ public class ArrayUtil {
 						Array.set(dest, i, long_to_boolean((long) v));
 					} else if ("long".equals(o) && "byte".equals(d)) {
 						Array.set(dest, i, long_to_byte((long) v));
+					} else if ("long".equals(o) && "double".equals(d)) {
+						Array.set(dest, i, long_to_double((long) v));
+					} else if ("long".equals(o) && "float".equals(d)) {
+						Array.set(dest, i, long_to_float((long) v));
 					} else if ("long".equals(o) && "int".equals(d)) {
 						Array.set(dest, i, long_to_int((long) v));
 					} else if ("long".equals(o) && "String".equals(d)) {
