@@ -8,19 +8,20 @@ import java.nio.file.Paths;
 /**
  * Utility class for dealing with MNIST data in Java.
  *
+ * Examples:
+ * 
+ * <pre>
+ * int[] labels = MNISTUtil.getLabels(TEST_LABELS);
+ * System.out.println("LABEL:" + labels[0]);
+ * int[][][] images = MNISTUtil.getImages(TEST_IMAGES);
+ * MNISTUtil.displayMNISTImage(images[0]);
+ * MNISTUtil.displayMNISTImageAsText(images[0]);
+ * </pre>
  */
 public class MNISTUtil {
 
 	public static final String TEST_IMAGES = "./mnist_data/t10k-images-idx3-ubyte";
 	public static final String TEST_LABELS = "./mnist_data/t10k-labels-idx1-ubyte";
-
-	public static void main(String[] args) throws IOException {
-		int[] labels = getLabels(TEST_LABELS);
-		System.out.println("LABEL:" + labels[0]);
-		int[][][] images = getImages(TEST_IMAGES);
-		displayMNISTImage(images[0]);
-		displayMNISTImageAsText(images[0]);
-	}
 
 	/**
 	 * Obtain labels from MNIST label data file.

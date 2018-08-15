@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
@@ -40,10 +39,7 @@ import javax.imageio.ImageIO;
  * ImageUtil.displayImage(cat);
  * float[][][] dog = CIFAR10Util.getScaledDownImage("images/dog.png", DimOrder.ROWS_COLS_CHANNELS);
  * ImageUtil.displayImage(dog);
- * 
  * </pre>
- * 
- *
  */
 public class CIFAR10Util {
 
