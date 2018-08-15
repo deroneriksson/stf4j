@@ -360,6 +360,11 @@ public class TFUtil {
 		} else if (DataType.DT_UINT8 == dtype && isByteType(value)) {
 			if (value instanceof Byte) {
 				tensor = Tensor.create(value, UInt8.class);
+			} else if (isByteObjectArray(value)) {
+				// to avoid: "cannot create non-scalar Tensors from arrays of boxed values"
+				log.warn("Implicitly converting Byte object array to primitive byte array");
+				Object byteArray = ArrayUtil.convertArrayType(value, byte.class);
+				tensor = Tensor.create(byteArray, UInt8.class);
 			} else {
 				tensor = Tensor.create(value, UInt8.class);
 			}
@@ -488,6 +493,11 @@ public class TFUtil {
 		} else if (DataType.DT_BOOL == dtype && isBooleanType(value)) {
 			if (value instanceof Boolean) {
 				tensor = Tensor.create(value, Boolean.class);
+			} else if (isBooleanObjectArray(value)) {
+				// to avoid: "cannot create non-scalar Tensors from arrays of boxed values"
+				log.warn("Implicitly converting Boolean object array to primitive boolean array");
+				Object booleanArray = ArrayUtil.convertArrayType(value, boolean.class);
+				tensor = Tensor.create(booleanArray, Boolean.class);
 			} else {
 				tensor = Tensor.create(value, Boolean.class);
 			}
@@ -675,6 +685,18 @@ public class TFUtil {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Return true if the object is a Boolean array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Boolean Object array, false otherwise
+	 */
+	public static boolean isBooleanObjectArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		return typeName.startsWith("java.lang.Boolean[");
 	}
 
 	/**

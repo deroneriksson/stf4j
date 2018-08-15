@@ -591,4 +591,14 @@ public class BooleanLogicTest {
 				.in("input2", new String[] { "true", "true" }).out("or").run().getString("or");
 		Assert.assertTrue("true".equals(result));
 	}
+
+	@Test
+	public void multiBooleanObjectArrayAndMultiBooleanObjectArrayOutputMultiBooleanArray() {
+		Boolean[][] input1 = new Boolean[][] { { true, true }, { false, false } };
+		Boolean[][] input2 = new Boolean[][] { { true, false }, { true, false } };
+		boolean[][] expected = new boolean[][] { { true, false }, { false, false } };
+		boolean[][] result = (boolean[][]) model.in("input1", input1).in("input2", input2).out("and").run()
+				.getBooleanArrayMultidimensional("and");
+		assertArrayEquals(expected, result);
+	}
 }

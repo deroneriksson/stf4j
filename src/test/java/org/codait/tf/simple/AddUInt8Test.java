@@ -21,7 +21,6 @@ public class AddUInt8Test {
 	@Before
 	public void init() throws IOException {
 		model = new TFModel(ADD_UINT8_MODEL_DIR).sig("serving_default");
-		System.out.println("MODEL:" + model);
 	}
 
 	@After
@@ -557,5 +556,17 @@ public class AddUInt8Test {
 		boolean expected = true;
 		boolean result = model.in("input1", input1).in("input2", input2).out("output").run().getBoolean("output");
 		Assert.assertEquals(expected, result);
+	}
+
+	@Test
+	public void inputMultiByteObjectArraysOutputMultiByteArray_1_2_3_4__5_6_7_8__6_8_10_12() {
+		Byte[][] input1 = new Byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		Byte[][] input2 = new Byte[][] { { (byte) 5, (byte) 6 }, { (byte) 7, (byte) 8 } };
+		byte[][] expected = new byte[][] { { (byte) 6, (byte) 8 }, { (byte) 10, (byte) 12 } };
+		byte[][] result = (byte[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getByteArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
 	}
 }
