@@ -411,4 +411,57 @@ public class ArrayUtilTest {
 		Assert.assertTrue(1L == l[0]);
 	}
 
+	@Test
+	public void unsignedByteArrayToDoubleArray() {
+		double[] d = (double[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void unsignedByteArrayToDoubleObjectArray() {
+		Double[] d = (Double[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, Double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void unsignedByteArrayToFloatArray() {
+		float[] f = (float[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, float.class);
+		Assert.assertTrue(1.0d == f[0]);
+	}
+
+	@Test
+	public void unsignedByteArrayToFloatObjectArray() {
+		Float[] f = (Float[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, Float.class);
+		Assert.assertTrue(1.0d == f[0]);
+	}
+
+	@Test
+	public void unsignedByteArrayToIntArray() {
+		int[] i = (int[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, int.class);
+		Assert.assertTrue(1 == i[0]);
+	}
+
+	@Test
+	public void unsignedByteArrayToIntegerObjectArray() {
+		Integer[] i = (Integer[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, Integer.class);
+		Assert.assertTrue(1 == i[0]);
+	}
+
+	@Test
+	public void unsignedByteArrayToLongArray() {
+		long[] l = (long[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, long.class);
+		Assert.assertTrue(1 == l[0]);
+	}
+
+	@Test
+	public void unsignedByteArrayToLongObjectArray() {
+		Long[] l = (Long[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, Long.class);
+		Assert.assertTrue(1 == l[0]);
+	}
+
+	@Test
+	public void unsignedByteArrayToStringArray() {
+		String[] s = (String[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, String.class);
+		Assert.assertTrue("1".equals(s[0]));
+	}
 }
