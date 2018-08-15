@@ -194,16 +194,16 @@ public class ArrayUtil {
 						} else {
 							Array.set(dest, i, v);
 						}
-					} else if ("int".equals(o)) {
-						if ("boolean".equals(d)) {
+					} else if ("int".equals(o) || "Integer".equals(o)) {
+						if ("boolean".equalsIgnoreCase(d)) {
 							Array.set(dest, i, int_to_boolean((int) v));
-						} else if ("byte".equals(d)) {
+						} else if ("byte".equalsIgnoreCase(d)) {
 							Array.set(dest, i, int_to_byte((int) v));
-						} else if ("Double".equalsIgnoreCase(d)) {
+						} else if ("double".equalsIgnoreCase(d)) {
 							Array.set(dest, i, int_to_double((int) v));
-						} else if ("Float".equals(d)) {
+						} else if ("float".equalsIgnoreCase(d)) {
 							Array.set(dest, i, int_to_float((int) v));
-						} else if ("Long".equals(d)) {
+						} else if ("long".equalsIgnoreCase(d)) {
 							Array.set(dest, i, int_to_long((int) v));
 						} else if ("String".equals(d)) {
 							Array.set(dest, i, int_to_String((int) v));

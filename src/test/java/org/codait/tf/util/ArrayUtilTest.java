@@ -206,4 +206,71 @@ public class ArrayUtilTest {
 		String[] s = (String[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, String.class);
 		Assert.assertTrue("1.0".equals(s[0]));
 	}
+
+	@Test
+	public void intArrayToByteArray() {
+		byte[] b = (byte[]) ArrayUtil.convertArrayType(new int[] { 1 }, byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void intArrayToBooleanArray() {
+		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new int[] { 1 }, boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void intArrayToFloatArray() {
+		float[] f = (float[]) ArrayUtil.convertArrayType(new int[] { 1 }, float.class);
+		Assert.assertTrue(1.0f == f[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToFloatObjectArray() {
+		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Float.class);
+		Assert.assertTrue(1.0f == f[0]);
+	}
+
+	@Test
+	public void intArrayToDoubleArray() {
+		double[] d = (double[]) ArrayUtil.convertArrayType(new int[] { 1 }, double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToDoubleObjectArray() {
+		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void intArrayToLongArray() {
+		long[] l = (long[]) ArrayUtil.convertArrayType(new int[] { 1 }, long.class);
+		Assert.assertTrue(1L == l[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToLongObjectArray() {
+		Long[] l = (Long[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Long.class);
+		Assert.assertTrue(1L == l[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToStringArray() {
+		String[] s = (String[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, String.class);
+		Assert.assertTrue("1".equals(s[0]));
+	}
+
 }
