@@ -244,8 +244,6 @@ public class ArrayUtil {
 						}
 					} else if ("byte".equalsIgnoreCase(o) && "boolean".equalsIgnoreCase(d)) {
 						Array.set(dest, i, byte_to_boolean((byte) v));
-					} else if ("Byte".equals(o) && "byte".equals(d)) {
-						Array.set(dest, i, v);
 					} else {
 						Array.set(dest, i, v);
 					}
