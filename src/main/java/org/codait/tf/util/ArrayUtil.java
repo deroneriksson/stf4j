@@ -210,16 +210,16 @@ public class ArrayUtil {
 						} else {
 							Array.set(dest, i, v);
 						}
-					} else if ("long".equals(o)) {
-						if ("boolean".equals(d)) {
+					} else if ("long".equalsIgnoreCase(o)) {
+						if ("boolean".equalsIgnoreCase(d)) {
 							Array.set(dest, i, long_to_boolean((long) v));
-						} else if ("byte".equals(d)) {
+						} else if ("byte".equalsIgnoreCase(d)) {
 							Array.set(dest, i, long_to_byte((long) v));
-						} else if ("double".equals(d)) {
+						} else if ("double".equalsIgnoreCase(d)) {
 							Array.set(dest, i, long_to_double((long) v));
-						} else if ("float".equals(d)) {
+						} else if ("float".equalsIgnoreCase(d)) {
 							Array.set(dest, i, long_to_float((long) v));
-						} else if ("int".equals(d)) {
+						} else if ("int".equals(d) || "Integer".equals(d)) {
 							Array.set(dest, i, long_to_int((long) v));
 						} else if ("String".equals(d)) {
 							Array.set(dest, i, long_to_String((long) v));

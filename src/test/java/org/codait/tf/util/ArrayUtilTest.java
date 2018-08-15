@@ -273,4 +273,69 @@ public class ArrayUtilTest {
 		Assert.assertTrue("1".equals(s[0]));
 	}
 
+	@Test
+	public void longArrayToByteArray() {
+		byte[] b = (byte[]) ArrayUtil.convertArrayType(new long[] { 1L }, byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void longObjectArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void longArrayToBooleanArray() {
+		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new long[] { 1L }, boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void longObjectArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void longArrayToFloatArray() {
+		float[] f = (float[]) ArrayUtil.convertArrayType(new long[] { 1L }, float.class);
+		Assert.assertTrue(1.0f == f[0]);
+	}
+
+	@Test
+	public void longObjectArrayToFloatObjectArray() {
+		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Float.class);
+		Assert.assertTrue(1.0f == f[0]);
+	}
+
+	@Test
+	public void longArrayToDoubleArray() {
+		double[] d = (double[]) ArrayUtil.convertArrayType(new long[] { 1L }, double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void longObjectArrayToDoubleObjectArray() {
+		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void longArrayToIntArray() {
+		int[] i = (int[]) ArrayUtil.convertArrayType(new long[] { 1L }, int.class);
+		Assert.assertTrue(1 == i[0]);
+	}
+
+	@Test
+	public void longObjectArrayToIntegerObjectArray() {
+		Integer[] i = (Integer[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Integer.class);
+		Assert.assertTrue(1 == i[0]);
+	}
+
+	@Test
+	public void longObjectArrayToStringArray() {
+		String[] s = (String[]) ArrayUtil.convertArrayType(new Long[] { 1L }, String.class);
+		Assert.assertTrue("1".equals(s[0]));
+	}
 }
