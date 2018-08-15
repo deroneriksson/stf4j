@@ -12,7 +12,37 @@ import java.util.Arrays;
 import javax.imageio.ImageIO;
 
 /**
- * Utility class for dealing with CIFAR-10 data in Java.
+ * Utility class for dealing with CIFAR-10 data in Java. See https://www.cs.toronto.edu/~kriz/cifar.html for format
+ * information.
+ * 
+ * Examples:
+ * 
+ * <pre>
+ * int[] labels = CIFAR10Util.getLabels(TEST_BATCH_BIN);
+ * System.out.println("class: " + classes[labels[0]]);
+ * System.out.println("class: " + classes[labels[1]]);
+ * System.out.println("class: " + classes[labels[2]]);
+ * System.out.println("class: " + classes[labels[3]]);
+ * System.out.println("class: " + classes[labels[4]]);
+ * 
+ * float[][][][] images = CIFAR10Util.getImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
+ * ImageUtil.displayImage(images[0]);
+ * ImageUtil.displayImage(images[1]);
+ * ImageUtil.displayImage(images[2]);
+ * ImageUtil.displayImage(images[3]);
+ * ImageUtil.displayImage(images[4]);
+ * 
+ * float[][][][] preprocessedImages = CIFAR10Util.getPreprocessedImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
+ * float[][][] preprocessedImage = preprocessedImages[0];
+ * System.out.println(Arrays.deepToString(preprocessedImage));
+ * 
+ * float[][][] cat = CIFAR10Util.getScaledDownImage("images/cat.jpg", DimOrder.ROWS_COLS_CHANNELS);
+ * ImageUtil.displayImage(cat);
+ * float[][][] dog = CIFAR10Util.getScaledDownImage("images/dog.png", DimOrder.ROWS_COLS_CHANNELS);
+ * ImageUtil.displayImage(dog);
+ * 
+ * </pre>
+ * 
  *
  */
 public class CIFAR10Util {
@@ -25,32 +55,6 @@ public class CIFAR10Util {
 	public static enum DimOrder {
 		ROWS_COLS_CHANNELS, CHANNELS_ROWS_COLS
 	};
-
-	// see https://www.cs.toronto.edu/~kriz/cifar.html for format info
-	public static void main(String[] args) throws IOException {
-		int[] labels = getLabels(TEST_BATCH_BIN);
-		System.out.println("class: " + classes[labels[6]]);
-		System.out.println("class: " + classes[labels[7]]);
-		System.out.println("class: " + classes[labels[8]]);
-		System.out.println("class: " + classes[labels[9]]);
-		System.out.println("class: " + classes[labels[10]]);
-
-		float[][][][] images = getImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
-		ImageUtil.displayImage(images[6]);
-		ImageUtil.displayImage(images[7]);
-		ImageUtil.displayImage(images[8]);
-		ImageUtil.displayImage(images[9]);
-		ImageUtil.displayImage(images[10]);
-
-		float[][][][] preprocessedImages = getPreprocessedImages(TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
-		float[][][] preprocessedImage = preprocessedImages[0];
-		System.out.println(Arrays.deepToString(preprocessedImage));
-
-		float[][][] cat = getScaledDownImage("images/cat.jpg", DimOrder.ROWS_COLS_CHANNELS);
-		ImageUtil.displayImage(cat);
-		float[][][] dog = getScaledDownImage("images/dog.png", DimOrder.ROWS_COLS_CHANNELS);
-		ImageUtil.displayImage(dog);
-	}
 
 	/**
 	 * Obtain labels from CIFAR-10 binary data file.
