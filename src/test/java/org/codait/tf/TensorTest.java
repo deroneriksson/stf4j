@@ -269,4 +269,57 @@ public class TensorTest {
 		Tensor.create(b, String.class);
 	}
 
+	@Test
+	public void createFloatTensorWith2dFloatArray() {
+		float[][] f = new float[][] { { 1.0f } };
+		Tensor<Float> tensor = Tensor.create(f, Float.class);
+		float[][] result = (float[][]) ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
+		Assert.assertEquals(f[0][0], result[0][0], 0.0f);
+	}
+
+	@Test
+	public void createFloatTensorWith3dFloatArray() {
+		float[][][] f = new float[][][] { { { 1.0f } } };
+		Tensor<Float> tensor = Tensor.create(f, Float.class);
+		float[][][] result = (float[][][]) ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
+		Assert.assertEquals(f[0][0][0], result[0][0][0], 0.0f);
+	}
+
+	@Test
+	public void createFloatTensorWith15dFloatArray() {
+		float[][][][][][][][][][][][][][][] f = new float[][][][][][][][][][][][][][][] {
+				{ { { { { { { { { { { { { { 1.0f } } } } } } } } } } } } } } };
+		Tensor<Float> tensor = Tensor.create(f, Float.class);
+		float[][][][][][][][][][][][][][][] result = (float[][][][][][][][][][][][][][][]) ArrayUtil
+				.floatTensorToMultidimensionalFloatArray(tensor);
+		Assert.assertEquals(f[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0],
+				result[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0], 0.0f);
+	}
+
+	@Test
+	public void createFloatTensorWith30dFloatArray() {
+		float[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] f = new float[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] {
+				{ { { { { { { { { { { { { {
+						{ { { { { { { { { { { { { { { 1.0f } } } } } } } } } } } } } } } } } } } } } } } } } } } } } };
+		Tensor<Float> tensor = Tensor.create(f, Float.class);
+		float[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] result = (float[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]) ArrayUtil
+				.floatTensorToMultidimensionalFloatArray(tensor);
+		float f0 = f[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0];
+		float result0 = result[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0];
+		Assert.assertEquals(f0, result0, 0.0f);
+	}
+
+	@Test
+	public void createFloatTensorWith60dFloatArray() {
+		float[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] f = new float[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] {
+				{ { { { { { { { { { { { { { { { { { { { {
+						{ { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { { {
+								1.0f } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } } };
+		Tensor<Float> tensor = Tensor.create(f, Float.class);
+		float[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] result = (float[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]) ArrayUtil
+				.floatTensorToMultidimensionalFloatArray(tensor);
+		float f0 = f[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0];
+		float result0 = result[0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0];
+		Assert.assertEquals(f0, result0, 0.0f);
+	}
 }
