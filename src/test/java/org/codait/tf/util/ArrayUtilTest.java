@@ -464,4 +464,16 @@ public class ArrayUtilTest {
 		String[] s = (String[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, String.class);
 		Assert.assertTrue("1".equals(s[0]));
 	}
+
+	@Test
+	public void byteArrayToBooleanArray() {
+		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new byte[] { 1 }, boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void byteObjectArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Byte[] { 1 }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
 }
