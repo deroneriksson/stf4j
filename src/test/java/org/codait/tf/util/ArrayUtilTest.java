@@ -16,20 +16,8 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void booleanObjectArrayToByteObjectArray() {
-		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Boolean[] { true }, Byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
-	}
-
-	@Test
 	public void booleanArrayToDoubleArray() {
 		double[] d = (double[]) ArrayUtil.convertArrayType(new boolean[] { true }, double.class);
-		Assert.assertTrue(1.0d == d[0]);
-	}
-
-	@Test
-	public void booleanObjectArrayToDoubleObjectArray() {
-		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Boolean[] { true }, Double.class);
 		Assert.assertTrue(1.0d == d[0]);
 	}
 
@@ -40,20 +28,8 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void booleanObjectArrayToFloatObjectArray() {
-		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Boolean[] { true }, Float.class);
-		Assert.assertTrue(1.0f == f[0]);
-	}
-
-	@Test
 	public void booleanArrayToIntArray() {
 		int[] i = (int[]) ArrayUtil.convertArrayType(new boolean[] { true }, int.class);
-		Assert.assertTrue(1 == i[0]);
-	}
-
-	@Test
-	public void booleanObjectArrayToIntegerObjectArray() {
-		Integer[] i = (Integer[]) ArrayUtil.convertArrayType(new Boolean[] { true }, Integer.class);
 		Assert.assertTrue(1 == i[0]);
 	}
 
@@ -61,6 +37,30 @@ public class ArrayUtilTest {
 	public void booleanArrayToLongArray() {
 		long[] l = (long[]) ArrayUtil.convertArrayType(new boolean[] { true }, long.class);
 		Assert.assertTrue(1L == l[0]);
+	}
+
+	@Test
+	public void booleanObjectArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Boolean[] { true }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void booleanObjectArrayToDoubleObjectArray() {
+		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Boolean[] { true }, Double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void booleanObjectArrayToFloatObjectArray() {
+		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Boolean[] { true }, Float.class);
+		Assert.assertTrue(1.0f == f[0]);
+	}
+
+	@Test
+	public void booleanObjectArrayToIntegerObjectArray() {
+		Integer[] i = (Integer[]) ArrayUtil.convertArrayType(new Boolean[] { true }, Integer.class);
+		Assert.assertTrue(1 == i[0]);
 	}
 
 	@Test
@@ -76,15 +76,15 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void doubleArrayToByteArray() {
-		byte[] b = (byte[]) ArrayUtil.convertArrayType(new double[] { 1.0d }, byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
+	public void byteArrayToBooleanArray() {
+		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new byte[] { 1 }, boolean.class);
+		Assert.assertTrue(true == b[0]);
 	}
 
 	@Test
-	public void doubleObjectArrayToByteObjectArray() {
-		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
+	public void byteObjectArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Byte[] { 1 }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
 	}
 
 	@Test
@@ -94,20 +94,14 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void doubleObjectArrayToBooleanObjectArray() {
-		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Boolean.class);
-		Assert.assertTrue(true == b[0]);
+	public void doubleArrayToByteArray() {
+		byte[] b = (byte[]) ArrayUtil.convertArrayType(new double[] { 1.0d }, byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
 	}
 
 	@Test
 	public void doubleArrayToFloatArray() {
 		float[] f = (float[]) ArrayUtil.convertArrayType(new double[] { 1.0d }, float.class);
-		Assert.assertTrue(1.0f == f[0]);
-	}
-
-	@Test
-	public void doubleObjectArrayToFloatObjectArray() {
-		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Float.class);
 		Assert.assertTrue(1.0f == f[0]);
 	}
 
@@ -118,15 +112,33 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void doubleObjectArrayToIntegerObjectArray() {
-		Integer[] i = (Integer[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Integer.class);
-		Assert.assertTrue(1 == i[0]);
-	}
-
-	@Test
 	public void doubleArrayToLongArray() {
 		long[] l = (long[]) ArrayUtil.convertArrayType(new double[] { 1.0d }, long.class);
 		Assert.assertTrue(1L == l[0]);
+	}
+
+	@Test
+	public void doubleObjectArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void doubleObjectArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void doubleObjectArrayToFloatObjectArray() {
+		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Float.class);
+		Assert.assertTrue(1.0f == f[0]);
+	}
+
+	@Test
+	public void doubleObjectArrayToIntegerObjectArray() {
+		Integer[] i = (Integer[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Integer.class);
+		Assert.assertTrue(1 == i[0]);
 	}
 
 	@Test
@@ -142,38 +154,20 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void floatArrayToByteArray() {
-		byte[] b = (byte[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
-	}
-
-	@Test
-	public void floatObjectArrayToByteObjectArray() {
-		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
-	}
-
-	@Test
 	public void floatArrayToBooleanArray() {
 		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, boolean.class);
 		Assert.assertTrue(true == b[0]);
 	}
 
 	@Test
-	public void floatObjectArrayToBooleanObjectArray() {
-		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Boolean.class);
-		Assert.assertTrue(true == b[0]);
+	public void floatArrayToByteArray() {
+		byte[] b = (byte[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
 	}
 
 	@Test
 	public void floatArrayToDoubleArray() {
 		double[] d = (double[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, double.class);
-		Assert.assertTrue(1.0d == d[0]);
-	}
-
-	@Test
-	public void floatObjectArrayToDoubleObjectArray() {
-		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Double.class);
 		Assert.assertTrue(1.0d == d[0]);
 	}
 
@@ -184,15 +178,33 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void floatObjectArrayToIntegerObjectArray() {
-		Integer[] i = (Integer[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Integer.class);
-		Assert.assertTrue(1 == i[0]);
-	}
-
-	@Test
 	public void floatArrayToLongArray() {
 		long[] l = (long[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, long.class);
 		Assert.assertTrue(1L == l[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToDoubleObjectArray() {
+		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToIntegerObjectArray() {
+		Integer[] i = (Integer[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Integer.class);
+		Assert.assertTrue(1 == i[0]);
 	}
 
 	@Test
@@ -208,39 +220,15 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void intArrayToByteArray() {
-		byte[] b = (byte[]) ArrayUtil.convertArrayType(new int[] { 1 }, byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
-	}
-
-	@Test
-	public void integerObjectArrayToByteObjectArray() {
-		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
-	}
-
-	@Test
 	public void intArrayToBooleanArray() {
 		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new int[] { 1 }, boolean.class);
 		Assert.assertTrue(true == b[0]);
 	}
 
 	@Test
-	public void integerObjectArrayToBooleanObjectArray() {
-		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Boolean.class);
-		Assert.assertTrue(true == b[0]);
-	}
-
-	@Test
-	public void intArrayToFloatArray() {
-		float[] f = (float[]) ArrayUtil.convertArrayType(new int[] { 1 }, float.class);
-		Assert.assertTrue(1.0f == f[0]);
-	}
-
-	@Test
-	public void integerObjectArrayToFloatObjectArray() {
-		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Float.class);
-		Assert.assertTrue(1.0f == f[0]);
+	public void intArrayToByteArray() {
+		byte[] b = (byte[]) ArrayUtil.convertArrayType(new int[] { 1 }, byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
 	}
 
 	@Test
@@ -250,15 +238,39 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void integerObjectArrayToDoubleObjectArray() {
-		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Double.class);
-		Assert.assertTrue(1.0d == d[0]);
+	public void intArrayToFloatArray() {
+		float[] f = (float[]) ArrayUtil.convertArrayType(new int[] { 1 }, float.class);
+		Assert.assertTrue(1.0f == f[0]);
 	}
 
 	@Test
 	public void intArrayToLongArray() {
 		long[] l = (long[]) ArrayUtil.convertArrayType(new int[] { 1 }, long.class);
 		Assert.assertTrue(1L == l[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToDoubleObjectArray() {
+		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void integerObjectArrayToFloatObjectArray() {
+		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Integer[] { 1 }, Float.class);
+		Assert.assertTrue(1.0f == f[0]);
 	}
 
 	@Test
@@ -274,39 +286,15 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void longArrayToByteArray() {
-		byte[] b = (byte[]) ArrayUtil.convertArrayType(new long[] { 1L }, byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
-	}
-
-	@Test
-	public void longObjectArrayToByteObjectArray() {
-		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
-	}
-
-	@Test
 	public void longArrayToBooleanArray() {
 		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new long[] { 1L }, boolean.class);
 		Assert.assertTrue(true == b[0]);
 	}
 
 	@Test
-	public void longObjectArrayToBooleanObjectArray() {
-		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Boolean.class);
-		Assert.assertTrue(true == b[0]);
-	}
-
-	@Test
-	public void longArrayToFloatArray() {
-		float[] f = (float[]) ArrayUtil.convertArrayType(new long[] { 1L }, float.class);
-		Assert.assertTrue(1.0f == f[0]);
-	}
-
-	@Test
-	public void longObjectArrayToFloatObjectArray() {
-		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Float.class);
-		Assert.assertTrue(1.0f == f[0]);
+	public void longArrayToByteArray() {
+		byte[] b = (byte[]) ArrayUtil.convertArrayType(new long[] { 1L }, byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
 	}
 
 	@Test
@@ -316,15 +304,39 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void longObjectArrayToDoubleObjectArray() {
-		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Double.class);
-		Assert.assertTrue(1.0d == d[0]);
+	public void longArrayToFloatArray() {
+		float[] f = (float[]) ArrayUtil.convertArrayType(new long[] { 1L }, float.class);
+		Assert.assertTrue(1.0f == f[0]);
 	}
 
 	@Test
 	public void longArrayToIntArray() {
 		int[] i = (int[]) ArrayUtil.convertArrayType(new long[] { 1L }, int.class);
 		Assert.assertTrue(1 == i[0]);
+	}
+
+	@Test
+	public void longObjectArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void longObjectArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void longObjectArrayToDoubleObjectArray() {
+		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void longObjectArrayToFloatObjectArray() {
+		Float[] f = (Float[]) ArrayUtil.convertArrayType(new Long[] { 1L }, Float.class);
+		Assert.assertTrue(1.0f == f[0]);
 	}
 
 	@Test
@@ -340,18 +352,6 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void stringArrayToByteArray() {
-		byte[] b = (byte[]) ArrayUtil.convertArrayType(new String[] { "1" }, byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
-	}
-
-	@Test
-	public void stringArrayToByteObjectArray() {
-		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new String[] { "1" }, Byte.class);
-		Assert.assertTrue((byte) 1 == b[0]);
-	}
-
-	@Test
 	public void stringArrayToBooleanArray() {
 		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new String[] { "true" }, boolean.class);
 		Assert.assertTrue(true == b[0]);
@@ -364,15 +364,15 @@ public class ArrayUtilTest {
 	}
 
 	@Test
-	public void stringArrayToFloatArray() {
-		float[] f = (float[]) ArrayUtil.convertArrayType(new String[] { "1.0" }, float.class);
-		Assert.assertTrue(1.0f == f[0]);
+	public void stringArrayToByteArray() {
+		byte[] b = (byte[]) ArrayUtil.convertArrayType(new String[] { "1" }, byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
 	}
 
 	@Test
-	public void stringArrayToFloatObjectArray() {
-		Float[] f = (Float[]) ArrayUtil.convertArrayType(new String[] { "1.0" }, Float.class);
-		Assert.assertTrue(1.0f == f[0]);
+	public void stringArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new String[] { "1" }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
 	}
 
 	@Test
@@ -385,6 +385,18 @@ public class ArrayUtilTest {
 	public void stringArrayToDoubleObjectArray() {
 		Double[] d = (Double[]) ArrayUtil.convertArrayType(new String[] { "1.0" }, Double.class);
 		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void stringArrayToFloatArray() {
+		float[] f = (float[]) ArrayUtil.convertArrayType(new String[] { "1.0" }, float.class);
+		Assert.assertTrue(1.0f == f[0]);
+	}
+
+	@Test
+	public void stringArrayToFloatObjectArray() {
+		Float[] f = (Float[]) ArrayUtil.convertArrayType(new String[] { "1.0" }, Float.class);
+		Assert.assertTrue(1.0f == f[0]);
 	}
 
 	@Test
@@ -463,17 +475,5 @@ public class ArrayUtilTest {
 	public void unsignedByteArrayToStringArray() {
 		String[] s = (String[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, String.class);
 		Assert.assertTrue("1".equals(s[0]));
-	}
-
-	@Test
-	public void byteArrayToBooleanArray() {
-		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new byte[] { 1 }, boolean.class);
-		Assert.assertTrue(true == b[0]);
-	}
-
-	@Test
-	public void byteObjectArrayToBooleanObjectArray() {
-		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Byte[] { 1 }, Boolean.class);
-		Assert.assertTrue(true == b[0]);
 	}
 }
