@@ -2,8 +2,10 @@ package org.codait.tf.util;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codait.tf.simple.BooleanLogicTest;
 import org.junit.Assert;
 import org.junit.Test;
+import org.tensorflow.Tensor;
 
 public class ArrayUtilTest {
 
@@ -475,5 +477,105 @@ public class ArrayUtilTest {
 	public void unsignedByteArrayToStringArray() {
 		String[] s = (String[]) ArrayUtil.convertUnsignedArrayType(new byte[] { 1 }, String.class);
 		Assert.assertTrue("1".equals(s[0]));
+	}
+
+	@Test
+	public void booleanTensorToBooleanArray() {
+		boolean[] b = new boolean[] { true, false };
+		Tensor<Boolean> tensor = Tensor.create(b, Boolean.class);
+		boolean[] result = ArrayUtil.booleanTensorToBooleanArray(tensor);
+		BooleanLogicTest.assertArrayEquals(b, result);
+	}
+
+	@Test
+	public void booleanTensorToByteArray() {
+		boolean[] b = new boolean[] { true, false };
+		byte[] expected = new byte[] { 1, 0 };
+		Tensor<Boolean> tensor = Tensor.create(b, Boolean.class);
+		byte[] result = ArrayUtil.booleanTensorToByteArray(tensor);
+		Assert.assertArrayEquals(expected, result);
+	}
+
+	@Test
+	public void booleanTensorToMultidimensionalBooleanArray() {
+		boolean[][] b = new boolean[][] { { true, false }, { false, true } };
+		Tensor<Boolean> tensor = Tensor.create(b, Boolean.class);
+		boolean[][] result = (boolean[][]) ArrayUtil.booleanTensorToMultidimensionalBooleanArray(tensor);
+		BooleanLogicTest.assertArrayEquals(b, result);
+	}
+
+	@Test
+	public void convert2dIntArraysTo3dIntArray() {
+		int[][] i1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] i2 = new int[][] { { 5, 6 }, { 7, 8 } };
+		int[][][] i3 = ArrayUtil.convert2dIntArraysTo3dIntArray(i1, i2);
+		Assert.assertArrayEquals(i3[0][0], i1[0]);
+		Assert.assertArrayEquals(i3[0][1], i1[1]);
+		Assert.assertArrayEquals(i3[1][0], i2[0]);
+		Assert.assertArrayEquals(i3[1][1], i2[1]);
+	}
+
+	@Test
+	public void doubleTensorToDoubleArray() {
+		double[] d = new double[] { 1.0d, 2.0d };
+		Tensor<Double> tensor = Tensor.create(d, Double.class);
+		double[] result = ArrayUtil.doubleTensorToDoubleArray(tensor);
+		Assert.assertArrayEquals(d, result, 0.0d);
+	}
+
+	@Test
+	public void doubleTensorToMultidimensionalDoubleArray() {
+		double[][] d = new double[][] { { 1.0d, 2.0d }, { 3.0d, 4.0d } };
+		Tensor<Double> tensor = Tensor.create(d, Double.class);
+		double[][] result = (double[][]) ArrayUtil.doubleTensorToMultidimensionalDoubleArray(tensor);
+		Assert.assertArrayEquals(d, result);
+	}
+
+	@Test
+	public void floatTensorToFloatArray() {
+		float[] f = new float[] { 1.0f, 2.0f };
+		Tensor<Float> tensor = Tensor.create(f, Float.class);
+		float[] result = ArrayUtil.floatTensorToFloatArray(tensor);
+		Assert.assertArrayEquals(f, result, 0.0f);
+	}
+
+	@Test
+	public void floatTensorToMultidimensionalFloatArray() {
+		float[][] f = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		Tensor<Float> tensor = Tensor.create(f, Float.class);
+		float[][] result = (float[][]) ArrayUtil.floatTensorToMultidimensionalFloatArray(tensor);
+		Assert.assertArrayEquals(f, result);
+	}
+
+	@Test
+	public void longTensorToLongArray() {
+		long[] l = new long[] { 1L, 2L };
+		Tensor<Long> tensor = Tensor.create(l, Long.class);
+		long[] result = ArrayUtil.longTensorToLongArray(tensor);
+		Assert.assertArrayEquals(l, result);
+	}
+
+	@Test
+	public void longTensorToMultidimensionalLongArray() {
+		long[][] l = new long[][] { { 1L, 2L }, { 3L, 4L } };
+		Tensor<Long> tensor = Tensor.create(l, Long.class);
+		long[][] result = (long[][]) ArrayUtil.longTensorToMultidimensionalLongArray(tensor);
+		Assert.assertArrayEquals(l, result);
+	}
+
+	@Test
+	public void intTensorToIntArray() {
+		int[] i = new int[] { 1, 2 };
+		Tensor<Integer> tensor = Tensor.create(i, Integer.class);
+		int[] result = ArrayUtil.intTensorToIntArray(tensor);
+		Assert.assertArrayEquals(i, result);
+	}
+
+	@Test
+	public void intTensorToMultidimensionalIntArray() {
+		int[][] i = new int[][] { { 1, 2 }, { 3, 4 } };
+		Tensor<Integer> tensor = Tensor.create(i, Integer.class);
+		int[][] result = (int[][]) ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
+		Assert.assertArrayEquals(i, result);
 	}
 }
