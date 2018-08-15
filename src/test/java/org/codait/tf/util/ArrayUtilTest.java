@@ -338,4 +338,77 @@ public class ArrayUtilTest {
 		String[] s = (String[]) ArrayUtil.convertArrayType(new Long[] { 1L }, String.class);
 		Assert.assertTrue("1".equals(s[0]));
 	}
+
+	@Test
+	public void stringArrayToByteArray() {
+		byte[] b = (byte[]) ArrayUtil.convertArrayType(new String[] { "1" }, byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void stringArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new String[] { "1" }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void stringArrayToBooleanArray() {
+		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new String[] { "true" }, boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void stringArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new String[] { "true" }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void stringArrayToFloatArray() {
+		float[] f = (float[]) ArrayUtil.convertArrayType(new String[] { "1.0" }, float.class);
+		Assert.assertTrue(1.0f == f[0]);
+	}
+
+	@Test
+	public void stringArrayToFloatObjectArray() {
+		Float[] f = (Float[]) ArrayUtil.convertArrayType(new String[] { "1.0" }, Float.class);
+		Assert.assertTrue(1.0f == f[0]);
+	}
+
+	@Test
+	public void stringArrayToDoubleArray() {
+		double[] d = (double[]) ArrayUtil.convertArrayType(new String[] { "1.0" }, double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void stringArrayToDoubleObjectArray() {
+		Double[] d = (Double[]) ArrayUtil.convertArrayType(new String[] { "1.0" }, Double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void stringArrayToIntArray() {
+		int[] i = (int[]) ArrayUtil.convertArrayType(new String[] { "1" }, int.class);
+		Assert.assertTrue(1 == i[0]);
+	}
+
+	@Test
+	public void stringArrayToIntegerObjectArray() {
+		Integer[] i = (Integer[]) ArrayUtil.convertArrayType(new String[] { "1" }, Integer.class);
+		Assert.assertTrue(1 == i[0]);
+	}
+
+	@Test
+	public void stringArrayToLongArray() {
+		long[] l = (long[]) ArrayUtil.convertArrayType(new String[] { "1" }, long.class);
+		Assert.assertTrue(1L == l[0]);
+	}
+
+	@Test
+	public void stringArrayToLongObjectArray() {
+		Long[] l = (Long[]) ArrayUtil.convertArrayType(new String[] { "1" }, Long.class);
+		Assert.assertTrue(1L == l[0]);
+	}
+
 }

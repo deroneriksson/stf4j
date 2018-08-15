@@ -227,17 +227,17 @@ public class ArrayUtil {
 							Array.set(dest, i, v);
 						}
 					} else if ("String".equals(o)) {
-						if ("boolean".equals(d)) {
+						if ("boolean".equalsIgnoreCase(d)) {
 							Array.set(dest, i, String_to_boolean((String) v));
-						} else if ("byte".equals(d)) {
+						} else if ("byte".equalsIgnoreCase(d)) {
 							Array.set(dest, i, String_to_byte((String) v));
-						} else if ("double".equals(d)) {
+						} else if ("double".equalsIgnoreCase(d)) {
 							Array.set(dest, i, String_to_double((String) v));
-						} else if ("float".equals(d)) {
+						} else if ("float".equalsIgnoreCase(d)) {
 							Array.set(dest, i, String_to_float((String) v));
-						} else if ("int".equals(d)) {
+						} else if ("int".equals(d) || "Integer".equals(d)) {
 							Array.set(dest, i, String_to_int((String) v));
-						} else if ("long".equals(d)) {
+						} else if ("long".equalsIgnoreCase(d)) {
 							Array.set(dest, i, String_to_long((String) v));
 						} else {
 							Array.set(dest, i, v);
