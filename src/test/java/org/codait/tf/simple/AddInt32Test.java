@@ -676,4 +676,16 @@ public class AddInt32Test {
 		boolean result = model.in("input1", input1).in("input2", input2).out("output").run().getBoolean("output");
 		Assert.assertEquals(expected, result);
 	}
+
+	@Test
+	public void inputMultiIntegerObjectArraysOutputMultiIntArray() {
+		Integer[][] input1 = new Integer[][] { { 1, 2 }, { 3, 4 } };
+		Integer[][] input2 = new Integer[][] { { 1, 2 }, { 3, 4 } };
+		int[][] expected = new int[][] { { 2, 4 }, { 6, 8 } };
+		int[][] result = (int[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getIntArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }

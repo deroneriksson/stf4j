@@ -189,6 +189,11 @@ public class TFUtil {
 		} else if (DataType.DT_DOUBLE == dtype && isDoubleType(value)) {
 			if (value instanceof Double) {
 				tensor = Tensor.create(value, Double.class);
+			} else if (isDoubleObjectArray(value)) {
+				// to avoid: "cannot create non-scalar Tensors from arrays of boxed values"
+				log.warn("Implicitly converting Double object array to primitive double array");
+				Object doubleArray = ArrayUtil.convertArrayType(value, double.class);
+				tensor = Tensor.create(doubleArray, Double.class);
 			} else {
 				tensor = Tensor.create(value, Double.class);
 			}
@@ -223,6 +228,11 @@ public class TFUtil {
 		} else if (DataType.DT_INT64 == dtype && isLongType(value)) {
 			if (value instanceof Long) {
 				tensor = Tensor.create(value, Long.class);
+			} else if (isLongObjectArray(value)) {
+				// to avoid: "cannot create non-scalar Tensors from arrays of boxed values"
+				log.warn("Implicitly converting Long object array to primitive long array");
+				Object longArray = ArrayUtil.convertArrayType(value, long.class);
+				tensor = Tensor.create(longArray, Long.class);
 			} else {
 				tensor = Tensor.create(value, Long.class);
 			}
@@ -293,6 +303,11 @@ public class TFUtil {
 		} else if (DataType.DT_INT32 == dtype && isIntType(value)) {
 			if (value instanceof Integer) {
 				tensor = Tensor.create(value, Integer.class);
+			} else if (isIntegerObjectArray(value)) {
+				// to avoid: "cannot create non-scalar Tensors from arrays of boxed values"
+				log.warn("Implicitly converting Integer object array to primitive int array");
+				Object intArray = ArrayUtil.convertArrayType(value, int.class);
+				tensor = Tensor.create(intArray, Integer.class);
 			} else {
 				tensor = Tensor.create(value, Integer.class);
 			}
@@ -736,6 +751,42 @@ public class TFUtil {
 	public static boolean isFloatObjectArray(Object value) {
 		String typeName = value.getClass().getTypeName();
 		return typeName.startsWith("java.lang.Float[");
+	}
+
+	/**
+	 * Return true if the object is a Double array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Double Object array, false otherwise
+	 */
+	public static boolean isDoubleObjectArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		return typeName.startsWith("java.lang.Double[");
+	}
+
+	/**
+	 * Return true if the object is a Long array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Long Object array, false otherwise
+	 */
+	public static boolean isLongObjectArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		return typeName.startsWith("java.lang.Long[");
+	}
+
+	/**
+	 * Return true if the object is an Integer array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is an Integer Object array, false otherwise
+	 */
+	public static boolean isIntegerObjectArray(Object value) {
+		String typeName = value.getClass().getTypeName();
+		return typeName.startsWith("java.lang.Integer[");
 	}
 
 	/**

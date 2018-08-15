@@ -486,4 +486,16 @@ public class AddInt64Test {
 		boolean result = model.in("input1", input1).in("input2", input2).out("output").run().getBoolean("output");
 		Assert.assertEquals(expected, result);
 	}
+
+	@Test
+	public void inputMultiLongObjectArraysOutputMultiLongArray() {
+		Long[][] input1 = new Long[][] { { 1L, 2L }, { 3L, 4L } };
+		Long[][] input2 = new Long[][] { { 1L, 2L }, { 3L, 4L } };
+		long[][] expected = new long[][] { { 2L, 4L }, { 6L, 8L } };
+		long[][] result = (long[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getLongArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i]);
+		}
+	}
 }

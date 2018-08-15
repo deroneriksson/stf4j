@@ -464,4 +464,16 @@ public class AddFloat32Test {
 		boolean result = model.in("input1", input1).in("input2", input2).out("output").run().getBoolean("output");
 		Assert.assertEquals(expected, result);
 	}
+	
+	@Test
+	public void inputMultiFloatObjectArraysOutputMultiFloatArray() {
+		Float[][] input1 = new Float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		Float[][] input2 = new Float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		float[][] expected = new float[][] { { 2.0f, 4.0f }, { 6.0f, 8.0f } };
+		float[][] result = (float[][]) model.in("input1", input1).in("input2", input2).out("output").run()
+				.getFloatArrayMultidimensional("output");
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertArrayEquals(expected[i], result[i], 0.0f);
+		}
+	}
 }
