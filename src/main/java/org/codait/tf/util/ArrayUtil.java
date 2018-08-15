@@ -178,16 +178,16 @@ public class ArrayUtil {
 						} else {
 							Array.set(dest, i, v);
 						}
-					} else if ("float".equals(o)) {
-						if ("boolean".equals(d)) {
+					} else if ("float".equalsIgnoreCase(o)) {
+						if ("boolean".equalsIgnoreCase(d)) {
 							Array.set(dest, i, float_to_boolean((float) v));
-						} else if ("byte".equals(d)) {
+						} else if ("byte".equalsIgnoreCase(d)) {
 							Array.set(dest, i, float_to_byte((float) v));
-						} else if ("double".equals(d)) {
+						} else if ("double".equalsIgnoreCase(d)) {
 							Array.set(dest, i, float_to_double((float) v));
-						} else if ("int".equals(d)) {
+						} else if ("int".equals(d) || "Integer".equals(d)) {
 							Array.set(dest, i, float_to_int((float) v));
-						} else if ("long".equals(d)) {
+						} else if ("long".equalsIgnoreCase(d)) {
 							Array.set(dest, i, float_to_long((float) v));
 						} else if ("String".equals(d)) {
 							Array.set(dest, i, float_to_String((float) v));

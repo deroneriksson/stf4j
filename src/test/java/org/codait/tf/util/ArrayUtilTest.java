@@ -95,8 +95,8 @@ public class ArrayUtilTest {
 
 	@Test
 	public void doubleObjectArrayToBooleanObjectArray() {
-		Boolean[] d = (Boolean[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Boolean.class);
-		Assert.assertTrue(true == d[0]);
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
 	}
 
 	@Test
@@ -138,6 +138,72 @@ public class ArrayUtilTest {
 	@Test
 	public void doubleObjectArrayToStringArray() {
 		String[] s = (String[]) ArrayUtil.convertArrayType(new Double[] { 1.0d }, String.class);
+		Assert.assertTrue("1.0".equals(s[0]));
+	}
+
+	@Test
+	public void floatArrayToByteArray() {
+		byte[] b = (byte[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToByteObjectArray() {
+		Byte[] b = (Byte[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Byte.class);
+		Assert.assertTrue((byte) 1 == b[0]);
+	}
+
+	@Test
+	public void floatArrayToBooleanArray() {
+		boolean[] b = (boolean[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToBooleanObjectArray() {
+		Boolean[] b = (Boolean[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Boolean.class);
+		Assert.assertTrue(true == b[0]);
+	}
+
+	@Test
+	public void floatArrayToDoubleArray() {
+		double[] d = (double[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToDoubleObjectArray() {
+		Double[] d = (Double[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Double.class);
+		Assert.assertTrue(1.0d == d[0]);
+	}
+
+	@Test
+	public void floatArrayToIntArray() {
+		int[] i = (int[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, int.class);
+		Assert.assertTrue(1 == i[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToIntegerObjectArray() {
+		Integer[] i = (Integer[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Integer.class);
+		Assert.assertTrue(1 == i[0]);
+	}
+
+	@Test
+	public void floatArrayToLongArray() {
+		long[] l = (long[]) ArrayUtil.convertArrayType(new float[] { 1.0f }, long.class);
+		Assert.assertTrue(1L == l[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToLongObjectArray() {
+		Long[] l = (Long[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, Long.class);
+		Assert.assertTrue(1L == l[0]);
+	}
+
+	@Test
+	public void floatObjectArrayToStringArray() {
+		String[] s = (String[]) ArrayUtil.convertArrayType(new Float[] { 1.0f }, String.class);
 		Assert.assertTrue("1.0".equals(s[0]));
 	}
 }
