@@ -1,5 +1,7 @@
 package org.codait.tf.util;
 
+import java.util.List;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.codait.tf.simple.BooleanLogicTest;
@@ -578,4 +580,124 @@ public class ArrayUtilTest {
 		int[][] result = (int[][]) ArrayUtil.intTensorToMultidimensionalIntArray(tensor);
 		Assert.assertArrayEquals(i, result);
 	}
+
+	@Test
+	public void dToF() {
+		double[] d = new double[] { 1.0d, 2.0d };
+		float[] f = new float[] { 1.0f, 2.0f };
+		float[] result = ArrayUtil.dToF(d);
+		Assert.assertArrayEquals(f, result, 0.0f);
+	}
+
+	@Test
+	public void dToI() {
+		double[] d = new double[] { 1.0d, 2.0d };
+		int[] i = new int[] { 1, 2 };
+		int[] result = ArrayUtil.dToI(d);
+		Assert.assertArrayEquals(i, result);
+	}
+
+	@Test
+	public void dToL() {
+		double[] d = new double[] { 1.0d, 2.0d };
+		long[] l = new long[] { 1L, 2L };
+		long[] result = ArrayUtil.dToL(d);
+		Assert.assertArrayEquals(l, result);
+	}
+
+	@Test
+	public void fToD() {
+		float[] f = new float[] { 1.0f, 2.0f };
+		double[] d = new double[] { 1.0d, 2.0d };
+		double[] result = ArrayUtil.fToD(f);
+		Assert.assertArrayEquals(d, result, 0.0d);
+	}
+
+	@Test
+	public void fToI() {
+		float[] f = new float[] { 1.0f, 2.0f };
+		int[] i = new int[] { 1, 2 };
+		int[] result = ArrayUtil.fToI(f);
+		Assert.assertArrayEquals(i, result);
+	}
+
+	@Test
+	public void fToL() {
+		float[] f = new float[] { 1.0f, 2.0f };
+		long[] l = new long[] { 1L, 2L };
+		long[] result = ArrayUtil.fToL(f);
+		Assert.assertArrayEquals(l, result);
+	}
+
+	@Test
+	public void iToD() {
+		int[] i = new int[] { 1, 2 };
+		double[] d = new double[] { 1.0d, 2.0d };
+		double[] result = ArrayUtil.iToD(i);
+		Assert.assertArrayEquals(d, result, 0.0d);
+	}
+
+	@Test
+	public void iToF() {
+		int[] i = new int[] { 1, 2 };
+		float[] f = new float[] { 1.0f, 2.0f };
+		float[] result = ArrayUtil.iToF(i);
+		Assert.assertArrayEquals(f, result, 0.0f);
+	}
+
+	@Test
+	public void iToL() {
+		int[] i = new int[] { 1, 2 };
+		long[] l = new long[] { 1L, 2L };
+		long[] result = ArrayUtil.iToL(i);
+		Assert.assertArrayEquals(l, result);
+	}
+
+	@Test
+	public void lToD() {
+		long[] l = new long[] { 1L, 2L };
+		double[] d = new double[] { 1.0d, 2.0d };
+		double[] result = ArrayUtil.lToD(l);
+		Assert.assertArrayEquals(d, result, 0.0d);
+	}
+
+	@Test
+	public void lToF() {
+		long[] l = new long[] { 1L, 2L };
+		float[] f = new float[] { 1.0f, 2.0f };
+		float[] result = ArrayUtil.lToF(l);
+		Assert.assertArrayEquals(f, result, 0.0f);
+	}
+
+	@Test
+	public void lToI() {
+		long[] l = new long[] { 1L, 2L };
+		int[] i = new int[] { 1, 2 };
+		int[] result = ArrayUtil.lToI(l);
+		Assert.assertArrayEquals(i, result);
+	}
+
+	@Test
+	public void firstElementValueOfMultidimArray_float() {
+		float[][] f = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		float first = (float) ArrayUtil.firstElementValueOfMultidimArray(f);
+		Assert.assertEquals(f[0][0], first, 0.0f);
+	}
+
+	@Test
+	public void getArrayDimensions() {
+		float[][] f = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		int[] dimensions = ArrayUtil.getArrayDimensions(f);
+		Assert.assertArrayEquals(new int[] { 2, 2 }, dimensions);
+	}
+
+	@Test
+	public void getArrayDimensionsList() {
+		float[][] f = new float[][] { { 1.0f, 2.0f }, { 3.0f, 4.0f } };
+		List<Integer> dimensions = ArrayUtil.getArrayDimensionsList(f);
+		Assert.assertTrue(2 == dimensions.size());
+		Assert.assertTrue(2 == dimensions.get(0));
+		Assert.assertTrue(2 == dimensions.get(1));
+	}
+
 }
