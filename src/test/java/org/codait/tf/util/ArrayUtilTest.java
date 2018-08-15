@@ -8,6 +8,7 @@ import org.codait.tf.simple.BooleanLogicTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.tensorflow.Tensor;
+import org.tensorflow.types.UInt8;
 
 public class ArrayUtilTest {
 
@@ -700,4 +701,76 @@ public class ArrayUtilTest {
 		Assert.assertTrue(2 == dimensions.get(1));
 	}
 
+	@Test
+	public void maxIndexDouble() {
+		double[] d = new double[] { 1.0d, 2.0d, 3.0d, 2.0d, 1.0d };
+		int i = ArrayUtil.maxIndex(d);
+		Assert.assertEquals(2, i);
+	}
+
+	@Test
+	public void maxIndexFloat() {
+		float[] f = new float[] { 1.0f, 2.0f, 3.0f, 2.0f, 1.0f };
+		int i = ArrayUtil.maxIndex(f);
+		Assert.assertEquals(2, i);
+	}
+
+	@Test
+	public void maxIndicesDouble() {
+		double[] d1 = new double[] { 1.0d, 2.0d, 3.0d, 2.0d, 1.0d };
+		double[] d2 = new double[] { 1.0d, 2.0d, 3.0d, 4.0d, 1.0d };
+		double[][] d3 = new double[][] { d1, d2 };
+		int[] i = ArrayUtil.maxIndices(d3);
+		Assert.assertArrayEquals(new int[] { 2, 3 }, i);
+	}
+
+	@Test
+	public void maxIndicesFloat() {
+		float[] f1 = new float[] { 1.0f, 2.0f, 3.0f, 2.0f, 1.0f };
+		float[] f2 = new float[] { 1.0f, 2.0f, 3.0f, 4.0f, 1.0f };
+		float[][] f3 = new float[][] { f1, f2 };
+		int[] i = ArrayUtil.maxIndices(f3);
+		Assert.assertArrayEquals(new int[] { 2, 3 }, i);
+	}
+
+	@Test
+	public void multidimStringsToMultidimBytes() {
+		String[][] s = new String[][] { { "AB", "CD" }, { "EF", "GH" } };
+		byte[][][] expected = new byte[][][] { { { 65, 66 }, { 67, 68 } }, { { 69, 70 }, { 71, 72 } } };
+		byte[][][] b = (byte[][][]) ArrayUtil.multidimStringsToMultidimBytes(s);
+		Assert.assertArrayEquals(expected, b);
+	}
+
+	@Test
+	public void multidimBytesToMultidimStrings() {
+		byte[][][] b = new byte[][][] { { { 65, 66 }, { 67, 68 } }, { { 69, 70 }, { 71, 72 } } };
+		String[][] expected = new String[][] { { "AB", "CD" }, { "EF", "GH" } };
+		String[][] s = (String[][]) ArrayUtil.multidimBytesToMultidimStrings(b);
+		Assert.assertArrayEquals(expected, s);
+	}
+
+	@Test
+	public void stringTensorToMultidimensionalStringArray() {
+		String[][] s = new String[][] { { "AB", "CD" }, { "EF", "GH" } };
+		byte[][][] b = (byte[][][]) ArrayUtil.multidimStringsToMultidimBytes(s);
+		Tensor<String> tensor = Tensor.create(b, String.class);
+		String[][] result = (String[][]) ArrayUtil.stringTensorToMultidimensionalStringArray(tensor);
+		Assert.assertArrayEquals(s, result);
+	}
+
+	@Test
+	public void uint8TensorToByteArray() {
+		byte[] b = new byte[] { (byte) 1, (byte) 2 };
+		Tensor<UInt8> tensor = Tensor.create(b, UInt8.class);
+		byte[] result = ArrayUtil.uint8TensorToByteArray(tensor);
+		Assert.assertArrayEquals(b, result);
+	}
+
+	@Test
+	public void uint8TensorToMultidimensionalByteArray() {
+		byte[][] b = new byte[][] { { (byte) 1, (byte) 2 }, { (byte) 3, (byte) 4 } };
+		Tensor<UInt8> tensor = Tensor.create(b, UInt8.class);
+		byte[][] result = (byte[][]) ArrayUtil.uint8TensorToMultidimensionalByteArray(tensor);
+		Assert.assertArrayEquals(b, result);
+	}
 }
