@@ -679,8 +679,8 @@ public class TFUtil {
 		if (value instanceof Boolean) {
 			return true;
 		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("boolean[") || typeName.startsWith("java.lang.Boolean[")) {
+		String type = value.getClass().getCanonicalName();
+		if (type.startsWith("boolean[") || type.startsWith("java.lang.Boolean[")) {
 			return true;
 		} else {
 			return false;
@@ -695,8 +695,8 @@ public class TFUtil {
 	 * @return True if object is a Boolean Object array, false otherwise
 	 */
 	public static boolean isBooleanObjectArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		return typeName.startsWith("java.lang.Boolean[");
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Boolean[");
 	}
 
 	/**
@@ -707,8 +707,8 @@ public class TFUtil {
 	 * @return True if object is a byte/Byte array, false otherwise
 	 */
 	public static boolean isByteArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("byte[") || typeName.startsWith("java.lang.Byte[")) {
+		String type = value.getClass().getCanonicalName();
+		if (type.startsWith("byte[") || type.startsWith("java.lang.Byte[")) {
 			return true;
 		}
 		return false;
@@ -722,8 +722,8 @@ public class TFUtil {
 	 * @return True if object is a Byte Object array, false otherwise
 	 */
 	public static boolean isByteObjectArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		return typeName.startsWith("java.lang.Byte[");
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Byte[");
 	}
 
 	/**
@@ -737,8 +737,8 @@ public class TFUtil {
 		if (value instanceof Byte) {
 			return true;
 		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("byte[") || typeName.startsWith("java.lang.Byte[")) {
+		String type = value.getClass().getCanonicalName();
+		if (type.startsWith("byte[") || type.startsWith("java.lang.Byte[")) {
 			return true;
 		} else {
 			return false;
@@ -756,8 +756,8 @@ public class TFUtil {
 		if (value instanceof Double) {
 			return true;
 		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("double[") || typeName.startsWith("java.lang.Double[")) {
+		String type = value.getClass().getCanonicalName();
+		if (type.startsWith("double[") || type.startsWith("java.lang.Double[")) {
 			return true;
 		}
 		return false;
@@ -771,8 +771,8 @@ public class TFUtil {
 	 * @return True if object is a Float Object array, false otherwise
 	 */
 	public static boolean isFloatObjectArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		return typeName.startsWith("java.lang.Float[");
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Float[");
 	}
 
 	/**
@@ -783,8 +783,8 @@ public class TFUtil {
 	 * @return True if object is a Double Object array, false otherwise
 	 */
 	public static boolean isDoubleObjectArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		return typeName.startsWith("java.lang.Double[");
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Double[");
 	}
 
 	/**
@@ -795,8 +795,8 @@ public class TFUtil {
 	 * @return True if object is a Long Object array, false otherwise
 	 */
 	public static boolean isLongObjectArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		return typeName.startsWith("java.lang.Long[");
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Long[");
 	}
 
 	/**
@@ -807,8 +807,8 @@ public class TFUtil {
 	 * @return True if object is an Integer Object array, false otherwise
 	 */
 	public static boolean isIntegerObjectArray(Object value) {
-		String typeName = value.getClass().getTypeName();
-		return typeName.startsWith("java.lang.Integer[");
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Integer[");
 	}
 
 	/**
@@ -822,8 +822,8 @@ public class TFUtil {
 		if (value instanceof Float) {
 			return true;
 		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("float[") || typeName.startsWith("java.lang.Float[")) {
+		String type = value.getClass().getCanonicalName();
+		if (type.startsWith("float[") || type.startsWith("java.lang.Float[")) {
 			return true;
 		}
 		return false;
@@ -840,8 +840,8 @@ public class TFUtil {
 		if (value instanceof Integer) {
 			return true;
 		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("int[") || typeName.startsWith("java.lang.Integer[")) {
+		String type = value.getClass().getCanonicalName();
+		if (type.startsWith("int[") || type.startsWith("java.lang.Integer[")) {
 			return true;
 		} else {
 			return false;
@@ -859,8 +859,9 @@ public class TFUtil {
 		if (value instanceof Long) {
 			return true;
 		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("long[") || typeName.startsWith("java.lang.Long[")) {
+
+		String type = value.getClass().getCanonicalName();
+		if (type.startsWith("long[") || type.startsWith("java.lang.Long[")) {
 			return true;
 		} else {
 			return false;
@@ -878,8 +879,9 @@ public class TFUtil {
 		if (value instanceof String) {
 			return true;
 		}
-		String typeName = value.getClass().getTypeName();
-		if (typeName.startsWith("java.lang.String[")) {
+
+		String type = value.getClass().getCanonicalName();
+		if (type.startsWith("java.lang.String[")) {
 			return true;
 		} else {
 			return false;
