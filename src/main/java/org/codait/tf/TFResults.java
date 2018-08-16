@@ -61,17 +61,6 @@ public class TFResults {
 	}
 
 	/**
-	 * Return true if the output key exists in the result map, false otherwise.
-	 * 
-	 * @param key
-	 *            The output key
-	 * @return true if the output key exists in the result map, false otherwise.
-	 */
-	public boolean keyExists(String key) {
-		return outputKeyToName.containsKey(key);
-	}
-
-	/**
 	 * Obtain the boolean value corresponding to the output key.
 	 * 
 	 * @param key
@@ -1508,6 +1497,17 @@ public class TFResults {
 	public Tensor<?> getTensor(String key) {
 		checkKey(key);
 		return (Tensor<?>) keyToOutput(key);
+	}
+
+	/**
+	 * Return true if the output key exists in the result map, false otherwise.
+	 * 
+	 * @param key
+	 *            The output key
+	 * @return true if the output key exists in the result map, false otherwise.
+	 */
+	public boolean keyExists(String key) {
+		return outputKeyToName.containsKey(key);
 	}
 
 	/**

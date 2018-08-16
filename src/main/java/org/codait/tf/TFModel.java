@@ -360,6 +360,19 @@ public class TFModel {
 	}
 
 	/**
+	 * Obtain SignatureDef metadata as a String.
+	 * 
+	 * @return The SignatureDef metadata as a String
+	 */
+	public String signatureDefInfo() {
+		try {
+			return TFUtil.signatureDefInfo(metaGraphDef());
+		} catch (InvalidProtocolBufferException e) {
+			throw new TFException("Exception displaying MetaGraphDef", e);
+		}
+	}
+
+	/**
 	 * Return the set of SignatureDef keys as a String.
 	 * 
 	 * @return The SignatureDef keys as a String
@@ -372,19 +385,6 @@ public class TFModel {
 			return "No SignatureDef keys found";
 		} else {
 			return signatureDefKeys.toString();
-		}
-	}
-
-	/**
-	 * Obtain SignatureDef metadata as a String.
-	 * 
-	 * @return The SignatureDef metadata as a String
-	 */
-	public String signatureDefInfo() {
-		try {
-			return TFUtil.signatureDefInfo(metaGraphDef());
-		} catch (InvalidProtocolBufferException e) {
-			throw new TFException("Exception displaying MetaGraphDef", e);
 		}
 	}
 

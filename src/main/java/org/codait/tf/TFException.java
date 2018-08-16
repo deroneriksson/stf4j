@@ -12,12 +12,12 @@ public class TFException extends RuntimeException {
 		super();
 	}
 
-	public TFException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
 	public TFException(String message) {
 		super(message);
+	}
+
+	public TFException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 	public TFException(Throwable cause) {
