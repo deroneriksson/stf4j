@@ -669,6 +669,18 @@ public class TFUtil {
 	}
 
 	/**
+	 * Return true if the object is a Boolean array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Boolean Object array, false otherwise
+	 */
+	public static boolean isBooleanObjectArray(Object value) {
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Boolean[");
+	}
+
+	/**
 	 * Return true if the object is a Boolean instance or an boolean/Boolean array.
 	 * 
 	 * @param value
@@ -685,18 +697,6 @@ public class TFUtil {
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * Return true if the object is a Boolean array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Boolean Object array, false otherwise
-	 */
-	public static boolean isBooleanObjectArray(Object value) {
-		String type = value.getClass().getCanonicalName();
-		return type.startsWith("java.lang.Boolean[");
 	}
 
 	/**
@@ -746,6 +746,18 @@ public class TFUtil {
 	}
 
 	/**
+	 * Return true if the object is a Double array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Double Object array, false otherwise
+	 */
+	public static boolean isDoubleObjectArray(Object value) {
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Double[");
+	}
+
+	/**
 	 * Return true if the object is a Double instance or a double/Double array.
 	 * 
 	 * @param value
@@ -776,42 +788,6 @@ public class TFUtil {
 	}
 
 	/**
-	 * Return true if the object is a Double array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Double Object array, false otherwise
-	 */
-	public static boolean isDoubleObjectArray(Object value) {
-		String type = value.getClass().getCanonicalName();
-		return type.startsWith("java.lang.Double[");
-	}
-
-	/**
-	 * Return true if the object is a Long array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is a Long Object array, false otherwise
-	 */
-	public static boolean isLongObjectArray(Object value) {
-		String type = value.getClass().getCanonicalName();
-		return type.startsWith("java.lang.Long[");
-	}
-
-	/**
-	 * Return true if the object is an Integer array.
-	 * 
-	 * @param value
-	 *            The object to evaluate
-	 * @return True if object is an Integer Object array, false otherwise
-	 */
-	public static boolean isIntegerObjectArray(Object value) {
-		String type = value.getClass().getCanonicalName();
-		return type.startsWith("java.lang.Integer[");
-	}
-
-	/**
 	 * Return true if the object is a Float instance or a float/Float array.
 	 * 
 	 * @param value
@@ -827,6 +803,18 @@ public class TFUtil {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Return true if the object is an Integer array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is an Integer Object array, false otherwise
+	 */
+	public static boolean isIntegerObjectArray(Object value) {
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Integer[");
 	}
 
 	/**
@@ -846,6 +834,18 @@ public class TFUtil {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Return true if the object is a Long array.
+	 * 
+	 * @param value
+	 *            The object to evaluate
+	 * @return True if object is a Long Object array, false otherwise
+	 */
+	public static boolean isLongObjectArray(Object value) {
+		String type = value.getClass().getCanonicalName();
+		return type.startsWith("java.lang.Long[");
 	}
 
 	/**
