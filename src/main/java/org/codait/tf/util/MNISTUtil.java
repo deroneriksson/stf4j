@@ -24,21 +24,24 @@ public class MNISTUtil {
 	public static final String TEST_LABELS = "./mnist_data/t10k-labels-idx1-ubyte";
 
 	/**
-	 * Obtain labels from MNIST label data file.
+	 * Display an MNIST image to the screen as an image.
 	 * 
-	 * @param labelFile
-	 *            MNIST label data file
-	 * @return Labels (valued 0 through 9) as an int array
-	 * @throws IOException
-	 *             if problem occurs reading data file
+	 * @param image
+	 *            MNIST image as a 2-dimensional int array
 	 */
-	public static int[] getLabels(String labelFile) throws IOException {
-		byte[] b = Files.readAllBytes(Paths.get(labelFile));
-		int[] labels = new int[b.length - 8];
-		for (int i = 0; i < labels.length; i++) {
-			labels[i] = b[i + 8];
-		}
-		return labels;
+	public static void displayMNISTImage(int[][] image) {
+		BufferedImage bi = mnistToBuff(image);
+		ImageUtil.displayBufferedImage(bi);
+	}
+
+	/**
+	 * Display an MNIST image as text int values from 0 to 255, where 0 represents white and 255 represents black.
+	 * 
+	 * @param image
+	 *            MNIST image as a 2-dimensional int array
+	 */
+	public static void displayMNISTImageAsText(int[][] image) {
+		System.out.println(mnistImageAsText(image));
 	}
 
 	/**
@@ -62,6 +65,24 @@ public class MNISTUtil {
 	}
 
 	/**
+	 * Obtain labels from MNIST label data file.
+	 * 
+	 * @param labelFile
+	 *            MNIST label data file
+	 * @return Labels (valued 0 through 9) as an int array
+	 * @throws IOException
+	 *             if problem occurs reading data file
+	 */
+	public static int[] getLabels(String labelFile) throws IOException {
+		byte[] b = Files.readAllBytes(Paths.get(labelFile));
+		int[] labels = new int[b.length - 8];
+		for (int i = 0; i < labels.length; i++) {
+			labels[i] = b[i + 8];
+		}
+		return labels;
+	}
+
+	/**
 	 * Obtain an MNIST image as text int values from 0 to 255, where 0 represents white and 255 represents black.
 	 * 
 	 * @param image
@@ -77,27 +98,6 @@ public class MNISTUtil {
 			sb.append("\n");
 		}
 		return sb.toString();
-	}
-
-	/**
-	 * Display an MNIST image as text int values from 0 to 255, where 0 represents white and 255 represents black.
-	 * 
-	 * @param image
-	 *            MNIST image as a 2-dimensional int array
-	 */
-	public static void displayMNISTImageAsText(int[][] image) {
-		System.out.println(mnistImageAsText(image));
-	}
-
-	/**
-	 * Display an MNIST image to the screen as an image.
-	 * 
-	 * @param image
-	 *            MNIST image as a 2-dimensional int array
-	 */
-	public static void displayMNISTImage(int[][] image) {
-		BufferedImage bi = mnistToBuff(image);
-		ImageUtil.displayBufferedImage(bi);
 	}
 
 	/**

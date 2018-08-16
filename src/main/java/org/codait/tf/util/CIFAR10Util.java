@@ -43,32 +43,14 @@ import javax.imageio.ImageIO;
  */
 public class CIFAR10Util {
 
+	public static enum DimOrder {
+		ROWS_COLS_CHANNELS, CHANNELS_ROWS_COLS
+	}
+
 	public static final String TEST_BATCH_BIN = "./cifar10_data/cifar-10-batches-bin/test_batch.bin";
 
 	public static final String[] classes = new String[] { "airplane", "automobile", "bird", "cat", "deer", "dog",
-			"frog", "horse", "ship", "truck" };
-
-	public static enum DimOrder {
-		ROWS_COLS_CHANNELS, CHANNELS_ROWS_COLS
-	};
-
-	/**
-	 * Obtain labels from CIFAR-10 binary data file.
-	 * 
-	 * @param batchBinFile
-	 *            CIFAR-10 binary data file
-	 * @return Labels (valued 0 through 9) as an int array
-	 * @throws IOException
-	 *             if problem occurs reading binary data file
-	 */
-	public static int[] getLabels(String batchBinFile) throws IOException {
-		byte[] b = Files.readAllBytes(Paths.get(batchBinFile));
-		int[] labels = new int[b.length / 3073];
-		for (int i = 0; i < labels.length; i++) {
-			labels[i] = b[i * 3073];
-		}
-		return labels;
-	}
+			"frog", "horse", "ship", "truck" };;
 
 	/**
 	 * Obtain images from CIFAR-10 binary data file. If dimOrder is CHANNELS_ROWS_COLS, the images are returned as a
@@ -108,68 +90,21 @@ public class CIFAR10Util {
 	}
 
 	/**
-	 * Preprocess the image, as in the preprocess_image function in cifar10_main.py, which calls
-	 * tf.image.per_image_standardization(image). The average is subtracted and this is divided by the adjusted standard
-	 * deviation.
+	 * Obtain labels from CIFAR-10 binary data file.
 	 * 
-	 * @param f
-	 *            Image as a 3-dimensional float array
-	 * @return Preprocessed image as a 3-dimensional float array
+	 * @param batchBinFile
+	 *            CIFAR-10 binary data file
+	 * @return Labels (valued 0 through 9) as an int array
+	 * @throws IOException
+	 *             if problem occurs reading binary data file
 	 */
-	public static float[][][] preprocessImage(float[][][] f) {
-		int x = f.length;
-		int y = f[0].length;
-		int z = f[0][0].length;
-		int numElements = x * y * z;
-
-		// find average
-		double sum = 0;
-		for (int a = 0; a < x; a++) {
-			for (int b = 0; b < y; b++) {
-				for (int c = 0; c < z; c++) {
-					sum += f[a][b][c];
-				}
-			}
+	public static int[] getLabels(String batchBinFile) throws IOException {
+		byte[] b = Files.readAllBytes(Paths.get(batchBinFile));
+		int[] labels = new int[b.length / 3073];
+		for (int i = 0; i < labels.length; i++) {
+			labels[i] = b[i * 3073];
 		}
-		double avg = sum / numElements;
-
-		// find std deviation and adjusted std deviation
-		double tmp = 0;
-		for (int a = 0; a < x; a++) {
-			for (int b = 0; b < y; b++) {
-				for (int c = 0; c < z; c++) {
-					tmp += (Math.pow(f[a][b][c] - avg, 2));
-				}
-			}
-		}
-		double stdDev = Math.sqrt(tmp / numElements);
-		double adjStdDev = Math.max(stdDev, 1.0 / Math.sqrt(numElements));
-
-		float[][][] f2 = new float[f.length][f[0].length][f[0][0].length];
-		for (int a = 0; a < x; a++) {
-			for (int b = 0; b < y; b++) {
-				for (int c = 0; c < z; c++) {
-					f2[a][b][c] = (float) ((f[a][b][c] - avg) / adjStdDev);
-				}
-			}
-		}
-		return f2;
-	}
-
-	/**
-	 * Preprocess a group of images.
-	 * 
-	 * @param images
-	 *            Images as a 4-dimensional float array, where the first dimension is the image number
-	 * 
-	 * @return The preprocessed images as a 4-dimensional float array
-	 */
-	public static float[][][][] preprocessImages(float[][][][] images) {
-		float[][][][] preprocessedImages = new float[images.length][images[0].length][images[0][0].length][images[0][0][0].length];
-		for (int i = 0; i < images.length; i++) {
-			preprocessedImages[i] = preprocessImage(images[i]);
-		}
-		return preprocessedImages;
+		return labels;
 	}
 
 	/**
@@ -237,5 +172,70 @@ public class CIFAR10Util {
 			}
 		}
 		return im;
+	}
+
+	/**
+	 * Preprocess the image, as in the preprocess_image function in cifar10_main.py, which calls
+	 * tf.image.per_image_standardization(image). The average is subtracted and this is divided by the adjusted standard
+	 * deviation.
+	 * 
+	 * @param f
+	 *            Image as a 3-dimensional float array
+	 * @return Preprocessed image as a 3-dimensional float array
+	 */
+	public static float[][][] preprocessImage(float[][][] f) {
+		int x = f.length;
+		int y = f[0].length;
+		int z = f[0][0].length;
+		int numElements = x * y * z;
+
+		// find average
+		double sum = 0;
+		for (int a = 0; a < x; a++) {
+			for (int b = 0; b < y; b++) {
+				for (int c = 0; c < z; c++) {
+					sum += f[a][b][c];
+				}
+			}
+		}
+		double avg = sum / numElements;
+
+		// find std deviation and adjusted std deviation
+		double tmp = 0;
+		for (int a = 0; a < x; a++) {
+			for (int b = 0; b < y; b++) {
+				for (int c = 0; c < z; c++) {
+					tmp += (Math.pow(f[a][b][c] - avg, 2));
+				}
+			}
+		}
+		double stdDev = Math.sqrt(tmp / numElements);
+		double adjStdDev = Math.max(stdDev, 1.0 / Math.sqrt(numElements));
+
+		float[][][] f2 = new float[f.length][f[0].length][f[0][0].length];
+		for (int a = 0; a < x; a++) {
+			for (int b = 0; b < y; b++) {
+				for (int c = 0; c < z; c++) {
+					f2[a][b][c] = (float) ((f[a][b][c] - avg) / adjStdDev);
+				}
+			}
+		}
+		return f2;
+	}
+
+	/**
+	 * Preprocess a group of images.
+	 * 
+	 * @param images
+	 *            Images as a 4-dimensional float array, where the first dimension is the image number
+	 * 
+	 * @return The preprocessed images as a 4-dimensional float array
+	 */
+	public static float[][][][] preprocessImages(float[][][][] images) {
+		float[][][][] preprocessedImages = new float[images.length][images[0].length][images[0][0].length][images[0][0][0].length];
+		for (int i = 0; i < images.length; i++) {
+			preprocessedImages[i] = preprocessImage(images[i]);
+		}
+		return preprocessedImages;
 	}
 }
