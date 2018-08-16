@@ -16,7 +16,7 @@ public class HiggsBoostedTreesTest extends TFBaseTest {
 
 	protected static Logger log = LogManager.getLogger(HiggsBoostedTreesTest.class);
 
-	public static final String HIGGS_SAVED_MODEL_DIR = "./higgs_boosted_trees_saved_model/";
+	public static final String HIGGS_SAVED_MODEL_DIR = "../stf4j-test-models/higgs_boosted_trees_saved_model/";
 
 	private TFModel model = null;
 

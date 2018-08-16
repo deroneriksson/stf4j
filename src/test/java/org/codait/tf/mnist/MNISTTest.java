@@ -26,7 +26,7 @@ public class MNISTTest extends TFBaseTest {
 	public static final String TEST_IMAGES = "t10k-images-idx3-ubyte";
 	public static final String TEST_LABELS = "t10k-labels-idx1-ubyte";
 
-	public static final String MNIST_SAVED_MODEL_DIR = "./mnist_model/";
+	public static final String MNIST_SAVED_MODEL_DIR = "../stf4j-test-models/mnist_saved_model/";
 
 	private int[] labels = null;
 	private int[][][] images = null;
