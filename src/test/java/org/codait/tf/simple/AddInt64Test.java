@@ -15,7 +15,7 @@ public class AddInt64Test {
 
 	protected static Logger log = LogManager.getLogger(AddInt64Test.class);
 
-	public static final String ADD_INT64_MODEL_DIR = "./simple/add_int64";
+	public static final String ADD_INT64_MODEL_DIR = "../stf4j-test-models/simple_saved_models/add_int64";
 
 	private TFModel model = null;
 

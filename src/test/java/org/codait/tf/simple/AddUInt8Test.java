@@ -14,7 +14,7 @@ public class AddUInt8Test {
 
 	protected static Logger log = LogManager.getLogger(AddUInt8Test.class);
 
-	public static final String ADD_UINT8_MODEL_DIR = "./simple/add_uint8";
+	public static final String ADD_UINT8_MODEL_DIR = "../stf4j-test-models/simple_saved_models/add_uint8";
 
 	private TFModel model = null;
 

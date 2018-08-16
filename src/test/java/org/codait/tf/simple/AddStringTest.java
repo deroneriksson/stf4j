@@ -15,7 +15,7 @@ public class AddStringTest {
 
 	protected static Logger log = LogManager.getLogger(AddStringTest.class);
 
-	public static final String ADD_STRING_MODEL_DIR = "./simple/add_string";
+	public static final String ADD_STRING_MODEL_DIR = "../stf4j-test-models/simple_saved_models/add_string";
 
 	private TFModel model = null;
 

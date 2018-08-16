@@ -14,7 +14,7 @@ public class AddInt32Test {
 
 	protected static Logger log = LogManager.getLogger(AddInt32Test.class);
 
-	public static final String ADD_INT32_MODEL_DIR = "./simple/add_int32";
+	public static final String ADD_INT32_MODEL_DIR = "../stf4j-test-models/simple_saved_models/add_int32";
 
 	private TFModel model = null;
 

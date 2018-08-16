@@ -14,7 +14,7 @@ public class BooleanLogicTest {
 
 	protected static Logger log = LogManager.getLogger(BooleanLogicTest.class);
 
-	public static final String BOOLEAN_LOGIC_MODEL_DIR = "./simple/boolean_logic";
+	public static final String BOOLEAN_LOGIC_MODEL_DIR = "../stf4j-test-models/simple_saved_models/boolean_logic";
 
 	private TFModel model = null;
 

@@ -14,7 +14,7 @@ public class AddFloat32Test {
 
 	protected static Logger log = LogManager.getLogger(AddFloat32Test.class);
 
-	public static final String ADD_FLOAT32_MODEL_DIR = "./simple/add_float32";
+	public static final String ADD_FLOAT32_MODEL_DIR = "../stf4j-test-models/simple_saved_models/add_float32";
 
 	private TFModel model = null;
 

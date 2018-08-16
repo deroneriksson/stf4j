@@ -14,7 +14,7 @@ public class AddFloat64Test {
 
 	protected static Logger log = LogManager.getLogger(AddFloat64Test.class);
 
-	public static final String ADD_FLOAT64_MODEL_DIR = "./simple/add_float64";
+	public static final String ADD_FLOAT64_MODEL_DIR = "../stf4j-test-models/simple_saved_models/add_float64";
 
 	private TFModel model = null;
 
