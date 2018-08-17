@@ -23,8 +23,6 @@ public class MNISTTest extends TFBaseTest {
 	protected static Logger log = LogManager.getLogger(MNISTTest.class);
 
 	public static final String MNIST_DATA_DIR = "../stf4j-test-models/mnist_data/";
-	public static final String TRAIN_IMAGES = "train-images-idx3-ubyte";
-	public static final String TRAIN_LABELS = "train-labels-idx1-ubyte";
 	public static final String TEST_IMAGES = "t10k-images-idx3-ubyte";
 	public static final String TEST_LABELS = "t10k-labels-idx1-ubyte";
 
