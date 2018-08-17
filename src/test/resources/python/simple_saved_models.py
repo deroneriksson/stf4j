@@ -1,3 +1,5 @@
+# Should be run from the stf4j-test-models project's simple_saved_models directory.
+
 import tensorflow as tf
 import tensorflow.saved_model as saved_model
 
@@ -19,7 +21,7 @@ def add_int32():
   print(result)
 
   saved_model.simple_save(sess,
-                          '/Users/deroneriksson/Documents/workspace5/tf-java-tryout/simple/add_int32',
+                          'add_int32',
                           inputs={"input1": input1, "input2": input2},
                           outputs={"output": output})
 
@@ -43,7 +45,7 @@ def add_int64():
   print(result)
 
   saved_model.simple_save(sess,
-                          '/Users/deroneriksson/Documents/workspace5/tf-java-tryout/simple/add_int64',
+                          'add_int64',
                           inputs={"input1": input1, "input2": input2},
                           outputs={"output": output})
 
@@ -67,7 +69,7 @@ def add_float32():
   print(result)
 
   saved_model.simple_save(sess,
-                          '/Users/deroneriksson/Documents/workspace5/tf-java-tryout/simple/add_float32',
+                          'add_float32',
                           inputs={"input1": input1, "input2": input2},
                           outputs={"output": output})
 
@@ -91,7 +93,7 @@ def add_float64():
   print(result)
 
   saved_model.simple_save(sess,
-                          '/Users/deroneriksson/Documents/workspace5/tf-java-tryout/simple/add_float64',
+                          'add_float64',
                           inputs={"input1": input1, "input2": input2},
                           outputs={"output": output})
 
@@ -115,7 +117,7 @@ def add_string():
   print(result)
 
   saved_model.simple_save(sess,
-                          '/Users/deroneriksson/Documents/workspace5/tf-java-tryout/simple/add_string',
+                          'add_string',
                           inputs={"input1": input1, "input2": input2},
                           outputs={"output": output})
 
@@ -143,7 +145,7 @@ def boolean_logic():
   print(result)
 
   saved_model.simple_save(sess,
-                          '/Users/deroneriksson/Documents/workspace5/tf-java-tryout/simple/boolean_logic',
+                          'boolean_logic',
                           inputs={"input1": input1, "input2": input2},
                           outputs={"and": output_and, "or": output_or,
                                    "not_and": output_not_and, "not_or": output_not_or,
@@ -167,7 +169,7 @@ def add_uint8():
   print(result)
 
   saved_model.simple_save(sess,
-                          '/Users/deroneriksson/Documents/workspace5/tf-java-tryout/simple/add_uint8',
+                          'add_uint8',
                           inputs={"input1": input1, "input2": input2},
                           outputs={"output": output})
 
