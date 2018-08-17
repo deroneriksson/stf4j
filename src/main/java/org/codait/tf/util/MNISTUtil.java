@@ -11,6 +11,9 @@ import java.nio.file.Paths;
  * Examples:
  * 
  * <pre>
+ * final String TEST_IMAGES = "../stf4j-test-models/mnist_data/t10k-images-idx3-ubyte";
+ * final String TEST_LABELS = "../stf4j-test-models/mnist_data/t10k-labels-idx1-ubyte";
+ * 
  * int[] labels = MNISTUtil.getLabels(TEST_LABELS);
  * System.out.println("LABEL:" + labels[0]);
  * int[][][] images = MNISTUtil.getImages(TEST_IMAGES);
@@ -19,9 +22,6 @@ import java.nio.file.Paths;
  * </pre>
  */
 public class MNISTUtil {
-
-	public static final String TEST_IMAGES = "./mnist_data/t10k-images-idx3-ubyte";
-	public static final String TEST_LABELS = "./mnist_data/t10k-labels-idx1-ubyte";
 
 	/**
 	 * Display an MNIST image to the screen as an image.
