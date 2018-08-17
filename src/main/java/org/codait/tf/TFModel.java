@@ -2,6 +2,7 @@ package org.codait.tf;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -108,7 +109,10 @@ public class TFModel {
 		}
 		log.debug("Creating TFModel object");
 		savedModelDir = modelDir;
+		long start = new Date().getTime();
 		savedModel = SavedModelBundle.load(modelDir, metaGraphDefTags);
+		long end = new Date().getTime();
+		log.debug("Model loaded from '" + modelDir + "' in " + (end - start) + " milliseconds");
 	}
 
 	/**

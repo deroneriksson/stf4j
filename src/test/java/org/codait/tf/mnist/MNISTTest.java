@@ -45,7 +45,9 @@ public class MNISTTest extends TFBaseTest {
 		Assume.assumeTrue("Test images (" + MNIST_DATA_DIR + TEST_IMAGES + ") can't be found, so skipping MNIST tests",
 				testImagesExist);
 
+		log.debug("Loading MNIST labels");
 		labels = MNISTUtil.getLabels(MNIST_DATA_DIR + TEST_LABELS);
+		log.debug("Loading MNIST images");
 		images = MNISTUtil.getImages(MNIST_DATA_DIR + TEST_IMAGES);
 		model = new TFModel(MNIST_SAVED_MODEL_DIR).sig("serving_default");
 	}
