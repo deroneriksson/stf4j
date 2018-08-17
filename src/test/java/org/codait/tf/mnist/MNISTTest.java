@@ -1,5 +1,6 @@
 package org.codait.tf.mnist;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.LogManager;
@@ -12,6 +13,7 @@ import org.codait.tf.util.ArrayUtil;
 import org.codait.tf.util.MNISTUtil;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.tensorflow.Tensor;
@@ -34,6 +36,17 @@ public class MNISTTest extends TFBaseTest {
 
 	@Before
 	public void init() throws IOException {
+		boolean savedModelExists = new File(MNIST_SAVED_MODEL_DIR).exists();
+		boolean testLabelsExist = new File(MNIST_DATA_DIR + TEST_LABELS).exists();
+		boolean testImagesExist = new File(MNIST_DATA_DIR + TEST_IMAGES).exists();
+		Assume.assumeTrue(
+				"SavedModel directory (" + MNIST_SAVED_MODEL_DIR + ") can't be found, so skipping MNIST tests",
+				savedModelExists);
+		Assume.assumeTrue("Test labels (" + MNIST_DATA_DIR + TEST_LABELS + ") can't be found, so skipping MNIST tests",
+				testLabelsExist);
+		Assume.assumeTrue("Test images (" + MNIST_DATA_DIR + TEST_IMAGES + ") can't be found, so skipping MNIST tests",
+				testImagesExist);
+
 		labels = MNISTUtil.getLabels(MNIST_DATA_DIR + TEST_LABELS);
 		images = MNISTUtil.getImages(MNIST_DATA_DIR + TEST_IMAGES);
 		model = new TFModel(MNIST_SAVED_MODEL_DIR).sig("serving_default");
