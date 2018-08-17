@@ -773,4 +773,39 @@ public class ArrayUtilTest {
 		byte[][] result = (byte[][]) ArrayUtil.uint8TensorToMultidimensionalByteArray(tensor);
 		Assert.assertArrayEquals(b, result);
 	}
+
+	@Test
+	public void firstDimensionValuesOfMultidimArray_2dInt() {
+		int[][] i = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[] result = (int[]) ArrayUtil.firstDimensionValuesOfMultidimArray(i);
+		Assert.assertArrayEquals(new int[] { 1, 3 }, result);
+	}
+
+	@Test
+	public void firstDimensionValuesOfMultidimArray_3dInt() {
+		int[][][] i = new int[][][] { { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } },
+				{ { 10, 11, 12 }, { 13, 14, 15 }, { 16, 17, 18 } },
+				{ { 19, 20, 21 }, { 22, 23, 24 }, { 25, 26, 27 } } };
+		int[] result = (int[]) ArrayUtil.firstDimensionValuesOfMultidimArray(i);
+		Assert.assertArrayEquals(new int[] { 1, 10, 19 }, result);
+	}
+
+	@Test
+	public void firstDimensionValuesOfMultidimArray_2dString() {
+		String[][] s = new String[][] { { "one", "two" }, { "three", "four" } };
+		String[] result = (String[]) ArrayUtil.firstDimensionValuesOfMultidimArray(s);
+		Assert.assertArrayEquals(new String[] { "one", "three" }, result);
+	}
+
+	@Test
+	public void firstDimensionValuesOfMultidimArray_3dString() {
+		String[][][] s = new String[][][] {
+				{ { "one", "two", "three" }, { "four", "five", "six" }, { "seven", "eight", "nine" } },
+				{ { "ten", "eleven", "twelve" }, { "thirteen", "fourteen", "fifteen" },
+						{ "sixteen", "seventeen", "eighteen" } },
+				{ { "nineteen", "twenty", "twenty one" }, { "twenty two", "twenty three", "twenty four" },
+						{ "twenty five", "twenty six", "twenty seven" } } };
+		String[] result = (String[]) ArrayUtil.firstDimensionValuesOfMultidimArray(s);
+		Assert.assertArrayEquals(new String[] { "one", "ten", "nineteen" }, result);
+	}
 }

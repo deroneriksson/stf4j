@@ -836,4 +836,58 @@ public class ArrayUtil {
 		tensor.copyTo(i);
 		return i;
 	}
+
+	/**
+	 * Obtain an array of the first dimension of values of a multidimensional array.
+	 * 
+	 * @param obj
+	 *            The multidimensional array
+	 * @return Array of the first dimension of values of a multidimensional array
+	 */
+	public static Object firstDimensionValuesOfMultidimArray(Object obj) {
+		int[] dim = getArrayDimensions(obj);
+		Object first = firstElementValueOfMultidimArray(obj);
+		Class<?> firstClass = first.getClass();
+		Class<?> arrayType = null;
+		// convert to primitive types if necessary
+		if (firstClass.equals(Integer.class)) {
+			arrayType = int.class;
+		} else if (firstClass.equals(Long.class)) {
+			arrayType = long.class;
+		} else if (firstClass.equals(Float.class)) {
+			arrayType = float.class;
+		} else if (firstClass.equals(Double.class)) {
+			arrayType = double.class;
+		} else if (firstClass.equals(Boolean.class)) {
+			arrayType = boolean.class;
+		} else if (firstClass.equals(String.class)) {
+			arrayType = String.class;
+		} else if (firstClass.equals(Byte.class)) {
+			arrayType = byte.class;
+		} else {
+			arrayType = firstClass;
+		}
+		Object a = Array.newInstance(arrayType, dim[0]);
+		for (int i = 0; i < dim[0]; i++) {
+			Object v = Array.get(obj, i);
+			Array.set(a, i, traverseArrayToValue(v));
+		}
+		return a;
+	}
+
+	/**
+	 * Traverse a multidimensional array at position 0 until a value is obtained.
+	 * 
+	 * @param obj
+	 *            The multidimensional array
+	 * @return The position 0 value of this multidimensional array.
+	 */
+	protected static Object traverseArrayToValue(Object obj) {
+		if (obj.getClass().isArray()) {
+			return traverseArrayToValue(Array.get(obj, 0));
+		} else {
+			return obj;
+		}
+	}
+
 }
