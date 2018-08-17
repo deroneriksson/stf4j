@@ -24,8 +24,8 @@ public class CIFAR10Test {
 	public static final String CIFAR10_TEST_BATCH_BIN = "../stf4j-test-models/cifar10_data/cifar-10-batches-bin/test_batch.bin";
 	public static final String CIFAR10_SAVED_MODEL_DIR = "../stf4j-test-models/cifar10_saved_model/";
 
-	public static final String CAT_IMAGE = "images/cat.jpg";
-	public static final String DOG_IMAGE = "images/dog.jpg";
+	public static final String CAT_IMAGE = "../stf4j-test-models/image_data/cat.jpg";
+	public static final String DOG_IMAGE = "../stf4j-test-models/image_data/dog.jpg";
 
 	private int[] labels = null;
 	private float[][][][] images = null;
