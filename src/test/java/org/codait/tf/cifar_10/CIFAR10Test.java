@@ -33,6 +33,15 @@ public class CIFAR10Test {
 
 	@Before
 	public void init() throws IOException {
+		boolean savedModelExists = new File(CIFAR10_SAVED_MODEL_DIR).exists();
+		boolean testBatchBinExists = new File(CIFAR10_TEST_BATCH_BIN).exists();
+		Assume.assumeTrue(
+				"SavedModel directory (" + CIFAR10_SAVED_MODEL_DIR + ") can't be found, so skipping CIFAR-10 tests",
+				savedModelExists);
+		Assume.assumeTrue(
+				"CIFAR-10 test_batch.bin (" + CIFAR10_TEST_BATCH_BIN + ") can't be found, so skipping CIFAR-10 tests",
+				testBatchBinExists);
+
 		labels = CIFAR10Util.getLabels(CIFAR10_TEST_BATCH_BIN);
 		images = CIFAR10Util.getPreprocessedImages(CIFAR10_TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
 		model = new TFModel(CIFAR10_SAVED_MODEL_DIR).sig("serving_default");
