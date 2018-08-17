@@ -1,5 +1,6 @@
 package org.codait.tf.higgs;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -9,6 +10,7 @@ import org.codait.tf.TFBaseTest;
 import org.codait.tf.TFModel;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,6 +42,10 @@ public class HiggsBoostedTreesTest extends TFBaseTest {
 
 	@Before
 	public void init() throws IOException {
+		boolean savedModelExists = new File(HIGGS_SAVED_MODEL_DIR).exists();
+		Assume.assumeTrue("SavedModel directory (" + HIGGS_SAVED_MODEL_DIR
+				+ ") can't be found, so skipping Higgs Boosted Trees tests", savedModelExists);
+
 		model = new TFModel(HIGGS_SAVED_MODEL_DIR).sig("predict");
 	}
 
