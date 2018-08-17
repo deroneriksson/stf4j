@@ -21,7 +21,7 @@ public class CIFAR10Test {
 
 	protected static Logger log = LogManager.getLogger(CIFAR10Test.class);
 
-	public static final String CIFAR10_TEST_BATCH_BIN = "./cifar10_data/cifar-10-batches-bin/test_batch.bin";
+	public static final String CIFAR10_TEST_BATCH_BIN = "../stf4j-test-models/cifar10_data/cifar-10-batches-bin/test_batch.bin";
 	public static final String CIFAR10_SAVED_MODEL_DIR = "../stf4j-test-models/cifar10_saved_model/";
 
 	public static final String CAT_IMAGE = "images/cat.jpg";

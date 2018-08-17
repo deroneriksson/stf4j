@@ -17,6 +17,8 @@ import javax.imageio.ImageIO;
  * Examples:
  * 
  * <pre>
+ * final String TEST_BATCH_BIN = "../stf4j-test-models/cifar10_data/cifar-10-batches-bin/test_batch.bin";
+ * 
  * int[] labels = CIFAR10Util.getLabels(TEST_BATCH_BIN);
  * System.out.println("class: " + classes[labels[0]]);
  * System.out.println("class: " + classes[labels[1]]);
@@ -46,8 +48,6 @@ public class CIFAR10Util {
 	public static enum DimOrder {
 		ROWS_COLS_CHANNELS, CHANNELS_ROWS_COLS
 	}
-
-	public static final String TEST_BATCH_BIN = "./cifar10_data/cifar-10-batches-bin/test_batch.bin";
 
 	public static final String[] classes = new String[] { "airplane", "automobile", "bird", "cat", "deer", "dog",
 			"frog", "horse", "ship", "truck" };;
