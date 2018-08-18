@@ -102,4 +102,50 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<!-- Profile to create uberjars with and without log4j. -->
+			<id>shade</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>3.1.1</version>
+						<executions>
+							<execution>
+								<id>tf</id>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+								<configuration>
+									<finalName>${project.artifactId}-tf-${project.version}</finalName>
+									<artifactSet>
+										<excludes>
+											<exclude>log4j:log4j:jar:</exclude>
+										</excludes>
+									</artifactSet>
+								</configuration>
+							</execution>
+
+							<execution>
+								<id>uber</id>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+								<configuration>
+									<finalName>${project.artifactId}-uber-${project.version}</finalName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
 </project>
