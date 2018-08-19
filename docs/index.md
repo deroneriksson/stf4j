@@ -26,6 +26,7 @@ layout: default
 * Table of contents.
 {:toc}
 
+
 # Overview
 
 STF4J is a lightweight Java API that simplifies the running of pretrained
@@ -33,13 +34,39 @@ TensorFlow SavedModels from Java.
 
 Design goals:
 
-1. Be REPL friendly (see useful output when objects are retrieved).
+1. REPL friendly (see useful output when objects are retrieved).
 2. Easy access to SavedModel signature information.
 3. Input type coercion from Java scalars, arrays, and multidimensional arrays to Tensors.
 4. Output type coercion from Tensors to Java scalars, arrays, and multidimensional arrays.
-5. Use friendly SavedModel signature keys (e.g., `probabilities`, `classes`, `image`, `input`)
+5. Use friendly keys (e.g., `probabilities`, `classes`, `image`, `input`)
    rather than variable names (e.g., `Placeholder:0`, `ArgMax:0`, `Softmax:0`, `input_tensor:0`,
-   `softmax_tensor:0`) for specifying model inputs and outputs.
-6. Retrieve values by key rather than by output index (`classes` rather than `0`)
+   `softmax_tensor:0`) for model inputs and outputs.
+6. Retrieve values by output key.
+
+
+# Examples
+
+## Hello World
+
+The `stf4j-test-models` project contains several prebuilt SavedModels that are used for testing.
+Here, we use the `add_string` model to concatenate two input strings, `hello` and `world`. The output,
+`helloworld`, is output to the console.
+
+```
+package org.codait.example;
+
+import org.codait.tf.TFModel;
+
+public class Example {
+
+	public static void main(String[] args) {
+		TFModel model = new TFModel("../stf4j-test-models/simple_saved_models/add_string").sig("serving_default");
+		String result = model.in("input1", "hello").in("input2", "world").out("output").run().getString("output");
+		System.out.println(result);
+	}
+
+}
+```
+
 
 
