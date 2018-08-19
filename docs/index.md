@@ -44,13 +44,10 @@ Design goals:
 6. Retrieve values by output key.
 
 
-# Examples
-
-## Hello World
+# Hello World
 
 The `stf4j-test-models` project contains several prebuilt SavedModels that are used for testing.
-Here, we use the `add_string` model to concatenate two input strings, `hello` and `world`. The output,
-`helloworld`, is output to the console.
+Here, we use the `add_string` model to concatenate two input strings, `hello` and `world`.
 
 ```
 package org.codait.example;
@@ -68,5 +65,45 @@ public class Example {
 }
 ```
 
+Output:
 
+```
+helloworld
+```
+
+
+# Build
+
+STF4J is a standard maven Java project. The project can be cloned from GitHub and built using maven.
+Here, we skip testing. After building, the STF4J jar file is located in the target directory.
+
+```
+git clone https://github.com/deroneriksson/stf4j.git
+cd stf4j
+mvn clean package -DskipTests
+```
+
+
+For convenience when trying out STF4J, the shade profile builds 1) an `uber` STF4J jar that contains the
+TensorFlow dependencies and log4j and 2) a `tf` STF4J jar that contains the TensorFlow dependencies with no log4j.
+
+```
+mvn clean package -DskipTests -Pshade
+```
+
+
+# Testing
+
+The `stf4j-test-models` project contains several prebuilt SavedModels for testing. The `stf4j-test-models` project contains
+information about how to rebuild the models if necessary.
+
+For full testing, MNIST and CIFAR-10 data should be added to the `stf4j-test-models` project. Instructions to do this
+are located in the `stf4j-test-models` project. If the data is not present, the relevant tests will be skipped.
+
+```
+git clone https://github.com/deroneriksson/stf4j-test-models.git
+git clone https://github.com/deroneriksson/stf4j.git
+cd stf4j
+mvn clean test
+```
 
