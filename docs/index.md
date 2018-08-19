@@ -296,7 +296,7 @@ scala> print(sum(1)(1)(1))
 ```
 
 
-STF4J implicitly performs type coercion where possible. In this example, two multidimensional Int arrays
+STF4J implicitly performs type coercion where possible. In the example below, two multidimensional Int arrays
 are input into the `add_float32` model. Since the inputs need to be FLOAT Tensors, STF4J converts the
 multidimensional Int arrays to FLOAT Tensors.
 
@@ -369,5 +369,80 @@ scala> val sum = result.asInstanceOf[Array[Array[Array[Int]]]]
 sum: Array[Array[Array[Int]]] = Array(Array(Array(2, 4), Array(6, 8)), Array(Array(10, 12), Array(14, 16)))
 ```
 
+
+Next, let's have a look at a model that returns multiple outputs. The `boolean_logic` model in the `stf4j-test-models`
+project has 2 boolean inputs and 5 boolean outputs. The model takes the 2 boolean inputs and performs the following
+boolean logic operations on the inputs and provides them as outputs: AND, OR, XOR, NOT AND, NOT OR.
+
+Here, we input `true` for `input1` and `false` for `input2`. We retrieve the values of the inputs ANDed and ORed
+together.
+
+```
+val model = new TFModel("../stf4j-test-models/simple_saved_models/boolean_logic").sig("serving_default")
+val result = model.in("input1", true).in("input2", false).out("and", "or").run()
+val true_and_false = result.getBoolean("and")
+val true_or_false = result.getBoolean("or")
+```
+
+
+Output:
+
+```
+scala> val model = new TFModel("../stf4j-test-models/simple_saved_models/boolean_logic").sig("serving_default")
+2018-08-19 14:25:23.109043: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/simple_saved_models/boolean_logic
+2018-08-19 14:25:23.109690: I tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }
+2018-08-19 14:25:23.110120: I tensorflow/cc/saved_model/loader.cc:113] Restoring SavedModel bundle.
+2018-08-19 14:25:23.110689: I tensorflow/cc/saved_model/loader.cc:123] The specified SavedModel has no variables; no checkpoints were restored.
+2018-08-19 14:25:23.110704: I tensorflow/cc/saved_model/loader.cc:148] Running LegacyInitOp on SavedModel bundle.
+2018-08-19 14:25:23.110723: I tensorflow/cc/saved_model/loader.cc:233] SavedModel load for tags { serve }; Status: success. Took 1683 microseconds.
+model: org.codait.tf.TFModel =
+Model directory: ../stf4j-test-models/simple_saved_models/boolean_logic
+
+SignatureDef key: serving_default
+method name: tensorflow/serving/predict
+inputs:
+  input key: input1
+    dtype: DT_BOOL
+    shape: ()
+    name: input1:0
+  input key: input2
+    dtype: DT_BOOL
+    shape: ()
+    name: input2:0
+outputs:
+  output key: not_and
+    dtype: DT_BOOL
+    shape: ()
+    name: output_not_and:0
+  output key: and
+    dtype: DT_BOOL
+    shape: ()
+    name: output_and:0
+  output key: xor
+    dtype: DT_BOOL
+    shape: ()
+    name: output_xor:0
+  output key: not_or
+    dtype: DT_BOOL
+    shape: ()
+    name: output_not_or:0
+  output key: or
+    dtype: DT_BOOL
+    shape: ()
+    name: output_or:0
+Note: SignatureDef info can be obtained by calling TFModel's signatureDefInf...
+scala> val result = model.in("input1", true).in("input2", false).out("and", "or").run()
+result: org.codait.tf.TFResults =
+SignatureDef Key: serving_default
+Outputs:
+  [1] and (output_and:0): BOOL tensor with shape []
+  [2] or (output_or:0): BOOL tensor with shape []
+
+scala> val true_and_false = result.getBoolean("and")
+true_and_false: Boolean = false
+
+scala> val true_or_false = result.getBoolean("or")
+true_or_false: Boolean = true
+```
 
 
