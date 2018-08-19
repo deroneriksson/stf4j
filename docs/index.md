@@ -446,3 +446,109 @@ true_or_false: Boolean = true
 ```
 
 
+### MNIST
+
+Next, we'll take a look at doing predictions using the TensorFlow MNIST model.
+We'll start the Scala REPL with more memory allocated since we load 10,000 MNIST
+test images into memory in this example.
+
+```
+scala -cp target/stf4j-uber-1.10.0-SNAPSHOT.jar -J-Xmx4g
+```
+
+
+In the Scala REPL, in addition to the primary STF4J package, we import the `util` package
+since it contains the `MNISTUtil` class that can be used to load the 10,000 MNIST test
+labels and images.
+
+In this example, we load the MNIST model, load the test labels and test images, and then
+run the model on the first image. Even though the model requires Floats, STF4J allows
+the images to be fed in as Ints, since automatic type coercion is performed.
+
+The prediction value, `classes`, is defined as an INT64 (Long value). STF4J allows the value
+to be retrieved and type coerced as an Int using the `getInt` method. We display the label
+and the prediction to the console.
+
+```
+import org.codait.tf._
+import org.codait.tf.util._
+val mnist = new TFModel("../stf4j-test-models/mnist_saved_model/").sig("serving_default")
+val labels = MNISTUtil.getLabels("../stf4j-test-models/mnist_data/t10k-labels-idx1-ubyte")
+val images = MNISTUtil.getImages("../stf4j-test-models/mnist_data/t10k-images-idx3-ubyte")
+val label = labels(0);
+val prediction = mnist.in("image", images(0)).out("classes").run().getInt("classes")
+print("Label: " + label + ", Prediction: " + prediction)
+```
+
+
+Output:
+
+```
+scala> import org.codait.tf._
+import org.codait.tf._
+
+scala> import org.codait.tf.util._
+import org.codait.tf.util._
+
+scala> val mnist = new TFModel("../stf4j-test-models/mnist_saved_model/").sig("serving_default")
+log4j:WARN No appenders could be found for logger (org.codait.tf.TFModel).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+2018-08-19 15:18:04.456606: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/mnist_saved_model/
+2018-08-19 15:18:04.457571: I tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }
+2018-08-19 15:18:04.458685: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.2 AVX AVX2 FMA
+2018-08-19 15:18:04.461273: I tensorflow/cc/saved_model/loader.cc:113] Restoring SavedModel bundle.
+2018-08-19 15:18:04.493649: I tensorflow/cc/saved_model/loader.cc:148] Running LegacyInitOp on SavedModel bundle.
+2018-08-19 15:18:04.497168: I tensorflow/cc/saved_model/loader.cc:233] SavedModel load for tags { serve }; Status: success. Took 40572 microseconds.
+mnist: org.codait.tf.TFModel =
+Model directory: ../stf4j-test-models/mnist_saved_model/
+
+SignatureDef key: classify
+method name: tensorflow/serving/predict
+inputs:
+  input key: image
+    dtype: DT_FLOAT
+    shape: (-1, 28, 28)
+    name: Placeholder:0
+outputs:
+  output key: probabilities
+    dtype: DT_FLOAT
+    shape: (-1, 10)
+    name: Softmax:0
+  output key: classes
+    dtype: DT_INT64
+    shape: (-1)
+    name: ArgMax:0
+SignatureDef key: serving_default
+method name: tensorflow/serving/predict
+inputs:
+  input key: image
+    dtype: DT_FLOAT
+    shape: (-1, 28, 28)
+    name: Placeholder:0
+outputs:
+  output key: probabilities
+    dtype: DT_FLOAT
+    shape: (-1, 10)
+    name: Softmax:0
+  output key: classes
+    dtype: DT_INT64
+    shape: (-1)
+    name: ArgMax:0
+Note: SignatureDef info can b...
+scala> val labels = MNISTUtil.getLabels("../stf4j-test-models/mnist_data/t10k-labels-idx1-ubyte")
+labels: Array[Int] = Array(7, 2, 1, 0, 4, 1, 4, 9, 5, 9, 0, 6, 9, 0, 1, 5, 9, 7, 3, 4, 9, 6, 6, 5, 4, 0, 7, 4, 0, 1, 3, 1, 3, 4, 7, 2, 7, 1, 2, 1, 1, 7, 4, 2, 3, 5, 1, 2, 4, 4, 6, 3, 5, 5, 6, 0, 4, 1, 9, 5, 7, 8, 9, 3, 7, 4, 6, 4, 3, 0, 7, 0, 2, 9, 1, 7, 3, 2, 9, 7, 7, 6, 2, 7, 8, 4, 7, 3, 6, 1, 3, 6, 9, 3, 1, 4, 1, 7, 6, 9, 6, 0, 5, 4, 9, 9, 2, 1, 9, 4, 8, 7, 3, 9, 7, 4, 4, 4, 9, 2, 5, 4, 7, 6, 7, 9, 0, 5, 8, 5, 6, 6, 5, 7, 8, 1, 0, 1, 6, 4, 6, 7, 3, 1, 7, 1, 8, 2, 0, 2, 9, 9, 5, 5, 1, 5, 6, 0, 3, 4, 4, 6, 5, 4, 6, 5, 4, 5, 1, 4, 4, 7, 2, 3, 2, 7, 1, 8, 1, 8, 1, 8, 5, 0, 8, 9, 2, 5, 0, 1, 1, 1, 0, 9, 0, 3, 1, 6, 4, 2, 3, 6, 1, 1, 1, 3, 9, 5, 2, 9, 4, 5, 9, 3, 9, 0, 3, 6, 5, 5, 7, 2, 2, 7, 1, 2, 8, 4, 1, 7, 3, 3, 8, 8, 7, 9, 2, 2, 4, 1, 5, 9, 8, 7, 2, 3, 0, 4, 4, 2, 4, 1, 9, 5, 7, 7, 2,...
+scala> val images = MNISTUtil.getImages("../stf4j-test-models/mnist_data/t10k-images-idx3-ubyte")
+images: Array[Array[Array[Int]]] = Array(Array(Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Array(0, 0, 0, 0, 0, 0, 84, 185, 159, 151, 60, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), Array(0, 0, 0...
+scala> val label = labels(0);
+label: Int = 7
+
+scala> val prediction = mnist.in("image", images(0)).out("classes").run().getInt("classes")
+prediction: Int = 7
+
+scala> print("Label: " + label + ", Prediction: " + prediction)
+Label: 7, Prediction: 7
+```
+
+
+
