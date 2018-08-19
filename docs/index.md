@@ -42,6 +42,7 @@ Design goals:
    rather than variable names (e.g., `Placeholder:0`, `ArgMax:0`, `Softmax:0`, `input_tensor:0`,
    `softmax_tensor:0`) for model inputs and outputs.
 6. Retrieve values by output key.
+7. Minimize external dependencies (only relevant TensorFlow libraries and log4j).
 
 
 # Hello World
