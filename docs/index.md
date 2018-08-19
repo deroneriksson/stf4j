@@ -216,3 +216,158 @@ scala> val sum = result.getFloat("output")
 sum: Float = 3.0
 
 ```
+
+
+Using the existing model, let's input two Float arrays and obtain the resulting Float array.
+
+```
+val input1 = Array(1.0f, 2.0f)
+val input2 = Array(0.1f, 0.2f)
+val sum = model.in("input1", input1).in("input2", input2).out("output").run().getFloatArray("output")
+```
+
+
+In the console output, we see the elements in the two Float arrays have been added, and the resulting
+Float array is returned by the call to the `TFResults` `getFloatArray("output")` method.
+
+```
+scala> val input1 = Array(1.0f, 2.0f)
+input1: Array[Float] = Array(1.0, 2.0)
+
+scala> val input2 = Array(0.1f, 0.2f)
+input2: Array[Float] = Array(0.1, 0.2)
+
+scala> val sum = model.in("input1", input1).in("input2", input2).out("output").run().getFloatArray("output")
+sum: Array[Float] = Array(1.1, 2.2)
+```
+
+
+Next, let's input two multidimensional Float arrays and obtain the resulting multidimensional Float array.
+Here, we input two 3d arrays and obtain the resulting 3d array. We print the values of the individual
+array elements.
+
+```
+val input1 = Array(Array(Array(1.0f, 2.0f), Array(3.0f, 4.0f)), Array(Array(5.0f, 6.0f), Array(7.0f, 8.0f)))
+val input2 = Array(Array(Array(0.1f, 0.2f), Array(0.3f, 0.4f)), Array(Array(0.5f, 0.6f), Array(0.7f, 0.8f)))
+val result = model.in("input1", input1).in("input2", input2).out("output").run().getFloatArrayMultidimensional("output")
+val sum = result.asInstanceOf[Array[Array[Array[Float]]]]
+print(sum(0)(0)(0))
+print(sum(0)(0)(1))
+print(sum(0)(1)(0))
+print(sum(0)(1)(1))
+print(sum(1)(0)(0))
+print(sum(1)(0)(1))
+print(sum(1)(1)(0))
+print(sum(1)(1)(1))
+```
+
+
+Output:
+
+```
+scala> val input1 = Array(Array(Array(1.0f, 2.0f), Array(3.0f, 4.0f)), Array(Array(5.0f, 6.0f), Array(7.0f, 8.0f)))
+input1: Array[Array[Array[Float]]] = Array(Array(Array(1.0, 2.0), Array(3.0, 4.0)), Array(Array(5.0, 6.0), Array(7.0, 8.0)))
+
+scala> val input2 = Array(Array(Array(0.1f, 0.2f), Array(0.3f, 0.4f)), Array(Array(0.5f, 0.6f), Array(0.7f, 0.8f)))
+input2: Array[Array[Array[Float]]] = Array(Array(Array(0.1, 0.2), Array(0.3, 0.4)), Array(Array(0.5, 0.6), Array(0.7, 0.8)))
+
+scala> val result = model.in("input1", input1).in("input2", input2).out("output").run().getFloatArrayMultidimensional("output")
+result: Object = Array(Array(Array(1.1, 2.2), Array(3.3, 4.4)), Array(Array(5.5, 6.6), Array(7.7, 8.8)))
+
+scala> val sum = result.asInstanceOf[Array[Array[Array[Float]]]]
+sum: Array[Array[Array[Float]]] = Array(Array(Array(1.1, 2.2), Array(3.3, 4.4)), Array(Array(5.5, 6.6), Array(7.7, 8.8)))
+
+scala> print(sum(0)(0)(0))
+1.1
+scala> print(sum(0)(0)(1))
+2.2
+scala> print(sum(0)(1)(0))
+3.3
+scala> print(sum(0)(1)(1))
+4.4
+scala> print(sum(1)(0)(0))
+5.5
+scala> print(sum(1)(0)(1))
+6.6
+scala> print(sum(1)(1)(0))
+7.7
+scala> print(sum(1)(1)(1))
+8.8
+```
+
+
+STF4J implicitly performs type coercion where possible. In this example, two multidimensional Int arrays
+are input into the `add_float32` model. Since the inputs need to be FLOAT Tensors, STF4J converts the
+multidimensional Int arrays to FLOAT Tensors.
+
+```
+val input1 = Array(Array(Array(1, 2), Array(3, 4)), Array(Array(5, 6), Array(7, 8)))
+val input2 = Array(Array(Array(1, 2), Array(3, 4)), Array(Array(5, 6), Array(7, 8)))
+val result = model.in("input1", input1).in("input2", input2).out("output").run().getFloatArrayMultidimensional("output")
+val sum = result.asInstanceOf[Array[Array[Array[Float]]]]
+print(sum(0)(0)(0))
+print(sum(0)(0)(1))
+print(sum(0)(1)(0))
+print(sum(0)(1)(1))
+print(sum(1)(0)(0))
+print(sum(1)(0)(1))
+print(sum(1)(1)(0))
+print(sum(1)(1)(1))
+```
+
+We see that the 3d Int arrays have been converted to FLOAT Tensors and added together by the model,
+and the resulting 3d Float array is obtained by the call to `getFloatArrayMultidimensional("output")`.
+
+```
+scala> val input1 = Array(Array(Array(1, 2), Array(3, 4)), Array(Array(5, 6), Array(7, 8)))
+input1: Array[Array[Array[Int]]] = Array(Array(Array(1, 2), Array(3, 4)), Array(Array(5, 6), Array(7, 8)))
+
+scala> val input2 = Array(Array(Array(1, 2), Array(3, 4)), Array(Array(5, 6), Array(7, 8)))
+input2: Array[Array[Array[Int]]] = Array(Array(Array(1, 2), Array(3, 4)), Array(Array(5, 6), Array(7, 8)))
+
+scala> val result = model.in("input1", input1).in("input2", input2).out("output").run().getFloatArrayMultidimensional("output")
+result: Object = Array(Array(Array(2.0, 4.0), Array(6.0, 8.0)), Array(Array(10.0, 12.0), Array(14.0, 16.0)))
+
+scala> val sum = result.asInstanceOf[Array[Array[Array[Float]]]]
+sum: Array[Array[Array[Float]]] = Array(Array(Array(2.0, 4.0), Array(6.0, 8.0)), Array(Array(10.0, 12.0), Array(14.0, 16.0)))
+
+scala> print(sum(0)(0)(0))
+2.0
+scala> print(sum(0)(0)(1))
+4.0
+scala> print(sum(0)(1)(0))
+6.0
+scala> print(sum(0)(1)(1))
+8.0
+scala> print(sum(1)(0)(0))
+10.0
+scala> print(sum(1)(0)(1))
+12.0
+scala> print(sum(1)(1)(0))
+14.0
+scala> print(sum(1)(1)(1))
+16.0
+```
+
+
+In the previous example, the resulting 3d Float array could also be retrieved as a 3d Int array if desired, since STF4J
+can perform the type coercion automatically.
+
+```
+val result = model.in("input1", input1).in("input2", input2).out("output").run().getIntArrayMultidimensional("output")
+val sum = result.asInstanceOf[Array[Array[Array[Int]]]]
+```
+
+
+Output:
+
+```
+scala> val result = model.in("input1", input1).in("input2", input2).out("output").run().getIntArrayMultidimensional("output")
+result: Object = Array(Array(Array(2, 4), Array(6, 8)), Array(Array(10, 12), Array(14, 16)))
+
+scala> val sum = result.asInstanceOf[Array[Array[Array[Int]]]]
+sum: Array[Array[Array[Int]]] = Array(Array(Array(2, 4), Array(6, 8)), Array(Array(10, 12), Array(14, 16)))
+```
+
+
+
