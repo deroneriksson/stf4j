@@ -16,6 +16,7 @@
 
 package org.codait.tf.mnist;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import org.codait.tf.util.ArrayUtil;
 import org.codait.tf.util.MNISTUtil;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.tensorflow.SavedModelBundle;
@@ -44,7 +46,19 @@ public class MNISTUnderlyingAPITest {
 
 	@Before
 	public void init() throws IOException {
+		boolean savedModelExists = new File(MNISTTest.MNIST_SAVED_MODEL_DIR).exists();
+		boolean testLabelsExist = new File(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_LABELS).exists();
+		boolean testImagesExist = new File(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_IMAGES).exists();
+		Assume.assumeTrue("SavedModel directory (" + MNISTTest.MNIST_SAVED_MODEL_DIR
+				+ ") can't be found, so skipping MNIST Underlying API tests", savedModelExists);
+		Assume.assumeTrue("Test labels (" + MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_LABELS
+				+ ") can't be found, so skipping MNIST Underlying API tests", testLabelsExist);
+		Assume.assumeTrue("Test images (" + MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_IMAGES
+				+ ") can't be found, so skipping MNIST Underlying API tests", testImagesExist);
+
+		log.debug("Loading MNIST labels");
 		labels = MNISTUtil.getLabels(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_LABELS);
+		log.debug("Loading MNIST images");
 		images = MNISTUtil.getImages(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_IMAGES);
 
 		tfModel(MNISTTest.MNIST_SAVED_MODEL_DIR);
