@@ -42,7 +42,7 @@ Design goals:
    rather than variable names (e.g., `Placeholder:0`, `ArgMax:0`, `Softmax:0`, `input_tensor:0`,
    `softmax_tensor:0`) for model inputs and outputs.
 6. Retrieve values by output key.
-7. Minimize external dependencies (only relevant TensorFlow libraries and log4j).
+7. Minimize external dependencies (only TensorFlow/Protocol Buffer libraries and log4j).
 
 
 # Hello World
@@ -91,6 +91,9 @@ TensorFlow dependencies and log4j and 2) a `tf` STF4J jar that contains the Tens
 ```
 mvn clean package -DskipTests -Pshade
 ```
+
+Currently STF4J only has the following library dependencies:
+tensorflow, libtensorflow, libtensorflow_jni, protobuf-java, and log4j.
 
 
 # Testing
