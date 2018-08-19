@@ -372,7 +372,7 @@ sum: Array[Array[Array[Int]]] = Array(Array(Array(2, 4), Array(6, 8)), Array(Arr
 
 Next, let's have a look at a model that returns multiple outputs. The `boolean_logic` model in the `stf4j-test-models`
 project has 2 boolean inputs and 5 boolean outputs. The model takes the 2 boolean inputs and performs the following
-boolean logic operations on the inputs and provides them as outputs: AND, OR, XOR, NOT AND, NOT OR.
+boolean logic operations on the inputs and provides them as outputs: "and", "or", "xor", "not_and", "not_or".
 
 Here, we input `true` for `input1` and `false` for `input2`. We retrieve the values of the inputs ANDed and ORed
 together.
