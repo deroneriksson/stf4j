@@ -566,4 +566,131 @@ predictions: Array[Int] = Array(7, 2, 1, 0, 4, 1, 4, 9, 5, 9, 0, 6, 9, 0, 1, 5, 
 ```
 
 
+### CIFAR-10
+
+
+Next, we'll perform predictions using the TensorFlow CIFAR-10 model.
+The CIFAR-10 test data consists of 10,000 32x32 3-channel images. We'll load the
+entire test dataset into memory, so let's start the Scala REPL with
+additional memory allocated.
+
+```
+scala -cp target/stf4j-uber-1.10.0-SNAPSHOT.jar -J-Xmx4g
+```
+
+We start by creating a `TFModel` object for the CIFAR-10 SavedModel. We
+specify "serving_default" as the signature definition to use. The
+possible signature definitions are displayed by the TFModel's `toString()`
+method, which is displayed to the REPL when the `model` object is created.
+
+We'll utilize the CIFAR10Util class to obtain the 10,000 CIFAR-10 test
+labels and images. After that, we'll perform a prediction on the first
+image and output the label and prediction to the console.
+
+```
+import org.codait.tf._
+import org.codait.tf.util._
+val cifar10 = new TFModel("../stf4j-test-models/cifar10_saved_model/").sig("serving_default")
+val testDataFile = "../stf4j-test-models/cifar10_data/cifar-10-batches-bin/test_batch.bin"
+val labels = CIFAR10Util.getLabels(testDataFile);
+val images = CIFAR10Util.getPreprocessedImages(testDataFile, CIFAR10Util.DimOrder.ROWS_COLS_CHANNELS);
+val label = labels(0);
+val prediction = cifar10.in("input", images(0)).out("classes").run().getInt("classes")
+print("Label: " + label + ", Prediction: " + prediction)
+```
+
+
+In the console output, notice that when we create the `model` object, we see the
+possible `SignatureDef` keys, `serving_default` and `predict`. Also, notice that
+the input image data is expected to be `Floats`. We see that the images are expected
+to be 32 rows by 32 columns by 3 channels. Although the input shape specifies 128
+input images, any number of images can be fed into the model. The `classes`
+output is specified to be an `INT64` (`Long`) value. However, we implicitly convert
+it to an `Int` value by calling the `TFResults` `getInt` method.
+
+```
+scala> import org.codait.tf._
+import org.codait.tf._
+
+scala> import org.codait.tf.util._
+import org.codait.tf.util._
+
+scala> val cifar10 = new TFModel("../stf4j-test-models/cifar10_saved_model/").sig("serving_default")
+log4j:WARN No appenders could be found for logger (org.codait.tf.TFModel).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+2018-08-20 10:30:55.876988: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/cifar10_saved_model/
+2018-08-20 10:30:55.892737: I tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }
+2018-08-20 10:30:55.901850: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.2 AVX AVX2 FMA
+2018-08-20 10:30:55.919080: I tensorflow/cc/saved_model/loader.cc:113] Restoring SavedModel bundle.
+2018-08-20 10:30:55.948538: I tensorflow/cc/saved_model/loader.cc:148] Running LegacyInitOp on SavedModel bundle.
+2018-08-20 10:30:55.969714: I tensorflow/cc/saved_model/loader.cc:233] SavedModel load for tags { serve }; Status: success. Took 92737 microseconds.
+cifar10: org.codait.tf.TFModel =
+Model directory: ../stf4j-test-models/cifar10_saved_model/
+
+SignatureDef key: serving_default
+method name: tensorflow/serving/predict
+inputs:
+  input key: input
+    dtype: DT_FLOAT
+    shape: (128, 32, 32, 3)
+    name: input_tensor:0
+outputs:
+  output key: probabilities
+    dtype: DT_FLOAT
+    shape: (128, 10)
+    name: softmax_tensor:0
+  output key: classes
+    dtype: DT_INT64
+    shape: (128)
+    name: ArgMax:0
+SignatureDef key: predict
+method name: tensorflow/serving/predict
+inputs:
+  input key: input
+    dtype: DT_FLOAT
+    shape: (128, 32, 32, 3)
+    name: input_tensor:0
+outputs:
+  output key: classes
+    dtype: DT_INT64
+    shape: (128)
+    name: ArgMax:0
+  output key: probabilities
+    dtype: DT_FLOAT
+    shape: (128, 10)
+    name: softmax_tensor:...
+scala> val testDataFile = "../stf4j-test-models/cifar10_data/cifar-10-batches-bin/test_batch.bin"
+testDataFile: String = ../stf4j-test-models/cifar10_data/cifar-10-batches-bin/test_batch.bin
+
+scala> val labels = CIFAR10Util.getLabels(testDataFile);
+labels: Array[Int] = Array(3, 8, 8, 0, 6, 6, 1, 6, 3, 1, 0, 9, 5, 7, 9, 8, 5, 7, 8, 6, 7, 0, 4, 9, 5, 2, 4, 0, 9, 6, 6, 5, 4, 5, 9, 2, 4, 1, 9, 5, 4, 6, 5, 6, 0, 9, 3, 9, 7, 6, 9, 8, 0, 3, 8, 8, 7, 7, 4, 6, 7, 3, 6, 3, 6, 2, 1, 2, 3, 7, 2, 6, 8, 8, 0, 2, 9, 3, 3, 8, 8, 1, 1, 7, 2, 5, 2, 7, 8, 9, 0, 3, 8, 6, 4, 6, 6, 0, 0, 7, 4, 5, 6, 3, 1, 1, 3, 6, 8, 7, 4, 0, 6, 2, 1, 3, 0, 4, 2, 7, 8, 3, 1, 2, 8, 0, 8, 3, 5, 2, 4, 1, 8, 9, 1, 2, 9, 7, 2, 9, 6, 5, 6, 3, 8, 7, 6, 2, 5, 2, 8, 9, 6, 0, 0, 5, 2, 9, 5, 4, 2, 1, 6, 6, 8, 4, 8, 4, 5, 0, 9, 9, 9, 8, 9, 9, 3, 7, 5, 0, 0, 5, 2, 2, 3, 8, 6, 3, 4, 0, 5, 8, 0, 1, 7, 2, 8, 8, 7, 8, 5, 1, 8, 7, 1, 3, 0, 5, 7, 9, 7, 4, 5, 9, 8, 0, 7, 9, 8, 2, 7, 6, 9, 4, 3, 9, 6, 4, 7, 6, 5, 1, 5, 8, 8, 0, 4, 0, 5, 5, 1, 1, 8, 9, 0, 3, 1, 9, 2, 2, 5, 3, 9, 9, 4, 0, 3,...
+scala> val images = CIFAR10Util.getPreprocessedImages(testDataFile, CIFAR10Util.DimOrder.ROWS_COLS_CHANNELS);
+images: Array[Array[Array[Array[Float]]]] = Array(Array(Array(Array(1.0636618, 0.077478275, -1.2731644), Array(1.0851005, 0.0560395, -1.316042), Array(1.2137332, 0.16323337, -1.2302868), Array(1.235172, 0.20611091, -1.1874093), Array(1.1065394, 0.077478275, -1.3374807), Array(1.0207843, 0.0131619545, -1.4446746), Array(1.1494169, 0.14179459, -1.316042), Array(1.0851005, 0.098917045, -1.3589195), Array(1.0636618, 0.0560395, -1.3803582), Array(1.0851005, 0.098917045, -1.4446746), Array(1.1279781, 0.16323337, -1.4446746), Array(1.1065394, 0.0560395, -1.2088481), Array(1.1279781, 0.0560395, -1.2731644), Array(1.235172, 0.18467213, -1.4446746), Array(1.2994883, 0.18467213, -1.3589195), Array(1.3209271, 0.22754969, -1.3803582), Array(1.2566108, 0.18467213, -1.4661133), Array(1.1494169, 0.0989...
+scala> val label = labels(0);
+label: Int = 3
+
+scala> val prediction = cifar10.in("input", images(0)).out("classes").run().getInt("classes")
+prediction: Int = 3
+
+scala> print("Label: " + label + ", Prediction: " + prediction)
+Label: 3, Prediction: 3
+```
+
+
+Here, we feed in all 10,000 images as a 4-dimensional `Float` array. In the
+background, this is converted to a 4-dimensional `Tensor` and this is fed into
+the model. The 10,000 predictions are returned as an `Int` array.
+
+```
+val predictions = cifar10.in("input", images).out("classes").run().getIntArray("classes")
+```
+
+
+Output:
+
+```
+scala> val predictions = cifar10.in("input", images).out("classes").run().getIntArray("classes")
+predictions: Array[Int] = Array(3, 8, 8, 0, 6, 6, 1, 6, 3, 1, 0, 9, 5, 7, 9, 6, 5, 7, 8, 6, 7, 0, 4, 9, 5, 2, 4, 0, 9, 6, 6, 5, 4, 5, 9, 2, 4, 1, 9, 5, 4, 6, 5, 6, 0, 9, 3, 9, 7, 6, 9, 8, 5, 3, 8, 8, 7, 7, 7, 3, 7, 3, 6, 3, 6, 2, 1, 2, 3, 7, 2, 6, 8, 8, 0, 2, 9, 3, 3, 8, 8, 1, 1, 7, 2, 5, 2, 7, 8, 9, 0, 3, 8, 6, 4, 3, 6, 0, 0, 7, 4, 5, 6, 3, 1, 1, 3, 6, 8, 7, 4, 0, 6, 2, 1, 3, 0, 4, 2, 7, 8, 3, 1, 2, 8, 1, 8, 3, 3, 2, 4, 1, 8, 9, 1, 2, 9, 7, 2, 9, 6, 5, 6, 3, 8, 2, 6, 6, 5, 2, 8, 9, 6, 0, 0, 5, 2, 9, 3, 4, 2, 1, 6, 6, 0, 4, 8, 4, 5, 8, 9, 0, 9, 8, 9, 9, 3, 7, 2, 0, 0, 5, 2, 2, 3, 8, 6, 3, 4, 0, 5, 8, 0, 1, 7, 2, 8, 8, 7, 8, 5, 1, 8, 7, 1, 3, 0, 5, 7, 9, 7, 4, 5, 9, 0, 0, 7, 9, 8, 2, 7, 6, 9, 4, 3, 9, 0, 4, 7, 6, 5, 1, 3, 8, 8, 0, 4, 7, 5, 5, 1, 1, 8, 9, 0, 3, 1, 9, 2, 2, 5, 3, 9, 9, 4, ...
+```
 

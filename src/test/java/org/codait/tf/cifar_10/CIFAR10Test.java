@@ -55,7 +55,7 @@ public class CIFAR10Test {
 				"SavedModel directory (" + CIFAR10_SAVED_MODEL_DIR + ") can't be found, so skipping CIFAR-10 tests",
 				savedModelExists);
 		Assume.assumeTrue(
-				"CIFAR-10 test_batch.bin (" + CIFAR10_TEST_BATCH_BIN + ") can't be found, so skipping CIFAR-10 tests",
+				"CIFAR-10 test data file (" + CIFAR10_TEST_BATCH_BIN + ") can't be found, so skipping CIFAR-10 tests",
 				testBatchBinExists);
 
 		log.debug("Loading CIFAR-10 labels");
