@@ -142,7 +142,7 @@ val result = model.in("input1", 1.0f).in("input2", 2.0f).out("output").run()
 val sum = result.getFloat("output")
 ```
 
-Here we see the REPL console output. Notice that when we create our `model` object, the contained signature
+Below we see the REPL console output. Notice that when we create our `model` object, the contained signature
 definitions are displayed. We see a single signature definition which has the "serving_default" key.
 The input and output keys are displayed, along with their types, shapes, and underlying variable names.
 
@@ -464,11 +464,11 @@ since it contains the `MNISTUtil` class that can be used to load the 10,000 MNIS
 labels and images.
 
 In this example, we load the MNIST model, load the test labels and test images, and then
-run the model on the first image. Even though the model requires Floats, STF4J allows
-the images to be fed in as Ints, since automatic type coercion is performed.
+run the model on the first image. Even though the model requires `Float`s, STF4J allows
+the images to be fed in as `Int`s, since automatic type coercion is performed.
 
 The prediction value, `classes`, is defined as an INT64 (Long value). STF4J allows the value
-to be retrieved and type coerced as an Int using the `getInt` method. We display the label
+to be retrieved and type coerced as an `Int` using the `getInt()` method. We display the label
 and the prediction to the console.
 
 ```
