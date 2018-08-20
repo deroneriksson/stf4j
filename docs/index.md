@@ -119,6 +119,8 @@ mvn clean test
 
 ## Scala
 
+### Introduction
+
 To use STF4J with the Scala REPL, we can build the STF4J uberjar and start the Scala REPL
 with the uberjar on the classpath.
 
