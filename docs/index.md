@@ -140,6 +140,93 @@ We can now add the stf4j dependency to the pom.xml file of our example project.
 ```
 
 
+Our first Java example references the `add_int32` model in the `simple_saved_models` project that
+adds two `int` `Tensors`. We create our `TFModel` object by referencing the path to the model
+directory. We specify that we will use the "serving_default" signature definition. The available
+signature definitions can conveniently be displayed by the `toString` method of the `TFModel`
+after it has been created. We print this information to the console after we create the `model`
+object.
+
+We set input values to the model using the `in()` method. The first parameter of the `in()` method specifies
+the input key which we can see in the "serving_default" signature definition in the console. The
+second parameter to `in()` specifies the value. In this example, we input two scalar `int` values,
+"input1" and "input2",
+which will be added together. Outputs are specified by the `out()` method, where the output keys
+are specified.
+
+The `model` is executed by the `run()` method, which returns the results in the form of a
+`TFResults` object. The `toString()` method of `TFResults` displays the output keys, the
+corresponding output variable names, and information about the `Tensor` data returned. This
+value is output to the console in the below example.
+
+The result of the calculation is a scalar `int` with the key `output`. We can obtain
+this value by calling `getInt("output")` on the `TFResults` object. This sum is displayed
+to the console.
+
+```
+package org.codait.stf4j.example;
+
+import org.codait.stf4j.TFModel;
+import org.codait.stf4j.TFResults;
+
+public class STF4JExample {
+
+	public static void main(String[] args) {
+		TFModel model = new TFModel("../stf4j-test-models/simple_saved_models/add_int32").sig("serving_default");
+		System.out.println("MODEL: " + model);
+		TFResults results = model.in("input1", 1).in("input2", 2).out("output").run();
+		System.out.println("RESULTS: " + results);
+		int sum = results.getInt("output");
+		System.out.println("SUM:" + sum);
+	}
+
+}
+```
+
+
+The above example generates the following output:
+
+```
+log4j:WARN No appenders could be found for logger (org.codait.stf4j.TFModel).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+2018-08-20 13:35:36.171780: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/simple_saved_models/add_int32
+2018-08-20 13:35:36.176215: I tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }
+2018-08-20 13:35:36.176377: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.2 AVX AVX2 FMA
+2018-08-20 13:35:36.177207: I tensorflow/cc/saved_model/loader.cc:113] Restoring SavedModel bundle.
+2018-08-20 13:35:36.177254: I tensorflow/cc/saved_model/loader.cc:123] The specified SavedModel has no variables; no checkpoints were restored.
+2018-08-20 13:35:36.177262: I tensorflow/cc/saved_model/loader.cc:148] Running LegacyInitOp on SavedModel bundle.
+2018-08-20 13:35:36.177275: I tensorflow/cc/saved_model/loader.cc:233] SavedModel load for tags { serve }; Status: success. Took 5513 microseconds.
+MODEL: Model directory: ../stf4j-test-models/simple_saved_models/add_int32
+
+SignatureDef key: serving_default
+method name: tensorflow/serving/predict
+inputs:
+  input key: input1
+    dtype: DT_INT32
+    shape: ()
+    name: input1:0
+  input key: input2
+    dtype: DT_INT32
+    shape: ()
+    name: input2:0
+outputs:
+  output key: output
+    dtype: DT_INT32
+    shape: ()
+    name: output:0
+Note: SignatureDef info can be obtained by calling TFModel's signatureDefInfo() method.
+
+RESULTS: SignatureDef Key: serving_default
+Outputs:
+  [1] output (output:0): INT32 tensor with shape []
+
+SUM:3
+
+```
+
+
+
 ## Scala
 
 ### Introduction
