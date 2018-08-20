@@ -116,6 +116,29 @@ mvn clean test
 
 ## Java
 
+### Introduction
+
+For our Java examples, we will start by installing the STF4J jar file into the local maven repository so
+that we can reference STF4J from Java projects using maven. If STF4J has been deployed to the maven
+central repository, this step is unnecessary.
+
+```
+git clone https://github.com/deroneriksson/stf4j.git
+cd stf4j
+mvn clean install -DskipTests
+```
+
+
+We can now add the stf4j dependency to the pom.xml file of our example project.
+
+```
+<dependency>
+	<groupId>org.codait.stf4j</groupId>
+	<artifactId>stf4j</artifactId>
+	<version>1.10.0-SNAPSHOT</version>
+</dependency>
+```
+
 
 ## Scala
 
