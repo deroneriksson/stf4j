@@ -53,7 +53,7 @@ Here, we use the `add_string` model to concatenate two input strings, `hello` an
 ```
 package org.codait.example;
 
-import org.codait.tf.TFModel;
+import org.codait.stf4j.TFModel;
 
 public class Example {
 
@@ -129,13 +129,13 @@ mvn clean package -DskipTests -Pshade
 scala -cp target/stf4j-uber-1.10.0-SNAPSHOT.jar
 ```
 
-First, we'll import `the org.codait.tf` package, which contains the `TFModel` and `TFResults` classes.
+First, we'll import the `org.codait.stf4j` package, which contains the `TFModel` and `TFResults` classes.
 Next, we create a `TFModel` object based on the `add_float32` model, which adds two float
 `Tensors`.
 We set the signature definition to be "serving_default".
 
 ```
-import org.codait.tf._
+import org.codait.stf4j._
 val model = new TFModel("../stf4j-test-models/simple_saved_models/add_float32")
 model.sig("serving_default")
 val result = model.in("input1", 1.0f).in("input2", 2.0f).out("output").run()
@@ -155,8 +155,8 @@ We obtain the float scalar result by calling the `TFResults` `getFloat("output")
 desired output key specified.
 
 ```
-scala> import org.codait.tf._
-import org.codait.tf._
+scala> import org.codait.stf4j._
+import org.codait.stf4j._
 
 scala> val model = new TFModel("../stf4j-test-models/simple_saved_models/add_float32")
 2018-08-19 12:59:09.927801: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/simple_saved_models/add_float32
@@ -165,7 +165,7 @@ scala> val model = new TFModel("../stf4j-test-models/simple_saved_models/add_flo
 2018-08-19 12:59:09.928271: I tensorflow/cc/saved_model/loader.cc:123] The specified SavedModel has no variables; no checkpoints were restored.
 2018-08-19 12:59:09.928278: I tensorflow/cc/saved_model/loader.cc:148] Running LegacyInitOp on SavedModel bundle.
 2018-08-19 12:59:09.928285: I tensorflow/cc/saved_model/loader.cc:233] SavedModel load for tags { serve }; Status: success. Took 487 microseconds.
-model: org.codait.tf.TFModel =
+model: org.codait.stf4j.TFModel =
 Model directory: ../stf4j-test-models/simple_saved_models/add_float32
 
 SignatureDef key: serving_default
@@ -187,7 +187,7 @@ outputs:
 Note: SignatureDef info can be obtained by calling TFModel's signatureDefInfo() method.
 
 scala> model.sig("serving_default")
-res50: org.codait.tf.TFModel =
+res50: org.codait.stf4j.TFModel =
 Model directory: ../stf4j-test-models/simple_saved_models/add_float32
 
 SignatureDef key: serving_default
@@ -209,7 +209,7 @@ outputs:
 Note: SignatureDef info can be obtained by calling TFModel's signatureDefInfo() method.
 
 scala> val result = model.in("input1", 1.0f).in("input2", 2.0f).out("output").run()
-result: org.codait.tf.TFResults =
+result: org.codait.stf4j.TFResults =
 SignatureDef Key: serving_default
 Outputs:
   [1] output (output:0): FLOAT tensor with shape []
@@ -397,7 +397,7 @@ scala> val model = new TFModel("../stf4j-test-models/simple_saved_models/boolean
 2018-08-19 14:25:23.110689: I tensorflow/cc/saved_model/loader.cc:123] The specified SavedModel has no variables; no checkpoints were restored.
 2018-08-19 14:25:23.110704: I tensorflow/cc/saved_model/loader.cc:148] Running LegacyInitOp on SavedModel bundle.
 2018-08-19 14:25:23.110723: I tensorflow/cc/saved_model/loader.cc:233] SavedModel load for tags { serve }; Status: success. Took 1683 microseconds.
-model: org.codait.tf.TFModel =
+model: org.codait.stf4j.TFModel =
 Model directory: ../stf4j-test-models/simple_saved_models/boolean_logic
 
 SignatureDef key: serving_default
@@ -434,7 +434,7 @@ outputs:
     name: output_or:0
 Note: SignatureDef info can be obtained by calling TFModel's signatureDefInf...
 scala> val result = model.in("input1", true).in("input2", false).out("and", "or").run()
-result: org.codait.tf.TFResults =
+result: org.codait.stf4j.TFResults =
 SignatureDef Key: serving_default
 Outputs:
   [1] and (output_and:0): BOOL tensor with shape []
@@ -472,8 +472,8 @@ to be retrieved and type coerced as an `Int` using the `getInt()` method. We dis
 and the prediction to the console.
 
 ```
-import org.codait.tf._
-import org.codait.tf.util._
+import org.codait.stf4j._
+import org.codait.stf4j.util._
 val mnist = new TFModel("../stf4j-test-models/mnist_saved_model/").sig("serving_default")
 val labels = MNISTUtil.getLabels("../stf4j-test-models/mnist_data/t10k-labels-idx1-ubyte")
 val images = MNISTUtil.getImages("../stf4j-test-models/mnist_data/t10k-images-idx3-ubyte")
@@ -486,14 +486,14 @@ print("Label: " + label + ", Prediction: " + prediction)
 Output:
 
 ```
-scala> import org.codait.tf._
-import org.codait.tf._
+scala> import org.codait.stf4j._
+import org.codait.stf4j._
 
-scala> import org.codait.tf.util._
-import org.codait.tf.util._
+scala> import org.codait.stf4j.util._
+import org.codait.stf4j.util._
 
 scala> val mnist = new TFModel("../stf4j-test-models/mnist_saved_model/").sig("serving_default")
-log4j:WARN No appenders could be found for logger (org.codait.tf.TFModel).
+log4j:WARN No appenders could be found for logger (org.codait.stf4j.TFModel).
 log4j:WARN Please initialize the log4j system properly.
 log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 2018-08-19 15:18:04.456606: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/mnist_saved_model/
@@ -502,7 +502,7 @@ log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more in
 2018-08-19 15:18:04.461273: I tensorflow/cc/saved_model/loader.cc:113] Restoring SavedModel bundle.
 2018-08-19 15:18:04.493649: I tensorflow/cc/saved_model/loader.cc:148] Running LegacyInitOp on SavedModel bundle.
 2018-08-19 15:18:04.497168: I tensorflow/cc/saved_model/loader.cc:233] SavedModel load for tags { serve }; Status: success. Took 40572 microseconds.
-mnist: org.codait.tf.TFModel =
+mnist: org.codait.stf4j.TFModel =
 Model directory: ../stf4j-test-models/mnist_saved_model/
 
 SignatureDef key: classify
@@ -590,8 +590,8 @@ labels and images. After that, we'll perform a prediction on the first
 image and output the label and prediction to the console.
 
 ```
-import org.codait.tf._
-import org.codait.tf.util._
+import org.codait.stf4j._
+import org.codait.stf4j.util._
 val cifar10 = new TFModel("../stf4j-test-models/cifar10_saved_model/").sig("serving_default")
 val testDataFile = "../stf4j-test-models/cifar10_data/cifar-10-batches-bin/test_batch.bin"
 val labels = CIFAR10Util.getLabels(testDataFile);
@@ -611,14 +611,14 @@ output is specified to be an `INT64` (`Long`) value. However, we implicitly conv
 it to an `Int` value by calling the `TFResults` `getInt` method.
 
 ```
-scala> import org.codait.tf._
-import org.codait.tf._
+scala> import org.codait.stf4j._
+import org.codait.stf4j._
 
-scala> import org.codait.tf.util._
-import org.codait.tf.util._
+scala> import org.codait.stf4j.util._
+import org.codait.stf4j.util._
 
 scala> val cifar10 = new TFModel("../stf4j-test-models/cifar10_saved_model/").sig("serving_default")
-log4j:WARN No appenders could be found for logger (org.codait.tf.TFModel).
+log4j:WARN No appenders could be found for logger (org.codait.stf4j.TFModel).
 log4j:WARN Please initialize the log4j system properly.
 log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 2018-08-20 10:30:55.876988: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/cifar10_saved_model/
@@ -627,7 +627,7 @@ log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more in
 2018-08-20 10:30:55.919080: I tensorflow/cc/saved_model/loader.cc:113] Restoring SavedModel bundle.
 2018-08-20 10:30:55.948538: I tensorflow/cc/saved_model/loader.cc:148] Running LegacyInitOp on SavedModel bundle.
 2018-08-20 10:30:55.969714: I tensorflow/cc/saved_model/loader.cc:233] SavedModel load for tags { serve }; Status: success. Took 92737 microseconds.
-cifar10: org.codait.tf.TFModel =
+cifar10: org.codait.stf4j.TFModel =
 Model directory: ../stf4j-test-models/cifar10_saved_model/
 
 SignatureDef key: serving_default
