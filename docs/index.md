@@ -93,7 +93,7 @@ mvn clean package -DskipTests -Pshade
 ```
 
 Currently STF4J only has the following library dependencies:
-tensorflow, libtensorflow, libtensorflow_jni, protobuf-java, and log4j.
+tensorflow, libtensorflow, libtensorflow_jni, proto, protobuf-java, and log4j.
 
 
 # Testing
