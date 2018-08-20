@@ -226,6 +226,185 @@ SUM:3
 ```
 
 
+Next, let's look at feeding in two 1-dimensional `int` arrays and obtaining the resulting
+1-dimensional `int` array.
+
+```
+TFModel model = new TFModel("../stf4j-test-models/simple_saved_models/add_int32").sig("serving_default");
+int[] result = model.in("input1", new int[] { 1, 2 }).in("input2", new int[] { 3, 4 }).out("output").run()
+		.getIntArray("output");
+System.out.println("RESULT: " + Arrays.toString(result));
+```
+
+
+Output:
+
+```
+RESULT: [4, 6]
+```
+
+
+STF4J also handles multidimensional arrays. In this example, we feed in 2 3-dimensional `int`
+arrays and obtain the resulting 3-dimensional `int` array.
+
+```
+TFModel model = new TFModel("../stf4j-test-models/simple_saved_models/add_int32").sig("serving_default");
+int[][][] input1 = new int[][][] { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } };
+int[][][] input2 = new int[][][] { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } };
+int[][][] result = (int[][][]) model.in("input1", input1).in("input2", input2).out("output").run()
+		.getIntArrayMultidimensional("output");
+System.out.println("RESULT: " + Arrays.deepToString(result));
+```
+
+
+Output:
+
+```
+RESULT: [[[2, 4], [6, 8]], [[10, 12], [14, 16]]]
+```
+
+
+STF4J will implicitly perform type coercion where possible for inputs and outputs. In the previous example,
+we can obtain the result as a 3-dimensional `float` array by calling the `getFloatArrayMultidimensional("output")`
+method rather than the `getIntArrayMultidimensional("output")` method.
+
+```
+float[][][] result = (float[][][]) model.in("input1", input1).in("input2", input2).out("output").run()
+		.getFloatArrayMultidimensional("output");
+System.out.println("RESULT: " + Arrays.deepToString(result));
+```
+
+
+Output:
+
+```
+RESULT: [[[2.0, 4.0], [6.0, 8.0]], [[10.0, 12.0], [14.0, 16.0]]]
+```
+
+
+As another example of implicit type coercion using the previous example, although the model adds two `int`
+`Tensors`, we can pass in two 3-dimensional `float` arrays and STF4J will convert these to 3-dimensional `int`
+`Tensors. Although the result is a 3-dimensional `int` `Tensor`, here we convert it to a 3-dimensional
+float array using the `getFloatArrayMultidimensional("output")` method.
+
+
+```
+TFModel model = new TFModel("../stf4j-test-models/simple_saved_models/add_int32").sig("serving_default");
+float[][][] input1 = new float[][][] { { { 1.0f, 2.0f }, { 3.0f, 4.0f } }, { { 5.0f, 6.0f }, { 7.0f, 8.0f } } };
+float[][][] input2 = new float[][][] { { { 1.0f, 2.0f }, { 3.0f, 4.0f } }, { { 5.0f, 6.0f }, { 7.0f, 8.0f } } };
+float[][][] result = (float[][][]) model.in("input1", input1).in("input2", input2).out("output").run()
+		.getFloatArrayMultidimensional("output");
+System.out.println("RESULT: " + Arrays.deepToString(result));
+```
+
+
+Output:
+
+```
+RESULT: [[[2.0, 4.0], [6.0, 8.0]], [[10.0, 12.0], [14.0, 16.0]]]
+```
+
+
+Here, we see an example of inputting two 5-dimensional String arrays and outputting a 5-dimensional String
+array.
+
+```
+TFModel model = new TFModel("../stf4j-test-models/simple_saved_models/add_string").sig("serving_default");
+String[][][][][] s1 = new String[][][][][] { { { { { "Lorem ", "dolor " }, { "amet, ", "adipiscing " },
+		{ "sed ", "eiusmod " }, { "incididunt ", "labore " }, { "dolore ", "aliqua" } } } } };
+String[][][][][] s2 = new String[][][][][] { { { { { "ipsum ", "sit " }, { "consectetur ", "elit, " },
+		{ "do ", "tempor " }, { "ut ", "et " }, { "magna ", "." } } } } };
+String[][][][][] result = (String[][][][][]) model.in("input1", s1).in("input2", s2).out("output").run()
+		.getStringArrayMultidimensional("output");
+System.out.println("RESULT: " + Arrays.deepToString(result));
+```
+
+
+Output:
+
+```
+RESULT: [[[[[Lorem ipsum , dolor sit ], [amet, consectetur , adipiscing elit, ], [sed do , eiusmod tempor ], [incididunt ut , labore et ], [dolore magna , aliqua.]]]]]
+```
+
+
+Next, we'll look at a basic model that returns multiple outputs. The `boolean_logic` model takes two `boolean`
+`Tensor` inputs and outputs five possible `Tensor` outputs. These outputs represent the following boolean
+operations on the two input `Tensors`: AND, OR, XOR, NOT AND, and NOT OR.
+
+```
+TFModel model = new TFModel("../stf4j-test-models/simple_saved_models/boolean_logic").sig("serving_default");
+System.out.println("MODEL: " + model);
+boolean[][] input1 = new boolean[][] { { true, true }, { false, false } };
+boolean[][] input2 = new boolean[][] { { true, false }, { true, false } };
+TFResults results = model.in("input1", input1).in("input2", input2).out("and", "or", "xor").run();
+System.out.println("INPUT1: " + Arrays.deepToString(input1));
+System.out.println("INPUT2: " + Arrays.deepToString(input2));
+System.out.println("RESULTS: " + results);
+System.out.println("AND: " + Arrays.deepToString((boolean[][]) results.getBooleanArrayMultidimensional("and")));
+System.out.println("OR: " + Arrays.deepToString((boolean[][]) results.getBooleanArrayMultidimensional("or")));
+System.out.println("XOR: " + Arrays.deepToString((boolean[][]) results.getBooleanArrayMultidimensional("xor")));
+```
+
+
+In the output, we see that the model `toString()` displays information about the "serving_default"
+signature definition, which lists the two inputs and the five outputs. Since we specify three outputs
+in the `out("and", "or", "xor")` method call, we see that `boolean` `Tensors` representing these outputs
+are available in the results. We obtain the results as two-dimensional boolean arrays using the
+`getBooleanArrayMultidimensional()` method and display their values to the console.
+
+```
+MODEL: Model directory: ../stf4j-test-models/simple_saved_models/boolean_logic
+
+SignatureDef key: serving_default
+method name: tensorflow/serving/predict
+inputs:
+  input key: input2
+    dtype: DT_BOOL
+    shape: ()
+    name: input2:0
+  input key: input1
+    dtype: DT_BOOL
+    shape: ()
+    name: input1:0
+outputs:
+  output key: not_and
+    dtype: DT_BOOL
+    shape: ()
+    name: output_not_and:0
+  output key: and
+    dtype: DT_BOOL
+    shape: ()
+    name: output_and:0
+  output key: xor
+    dtype: DT_BOOL
+    shape: ()
+    name: output_xor:0
+  output key: not_or
+    dtype: DT_BOOL
+    shape: ()
+    name: output_not_or:0
+  output key: or
+    dtype: DT_BOOL
+    shape: ()
+    name: output_or:0
+Note: SignatureDef info can be obtained by calling TFModel's signatureDefInfo() method.
+
+INPUT1: [[true, true], [false, false]]
+INPUT2: [[true, false], [true, false]]
+RESULTS: SignatureDef Key: serving_default
+Outputs:
+  [1] and (output_and:0): BOOL tensor with shape [2, 2]
+  [2] or (output_or:0): BOOL tensor with shape [2, 2]
+  [3] xor (output_xor:0): BOOL tensor with shape [2, 2]
+
+AND: [[true, false], [false, false]]
+OR: [[true, true], [true, false]]
+XOR: [[false, true], [true, false]]
+```
+
+
+
+
 
 ## Scala
 
