@@ -284,7 +284,7 @@ RESULT: [[[2.0, 4.0], [6.0, 8.0]], [[10.0, 12.0], [14.0, 16.0]]]
 
 As another example of implicit type coercion using the previous example, although the model adds two `int`
 `Tensors`, we can pass in two 3-dimensional `float` arrays and STF4J will convert these to 3-dimensional `int`
-`Tensors. Although the result is a 3-dimensional `int` `Tensor`, here we convert it to a 3-dimensional
+`Tensors`. Although the result is a 3-dimensional `int` `Tensor`, here we convert it to a 3-dimensional
 float array using the `getFloatArrayMultidimensional("output")` method.
 
 
@@ -329,7 +329,8 @@ RESULT: [[[[[Lorem ipsum , dolor sit ], [amet, consectetur , adipiscing elit, ],
 
 Next, we'll look at a basic model that returns multiple outputs. The `boolean_logic` model takes two `boolean`
 `Tensor` inputs and outputs five possible `Tensor` outputs. These outputs represent the following boolean
-operations on the two input `Tensors`: AND, OR, XOR, NOT AND, and NOT OR.
+operations on the two input `Tensors`: AND, OR, XOR, NOT AND, and NOT OR. We will retrieve three of these
+outputs using the following signature definition output keys: "and", "or", and "xor".
 
 ```
 TFModel model = new TFModel("../stf4j-test-models/simple_saved_models/boolean_logic").sig("serving_default");
