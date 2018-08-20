@@ -404,7 +404,89 @@ XOR: [[false, true], [true, false]]
 ```
 
 
+### MNIST
 
+In this Java example, we'll use the MNISTUtil class to load the standard 10,000 MNIST test labels
+and images. Each image is treated as a 28x28 `int` value, and the entire 10,000 image
+dataset is loaded as a three-dimensional `int` array, where the first dimension is the
+image number, the second dimension is the row, and the third dimension is the column.
+
+In the signature definition for "serving_default" (and "classify"), we see that the input
+image data should be `float` data (which is a little strange since it is really integer data).
+However, STF4J will automatically coerce `int` data to `float` data so we can feed in `int`
+data painlessly into a `float` Tensor.
+
+Here, we'll perform a prediction on the first of the 10,000 images and display the label and
+the prediction to the console.
+
+```
+TFModel mnist = new TFModel("../stf4j-test-models/mnist_saved_model/").sig("serving_default");
+System.out.println("MNIST MODEL: " + mnist);
+int[] labels = MNISTUtil.getLabels("../stf4j-test-models/mnist_data/t10k-labels-idx1-ubyte");
+int[][][] images = MNISTUtil.getImages("../stf4j-test-models/mnist_data/t10k-images-idx3-ubyte");
+int label = labels[0];
+int prediction = mnist.in("image", images[0]).out("classes").run().getInt("classes");
+System.out.println("Label: " + label + ", Prediction: " + prediction);
+```
+
+
+Output:
+
+```
+MNIST MODEL: Model directory: ../stf4j-test-models/mnist_saved_model/
+
+SignatureDef key: classify
+method name: tensorflow/serving/predict
+inputs:
+  input key: image
+    dtype: DT_FLOAT
+    shape: (-1, 28, 28)
+    name: Placeholder:0
+outputs:
+  output key: probabilities
+    dtype: DT_FLOAT
+    shape: (-1, 10)
+    name: Softmax:0
+  output key: classes
+    dtype: DT_INT64
+    shape: (-1)
+    name: ArgMax:0
+SignatureDef key: serving_default
+method name: tensorflow/serving/predict
+inputs:
+  input key: image
+    dtype: DT_FLOAT
+    shape: (-1, 28, 28)
+    name: Placeholder:0
+outputs:
+  output key: probabilities
+    dtype: DT_FLOAT
+    shape: (-1, 10)
+    name: Softmax:0
+  output key: classes
+    dtype: DT_INT64
+    shape: (-1)
+    name: ArgMax:0
+Note: SignatureDef info can be obtained by calling TFModel's signatureDefInfo() method.
+
+Label: 7, Prediction: 7
+
+```
+
+Since any number of images can be fed into the model, let's feed in all 10,000 test images
+and get back the 10,000 predictions as an `int` array.
+
+```
+int[] predictions = mnist.in("image", images).out("classes").run().getIntArray("classes");
+System.out.println("PREDICTIONS: " + Arrays.toString(predictions));
+```
+
+
+Output:
+
+```
+PREDICTIONS: [7, 2, 1, 0, 4, 1, 4, 9, 5, 9, 0, 6, 9, 0, 1, 5, 9, 7, 3, 4, 9, 6, 6, 5, 4, 0, 7, 4, 0, 1, 3, 1, 3, 4, 7, 2, 7, ... ]
+```
 
 
 ## Scala
