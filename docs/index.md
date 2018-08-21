@@ -489,6 +489,94 @@ PREDICTIONS: [7, 2, 1, 0, 4, 1, 4, 9, 5, 9, 0, 6, 9, 0, 1, 5, 9, 7, 3, 4, 9, 6, 
 ```
 
 
+### CIFAR-10
+
+Next, let's have a look at the TensorFlow CIFAR-10 SavedModel using STF4J. A copy of this model is
+saved in the `stf4j-test-models` project in the `cifar10_saved_model` directory.
+This model performs image predictions on color images that are 32 rows by 32 columns by
+3 channels. These images need to be preprocessed before feeding the images into the
+model. The labels and images can be obtained using the CIFAR10Util class, as we
+see below.
+
+In this example, we obtain the 10,000 test labels as an `int` arry and the 10,000 test
+images as a 4-dimensional `float` array, where the first dimension is the image number,
+the second dimension in the rows, the third dimension is the columns, and the
+fourth dimension is the channels, and we obtain these images afte preprocessing using the
+`CIFAR10Util.getPreprocessedImages()` method.
+
+We perform a prediction on the first CIFAR-10 image and display the label and prediction for
+the first image to the console.
+
+```
+TFModel cifar10 = new TFModel("../stf4j-test-models/cifar10_saved_model/").sig("serving_default");
+System.out.println("CIFAR-10 MODEL: " + cifar10);
+String testDataFile = "../stf4j-test-models/cifar10_data/cifar-10-batches-bin/test_batch.bin";
+int[] labels = CIFAR10Util.getLabels(testDataFile);
+float[][][][] images = CIFAR10Util.getPreprocessedImages(testDataFile, CIFAR10Util.DimOrder.ROWS_COLS_CHANNELS);
+int label = labels[0];
+int prediction = cifar10.in("input", images[0]).out("classes").run().getInt("classes");
+System.out.println("Label: " + label + ", Prediction: " + prediction);
+```
+
+
+Output:
+
+```
+CIFAR-10 MODEL: Model directory: ../stf4j-test-models/cifar10_saved_model/
+
+SignatureDef key: serving_default
+method name: tensorflow/serving/predict
+inputs:
+  input key: input
+    dtype: DT_FLOAT
+    shape: (128, 32, 32, 3)
+    name: input_tensor:0
+outputs:
+  output key: probabilities
+    dtype: DT_FLOAT
+    shape: (128, 10)
+    name: softmax_tensor:0
+  output key: classes
+    dtype: DT_INT64
+    shape: (128)
+    name: ArgMax:0
+SignatureDef key: predict
+method name: tensorflow/serving/predict
+inputs:
+  input key: input
+    dtype: DT_FLOAT
+    shape: (128, 32, 32, 3)
+    name: input_tensor:0
+outputs:
+  output key: classes
+    dtype: DT_INT64
+    shape: (128)
+    name: ArgMax:0
+  output key: probabilities
+    dtype: DT_FLOAT
+    shape: (128, 10)
+    name: softmax_tensor:0
+Note: SignatureDef info can be obtained by calling TFModel's signatureDefInfo() method.
+
+Label: 3, Prediction: 3
+```
+
+
+Next, we'll feed in all 10,000 test images and obtain the predictions as an `int` array.
+
+```
+int[] predictions = cifar10.in("input", images).out("classes").run().getIntArray("classes");
+System.out.println("PREDICTIONS: " + Arrays.toString(predictions));
+```
+
+
+The truncated console output is shown here:
+
+```
+PREDICTIONS: [3, 8, 8, 0, 6, 6, 1, 6, 3, 1, 0, 9, 5, 7, 9, 6, 5, 7, 8, 6, 7, 0, 4, 9, 5, 2, 4, 0, 9, 6, 6, 5, 4, 5, 9, 2, 4, ...]
+```
+
+
 ## Scala
 
 ### Introduction
