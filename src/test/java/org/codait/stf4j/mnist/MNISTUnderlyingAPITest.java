@@ -24,7 +24,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.codait.stf4j.util.ArrayUtil;
 import org.codait.stf4j.util.MNISTUtil;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -56,16 +56,22 @@ public class MNISTUnderlyingAPITest {
 		Assume.assumeTrue("Test images (" + MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_IMAGES
 				+ ") can't be found, so skipping MNIST Underlying API tests", testImagesExist);
 
-		log.debug("Loading MNIST labels");
-		labels = MNISTUtil.getLabels(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_LABELS);
-		log.debug("Loading MNIST images");
-		images = MNISTUtil.getImages(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_IMAGES);
+		if (labels == null) {
+			log.debug("Loading MNIST labels");
+			labels = MNISTUtil.getLabels(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_LABELS);
+		}
+		if (images == null) {
+			log.debug("Loading MNIST images");
+			images = MNISTUtil.getImages(MNISTTest.MNIST_DATA_DIR + MNISTTest.TEST_IMAGES);
+		}
 
 		tfModel(MNISTTest.MNIST_SAVED_MODEL_DIR);
 	}
 
-	@After
-	public void after() {
+	@AfterClass
+	public static void after() {
+		labels = null;
+		images = null;
 	}
 
 	@Test

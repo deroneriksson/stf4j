@@ -27,7 +27,7 @@ import org.codait.stf4j.TFModel;
 import org.codait.stf4j.TFResults;
 import org.codait.stf4j.util.ArrayUtil;
 import org.codait.stf4j.util.MNISTUtil;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -44,8 +44,8 @@ public class MNISTTest extends TFBaseTest {
 
 	public static final String MNIST_SAVED_MODEL_DIR = "../stf4j-test-models/mnist_saved_model/";
 
-	private int[] labels = null;
-	private int[][][] images = null;
+	private static int[] labels = null;
+	private static int[][][] images = null;
 	private TFModel model = null;
 
 	@Before
@@ -61,15 +61,21 @@ public class MNISTTest extends TFBaseTest {
 		Assume.assumeTrue("Test images (" + MNIST_DATA_DIR + TEST_IMAGES + ") can't be found, so skipping MNIST tests",
 				testImagesExist);
 
-		log.debug("Loading MNIST labels");
-		labels = MNISTUtil.getLabels(MNIST_DATA_DIR + TEST_LABELS);
-		log.debug("Loading MNIST images");
-		images = MNISTUtil.getImages(MNIST_DATA_DIR + TEST_IMAGES);
+		if (labels == null) {
+			log.debug("Loading MNIST labels");
+			labels = MNISTUtil.getLabels(MNIST_DATA_DIR + TEST_LABELS);
+		}
+		if (images == null) {
+			log.debug("Loading MNIST images");
+			images = MNISTUtil.getImages(MNIST_DATA_DIR + TEST_IMAGES);
+		}
 		model = new TFModel(MNIST_SAVED_MODEL_DIR).sig("serving_default");
 	}
 
-	@After
-	public void after() {
+	@AfterClass
+	public static void after() {
+		labels = null;
+		images = null;
 	}
 
 	@Test
