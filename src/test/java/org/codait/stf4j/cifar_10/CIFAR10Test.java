@@ -26,7 +26,7 @@ import org.codait.stf4j.TFModel;
 import org.codait.stf4j.util.ArrayUtil;
 import org.codait.stf4j.util.CIFAR10Util;
 import org.codait.stf4j.util.CIFAR10Util.DimOrder;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -43,8 +43,8 @@ public class CIFAR10Test {
 	public static final String CAT_IMAGE = "../stf4j-test-models/image_data/cat.jpg";
 	public static final String DOG_IMAGE = "../stf4j-test-models/image_data/dog.jpg";
 
-	private int[] labels = null;
-	private float[][][][] images = null;
+	private static int[] labels = null;
+	private static float[][][][] images = null;
 	private TFModel model = null;
 
 	@Before
@@ -58,15 +58,21 @@ public class CIFAR10Test {
 				"CIFAR-10 test data file (" + CIFAR10_TEST_BATCH_BIN + ") can't be found, so skipping CIFAR-10 tests",
 				testBatchBinExists);
 
-		log.debug("Loading CIFAR-10 labels");
-		labels = CIFAR10Util.getLabels(CIFAR10_TEST_BATCH_BIN);
-		log.debug("Loading CIFAR-10 images");
-		images = CIFAR10Util.getPreprocessedImages(CIFAR10_TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
+		if (labels == null) {
+			log.debug("Loading CIFAR-10 labels");
+			labels = CIFAR10Util.getLabels(CIFAR10_TEST_BATCH_BIN);
+		}
+		if (images == null) {
+			log.debug("Loading CIFAR-10 images");
+			images = CIFAR10Util.getPreprocessedImages(CIFAR10_TEST_BATCH_BIN, DimOrder.ROWS_COLS_CHANNELS);
+		}
 		model = new TFModel(CIFAR10_SAVED_MODEL_DIR).sig("serving_default");
 	}
 
-	@After
-	public void after() {
+	@AfterClass
+	public static void after() {
+		labels = null;
+		images = null;
 	}
 
 	@Test
