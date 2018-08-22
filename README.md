@@ -187,9 +187,6 @@ public class STF4JExample {
 The above example generates the following output:
 
 ```
-log4j:WARN No appenders could be found for logger (org.codait.stf4j.TFModel).
-log4j:WARN Please initialize the log4j system properly.
-log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 2018-08-20 13:35:36.171780: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/simple_saved_models/add_int32
 2018-08-20 13:35:36.176215: I tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }
 2018-08-20 13:35:36.176377: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.2 AVX AVX2 FMA
@@ -1022,9 +1019,6 @@ scala> import org.codait.stf4j.util._
 import org.codait.stf4j.util._
 
 scala> val mnist = new TFModel("../stf4j-test-models/mnist_saved_model/").sig("serving_default")
-log4j:WARN No appenders could be found for logger (org.codait.stf4j.TFModel).
-log4j:WARN Please initialize the log4j system properly.
-log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 2018-08-19 15:18:04.456606: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/mnist_saved_model/
 2018-08-19 15:18:04.457571: I tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }
 2018-08-19 15:18:04.458685: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.2 AVX AVX2 FMA
@@ -1147,9 +1141,6 @@ scala> import org.codait.stf4j.util._
 import org.codait.stf4j.util._
 
 scala> val cifar10 = new TFModel("../stf4j-test-models/cifar10_saved_model/").sig("serving_default")
-log4j:WARN No appenders could be found for logger (org.codait.stf4j.TFModel).
-log4j:WARN Please initialize the log4j system properly.
-log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 2018-08-20 10:30:55.876988: I tensorflow/cc/saved_model/reader.cc:31] Reading SavedModel from: ../stf4j-test-models/cifar10_saved_model/
 2018-08-20 10:30:55.892737: I tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }
 2018-08-20 10:30:55.901850: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.2 AVX AVX2 FMA
