@@ -581,9 +581,9 @@ PREDICTIONS: [3, 8, 8, 0, 6, 6, 1, 6, 3, 1, 0, 9, 5, 7, 9, 6, 5, 7, 8, 6, 7, 0, 
 
 Normal interactions with STF4J should occur through the `TFModel` and `TFResults` classes.
 If direct interactions with graph operations are required, this can be accomplished using
-using the `TFGraph` and `TFGraphResults` classes.
+the `TFGraph` and `TFGraphResults` classes.
 
-In the following example, we first add two int arrays using the `SavedModel` referenced
+In the following example, we first add two `int` arrays using the `SavedModel` referenced
 by `TFModel`, and we obtain our results through `TFResults` which gives us the resulting
 `int` array.
 
