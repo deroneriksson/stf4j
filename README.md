@@ -282,7 +282,7 @@ RESULT: [[[2.0, 4.0], [6.0, 8.0]], [[10.0, 12.0], [14.0, 16.0]]]
 As another example of implicit type coercion using the previous example, although the model adds two `int`
 `Tensors`, we can pass in two 3-dimensional `float` arrays and STF4J will convert these to 3-dimensional `int`
 `Tensors`. Although the result is a 3-dimensional `int` `Tensor`, here we convert it to a 3-dimensional
-float array using the `getFloatArrayMultidimensional("output")` method.
+`float` array using the `getFloatArrayMultidimensional("output")` method.
 
 
 ```
@@ -302,7 +302,7 @@ RESULT: [[[2.0, 4.0], [6.0, 8.0]], [[10.0, 12.0], [14.0, 16.0]]]
 ```
 
 
-Here, we see an example of inputting two 5-dimensional String arrays and outputting a 5-dimensional String
+Here, we see an example of inputting two 5-dimensional `String` arrays and outputting a 5-dimensional `String`
 array.
 
 ```
@@ -347,7 +347,7 @@ System.out.println("XOR: " + Arrays.deepToString((boolean[][]) results.getBoolea
 In the output, we see that the model `toString()` displays information about the "serving_default"
 signature definition, which lists the two inputs and the five outputs. Since we specify three outputs
 in the `out("and", "or", "xor")` method call, we see that `boolean` `Tensors` representing these outputs
-are available in the results. We obtain the results as two-dimensional boolean arrays using the
+are available in the results. We obtain the results as two-dimensional `boolean` arrays using the
 `getBooleanArrayMultidimensional()` method and display their values to the console.
 
 ```
@@ -403,7 +403,7 @@ XOR: [[false, true], [true, false]]
 
 ### MNIST
 
-In this Java example, we'll use the MNISTUtil class to load the standard 10,000 MNIST test labels
+In this Java example, we'll use the `MNISTUtil` class to load the standard 10,000 MNIST test labels
 and images. Each image is treated as a 28x28 `int` value, and the entire 10,000 image
 dataset is loaded as a three-dimensional `int` array, where the first dimension is the
 image number, the second dimension is the row, and the third dimension is the column.
@@ -492,13 +492,13 @@ Next, let's have a look at the TensorFlow CIFAR-10 SavedModel using STF4J. A cop
 saved in the `stf4j-test-models` project in the `cifar10_saved_model` directory.
 This model performs image predictions on color images that are 32 rows by 32 columns by
 3 channels. These images need to be preprocessed before feeding the images into the
-model. The labels and images can be obtained using the CIFAR10Util class, as we
+model. The labels and images can be obtained using the `CIFAR10Util` class, as we
 see below.
 
-In this example, we obtain the 10,000 test labels as an `int` arry and the 10,000 test
+In this example, we obtain the 10,000 test labels as an `int` array and the 10,000 test
 images as a 4-dimensional `float` array, where the first dimension is the image number,
 the second dimension in the rows, the third dimension is the columns, and the
-fourth dimension is the channels, and we obtain these images afte preprocessing using the
+fourth dimension is the channels, and we obtain these images after preprocessing using the
 `CIFAR10Util.getPreprocessedImages()` method.
 
 We perform a prediction on the first CIFAR-10 image and display the label and prediction for
@@ -656,7 +656,7 @@ scala -cp target/stf4j-uber-1.10.0-SNAPSHOT.jar
 ```
 
 First, we'll import the `org.codait.stf4j` package, which contains the `TFModel` and `TFResults` classes.
-Next, we create a `TFModel` object based on the `add_float32` model, which adds two float
+Next, we create a `TFModel` object based on the `add_float32` model, which adds two `Float`
 `Tensors`.
 We set the signature definition to be "serving_default".
 
@@ -676,8 +676,8 @@ Inputs are set by calls to the model's `in` method, and outputs are set by calls
 The model is run by the `run()` method, which returns a `TFResults` object, which maps keys to output
 `Tensors`. Notice that the returned `TFResults` object's `toString()` displays information about the
 contained outputs. We see in the console output that the result contains an `output` key which maps
-to the `output:0` variable and that the result is a `FLOAT` tensor containing a scalar float value.
-We obtain the float scalar result by calling the `TFResults` `getFloat("output")` method with the
+to the `output:0` variable and that the result is a `FLOAT` tensor containing a scalar `float` value.
+We obtain the `float` scalar result by calling the `TFResults` `getFloat("output")` method with the
 desired output key specified.
 
 ```
@@ -746,7 +746,7 @@ sum: Float = 3.0
 ```
 
 
-Using the existing model, let's input two Float arrays and obtain the resulting Float array.
+Using the existing model, let's input two `Float` arrays and obtain the resulting `Float` array.
 
 ```
 val input1 = Array(1.0f, 2.0f)
@@ -755,8 +755,8 @@ val sum = model.in("input1", input1).in("input2", input2).out("output").run().ge
 ```
 
 
-In the console output, we see the elements in the two Float arrays have been added, and the resulting
-Float array is returned by the call to the `TFResults` `getFloatArray("output")` method.
+In the console output, we see the elements in the two `Float` arrays have been added, and the resulting
+`Float` array is returned by the call to the `TFResults` `getFloatArray("output")` method.
 
 ```
 scala> val input1 = Array(1.0f, 2.0f)
@@ -770,7 +770,7 @@ sum: Array[Float] = Array(1.1, 2.2)
 ```
 
 
-Next, let's input two multidimensional Float arrays and obtain the resulting multidimensional Float array.
+Next, let's input two multidimensional `Float` arrays and obtain the resulting multidimensional `Float` array.
 Here, we input two 3d arrays and obtain the resulting 3d array. We print the values of the individual
 array elements.
 
@@ -824,9 +824,9 @@ scala> print(sum(1)(1)(1))
 ```
 
 
-STF4J implicitly performs type coercion where possible. In the example below, two multidimensional Int arrays
-are input into the `add_float32` model. Since the inputs need to be FLOAT Tensors, STF4J converts the
-multidimensional Int arrays to FLOAT Tensors.
+STF4J implicitly performs type coercion where possible. In the example below, two multidimensional `Int` arrays
+are input into the `add_float32` model. Since the inputs need to be `FLOAT` `Tensors`, STF4J converts the
+multidimensional `Int` arrays to `FLOAT` `Tensors`.
 
 ```
 val input1 = Array(Array(Array(1, 2), Array(3, 4)), Array(Array(5, 6), Array(7, 8)))
@@ -843,8 +843,8 @@ print(sum(1)(1)(0))
 print(sum(1)(1)(1))
 ```
 
-We see that the 3d Int arrays have been converted to FLOAT Tensors and added together by the model,
-and the resulting 3d Float array is obtained by the call to `getFloatArrayMultidimensional("output")`.
+We see that the 3d `Int` arrays have been converted to `FLOAT` `Tensors` and added together by the model,
+and the resulting 3d `Float` array is obtained by the call to `getFloatArrayMultidimensional("output")`.
 
 ```
 scala> val input1 = Array(Array(Array(1, 2), Array(3, 4)), Array(Array(5, 6), Array(7, 8)))
@@ -878,7 +878,7 @@ scala> print(sum(1)(1)(1))
 ```
 
 
-In the previous example, the resulting 3d Float array could also be retrieved as a 3d Int array if desired, since STF4J
+In the previous example, the resulting 3d `Float` array could also be retrieved as a 3d `Int` array if desired, since STF4J
 can perform the type coercion automatically.
 
 ```
@@ -899,7 +899,7 @@ sum: Array[Array[Array[Int]]] = Array(Array(Array(2, 4), Array(6, 8)), Array(Arr
 
 
 Next, let's have a look at a model that returns multiple outputs. The `boolean_logic` model in the `stf4j-test-models`
-project has 2 boolean inputs and 5 boolean outputs. The model takes the 2 boolean inputs and performs the following
+project has 2 `boolean` inputs and 5 `boolean` outputs. The model takes the 2 `boolean` inputs and performs the following
 boolean logic operations on the inputs and provides them as outputs: "and", "or", "xor", "not_and", "not_or".
 
 Here, we input `true` for `input1` and `false` for `input2`. We retrieve the values of the inputs ANDed and ORed
@@ -993,7 +993,7 @@ In this example, we load the MNIST model, load the test labels and test images, 
 run the model on the first image. Even though the model requires `Float`s, STF4J allows
 the images to be fed in as `Int`s, since automatic type coercion is performed.
 
-The prediction value, `classes`, is defined as an INT64 (Long value). STF4J allows the value
+The prediction value, `classes`, is defined as an `INT64` (`Long` value). STF4J allows the value
 to be retrieved and type coerced as an `Int` using the `getInt()` method. We display the label
 and the prediction to the console.
 
@@ -1108,7 +1108,7 @@ specify "serving_default" as the signature definition to use. The
 possible signature definitions are displayed by the TFModel's `toString()`
 method, which is displayed to the REPL when the `model` object is created.
 
-We'll utilize the CIFAR10Util class to obtain the 10,000 CIFAR-10 test
+We'll utilize the `CIFAR10Util` class to obtain the 10,000 CIFAR-10 test
 labels and images. After that, we'll perform a prediction on the first
 image and output the label and prediction to the console.
 
@@ -1127,7 +1127,7 @@ print("Label: " + label + ", Prediction: " + prediction)
 
 In the console output, notice that when we create the `model` object, we see the
 possible `SignatureDef` keys, `serving_default` and `predict`. Also, notice that
-the input image data is expected to be `Floats`. We see that the images are expected
+the input image data is expected to be `Float`s. We see that the images are expected
 to be 32 rows by 32 columns by 3 channels. Although the input shape specifies 128
 input images, any number of images can be fed into the model. The `classes`
 output is specified to be an `INT64` (`Long`) value. However, we implicitly convert
