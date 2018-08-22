@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.codait.stf4j.graph.TFGraph;
 import org.codait.stf4j.util.TFUtil;
 import org.tensorflow.Graph;
 import org.tensorflow.SavedModelBundle;
@@ -257,6 +258,15 @@ public class TFModel {
 	 */
 	public Graph graph() {
 		return model().graph();
+	}
+
+	/**
+	 * Obtain a TFGraph object for graph interactions.
+	 * 
+	 * @return A TFGraph object.
+	 */
+	public TFGraph tfGraph() {
+		return new TFGraph(model().graph());
 	}
 
 	/**

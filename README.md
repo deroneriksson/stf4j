@@ -587,8 +587,8 @@ In the following example, we first add two int arrays using the `SavedModel` ref
 by `TFModel`, and we obtain our results through `TFResults` which gives us the resulting
 `int` array.
 
-After this, we display the model's graph's operations to the console. We create a `TFGraph`
-object based on the graph obtained from `TFModel`. We specify two inputs, `input1` and
+After this, we display the model's graph's operations to the console. We obtain a `TFGraph`
+object from `TFModel`. We specify two inputs, `input1` and
 `input2`, and we specify one output, `add`. Note that the `TFGraph` `input()` and `output()`
 methods only take input and output data as `Tensors`.
 
@@ -616,7 +616,7 @@ while (operations.hasNext()) {
 Tensor<Integer> t1 = Tensor.create(i1, Integer.class);
 Tensor<Integer> t2 = Tensor.create(i2, Integer.class);
 
-TFGraph graph = new TFGraph(model.graph());
+TFGraph graph = model.tfGraph();
 TFGraphResults res = graph.input("input1", t1).input("input2", t2).output("add").run();
 @SuppressWarnings("unchecked")
 Tensor<Integer> t = (Tensor<Integer>) res.getTensor("add");
