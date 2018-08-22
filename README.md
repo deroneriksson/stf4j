@@ -13,6 +13,7 @@
           <li><a href="#introduction">Introduction</a></li>
           <li><a href="#mnist">MNIST</a></li>
           <li><a href="#cifar-10">CIFAR-10</a></li>
+          <li><a href="#graph-inputs-and-outputs">Graph Inputs and Outputs</a></li>
         </ul>
       </li>
       <li><a href="#scala">Scala</a>
@@ -573,6 +574,76 @@ The truncated console output is shown here:
 
 ```
 PREDICTIONS: [3, 8, 8, 0, 6, 6, 1, 6, 3, 1, 0, 9, 5, 7, 9, 6, 5, 7, 8, 6, 7, 0, 4, 9, 5, 2, 4, 0, 9, 6, 6, 5, 4, 5, 9, 2, 4, ...]
+```
+
+
+### Graph Inputs and Outputs
+
+Normal interactions with STF4J should occur through the `TFModel` and `TFResults` classes.
+If direct interactions with graph operations is required, this can be accomplished using
+using the `TFGraph` and `TFGraphResults` classes.
+
+In the following example, we first add two int arrays using the `SavedModel` referenced
+by `TFModel`, and we obtain our results through `TFResults` which gives us the resulting
+`int` array.
+
+After this, we display the model's graph's operations to the console. We create a `TFGraph`
+object based on the graph obtained from `TFModel`. We specify two inputs, `input1` and
+`input2`, and we specify one output, `add`. Note that TFGraph's `input()` and `output()`
+methods only take input and output data as `Tensors`.
+
+We obtain our graph results through `TFGraphResults`. For convenience, we use the
+`ArrayUtil.intTensorToIntArray()` method to convert our `Integer` `Tensor` to an
+`int` array.
+
+
+```
+int[] i1 = new int[] { 1, 3, 5 };
+int[] i2 = new int[] { 2, 4, 6 };
+
+TFModel model = new TFModel("../stf4j-test-models/simple_saved_models/add_int32").sig("serving_default");
+TFResults result = model.in("input1", i1).in("input2", i2).out("output").run();
+int[] output = result.getIntArray("output");
+System.out.println("Model Output: " + Arrays.toString(output));
+
+Iterator<Operation> operations = model.graph().operations();
+System.out.println("\nGraph Operations:");
+while (operations.hasNext()) {
+	Operation operation = operations.next();
+	System.out.println("  Operation: " + operation);
+}
+
+Tensor<Integer> t1 = Tensor.create(i1, Integer.class);
+Tensor<Integer> t2 = Tensor.create(i2, Integer.class);
+
+TFGraph graph = new TFGraph(model.graph());
+TFGraphResults res = graph.input("input1", t1).input("input2", t2).output("add").run();
+@SuppressWarnings("unchecked")
+Tensor<Integer> t = (Tensor<Integer>) res.getTensor("add");
+int[] intArray = ArrayUtil.intTensorToIntArray(t);
+System.out.println("\nGraph Output: " + Arrays.toString(intArray));
+```
+
+
+The console output is shown here:
+
+```
+Model Output: [3, 7, 11]
+
+Graph Operations:
+  Operation: <Placeholder 'input1'>
+  Operation: <Placeholder 'input2'>
+  Operation: <Add 'add'>
+  Operation: <Identity 'output'>
+
+Graph Output: [3, 7, 11]
+```
+
+
+Note that a `TFGraph` object can be created based on an existing graph in the file system.
+
+```
+TFGraph graph = new TFGraph("./example/example_graph.pb");
 ```
 
 
