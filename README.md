@@ -580,7 +580,7 @@ PREDICTIONS: [3, 8, 8, 0, 6, 6, 1, 6, 3, 1, 0, 9, 5, 7, 9, 6, 5, 7, 8, 6, 7, 0, 
 ### Graph Inputs and Outputs
 
 Normal interactions with STF4J should occur through the `TFModel` and `TFResults` classes.
-If direct interactions with graph operations is required, this can be accomplished using
+If direct interactions with graph operations are required, this can be accomplished using
 using the `TFGraph` and `TFGraphResults` classes.
 
 In the following example, we first add two int arrays using the `SavedModel` referenced
@@ -589,7 +589,7 @@ by `TFModel`, and we obtain our results through `TFResults` which gives us the r
 
 After this, we display the model's graph's operations to the console. We create a `TFGraph`
 object based on the graph obtained from `TFModel`. We specify two inputs, `input1` and
-`input2`, and we specify one output, `add`. Note that TFGraph's `input()` and `output()`
+`input2`, and we specify one output, `add`. Note that the `TFGraph` `input()` and `output()`
 methods only take input and output data as `Tensors`.
 
 We obtain our graph results through `TFGraphResults`. For convenience, we use the
