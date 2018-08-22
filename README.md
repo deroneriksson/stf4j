@@ -79,7 +79,7 @@ STF4J is a standard maven Java project. The project can be cloned from GitHub an
 Here, we skip testing. After building, the STF4J jar file is located in the target directory.
 
 ```
-git clone https://github.com/deroneriksson/stf4j.git
+git clone https://github.com/CODAIT/stf4j.git
 cd stf4j
 mvn clean package -DskipTests
 ```
@@ -105,8 +105,8 @@ For full testing, MNIST and CIFAR-10 data should be added to the `stf4j-test-mod
 are located in the `stf4j-test-models` project. If the data is not present, the relevant tests will be skipped.
 
 ```
-git clone https://github.com/deroneriksson/stf4j-test-models.git
-git clone https://github.com/deroneriksson/stf4j.git
+git clone https://github.com/CODAIT/stf4j-test-models.git
+git clone https://github.com/CODAIT/stf4j.git
 cd stf4j
 mvn clean test
 ```
@@ -123,7 +123,7 @@ that we can reference STF4J from Java projects using maven. If STF4J has been de
 central repository, this step is unnecessary.
 
 ```
-git clone https://github.com/deroneriksson/stf4j.git
+git clone https://github.com/CODAIT/stf4j.git
 cd stf4j
 mvn clean install -DskipTests
 ```
