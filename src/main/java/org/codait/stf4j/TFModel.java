@@ -29,6 +29,7 @@ import java.util.Set;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.codait.stf4j.util.TFUtil;
+import org.tensorflow.Graph;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
 import org.tensorflow.Session.Runner;
@@ -247,6 +248,15 @@ public class TFModel {
 	 */
 	public String modelDir() {
 		return savedModelDir;
+	}
+
+	/**
+	 * Obtain the TensorFlow graph.
+	 * 
+	 * @return The TensorFlow graph.
+	 */
+	public Graph graph() {
+		return model().graph();
 	}
 
 	/**
