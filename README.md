@@ -618,8 +618,7 @@ Tensor<Integer> t2 = Tensor.create(i2, Integer.class);
 
 TFGraph graph = model.tfGraph();
 TFGraphResults res = graph.input("input1", t1).input("input2", t2).output("add").run();
-@SuppressWarnings("unchecked")
-Tensor<Integer> t = (Tensor<Integer>) res.getTensor("add");
+Tensor<Integer> t = res.getTensor("add", Integer.class);
 int[] intArray = ArrayUtil.intTensorToIntArray(t);
 System.out.println("\nGraph Output: " + Arrays.toString(intArray));
 ```
