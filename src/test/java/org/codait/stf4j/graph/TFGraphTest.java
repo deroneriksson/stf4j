@@ -85,4 +85,18 @@ public class TFGraphTest {
 		Assert.assertArrayEquals(expected, graphOutput);
 	}
 
+	@Test
+	public void graphAddScalarLongsSpecifyTensorType() {
+		TFModel model = new TFModel(AddInt64Test.ADD_INT64_MODEL_DIR);
+		long modelOutput = model.in("input1", 1L).in("input2", 2L).out("output").run().getLong("output");
+		log.debug("Model output: " + modelOutput);
+		TFGraph graph = model.tfGraph();
+		Tensor<Long> t = graph.input("input1", Tensor.create(1L, Long.class))
+				.input("input2", Tensor.create(2L, Long.class)).output("add").run().getTensor("add", Long.class);
+		long graphOutput = t.longValue();
+		log.debug("Graph output: " + graphOutput);
+		Assert.assertEquals(3L, modelOutput);
+		Assert.assertEquals(3L, graphOutput);
+	}
+
 }

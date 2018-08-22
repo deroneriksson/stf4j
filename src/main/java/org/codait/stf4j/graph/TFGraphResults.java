@@ -60,6 +60,23 @@ public class TFGraphResults {
 	}
 
 	/**
+	 * Obtain the output Tensor corresponding to the output name.
+	 * 
+	 * @param <T>
+	 *            The type of the returned Tensor
+	 * 
+	 * @param outputName
+	 *            The output name
+	 * @param type
+	 *            The tensor type
+	 * @return The output Tensor
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Tensor<T> getTensor(String outputName, Class<T> type) {
+		return (Tensor<T>) outputNameToValue.get(outputName);
+	}
+
+	/**
 	 * Display the output results. This includes the output names and information about the tensors such as the tensor
 	 * types and shapes. This information is very useful in a REPL environment.
 	 */
