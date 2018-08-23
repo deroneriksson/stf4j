@@ -1504,6 +1504,24 @@ public class TFResults {
 	}
 
 	/**
+	 * Obtain the output Tensor corresponding to the output key.
+	 * 
+	 * @param <T>
+	 *            The type of the returned Tensor
+	 * 
+	 * @param key
+	 *            The output key
+	 * @param type
+	 *            The tensor type
+	 * @return The output Tensor
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Tensor<T> getTensor(String key, Class<T> type) {
+		checkKey(key);
+		return (Tensor<T>) keyToOutput(key);
+	}
+
+	/**
 	 * Return true if the output key exists in the result map, false otherwise.
 	 * 
 	 * @param key

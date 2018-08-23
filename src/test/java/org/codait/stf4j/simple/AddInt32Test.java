@@ -21,10 +21,12 @@ import java.io.IOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.codait.stf4j.TFModel;
+import org.codait.stf4j.util.ArrayUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.tensorflow.Tensor;
 
 public class AddInt32Test {
 
@@ -703,5 +705,76 @@ public class AddInt32Test {
 		for (int i = 0; i < expected.length; i++) {
 			Assert.assertArrayEquals(expected[i], result[i]);
 		}
+	}
+
+	@Test
+	public void inputScalarIntegerTensorsOutputScalarIntegerTensor() {
+		Tensor<Integer> t1 = Tensor.create(1, Integer.class);
+		Tensor<Integer> t2 = Tensor.create(2, Integer.class);
+		@SuppressWarnings("unchecked")
+		Tensor<Integer> t = (Tensor<Integer>) model.in("input1", t1).in("input2", t2).out("output").run()
+				.getTensor("output");
+		int result = t.intValue();
+		Assert.assertTrue(3 == result);
+	}
+
+	@Test
+	public void inputScalarIntegerTensorsOutputScalarIntegerTensorSpecifyType() {
+		Tensor<Integer> t1 = Tensor.create(1, Integer.class);
+		Tensor<Integer> t2 = Tensor.create(2, Integer.class);
+		Tensor<Integer> t = model.in("input1", t1).in("input2", t2).out("output").run().getTensor("output",
+				Integer.class);
+		int result = t.intValue();
+		Assert.assertTrue(3 == result);
+	}
+
+	@Test
+	public void inputArrayIntegerTensorsOutputArrayIntegerTensor() {
+		int[] i1 = new int[] { 1, 2, 3 };
+		int[] i2 = new int[] { 4, 5, 6 };
+		Tensor<Integer> t1 = Tensor.create(i1, Integer.class);
+		Tensor<Integer> t2 = Tensor.create(i2, Integer.class);
+		@SuppressWarnings("unchecked")
+		Tensor<Integer> t = (Tensor<Integer>) model.in("input1", t1).in("input2", t2).out("output").run()
+				.getTensor("output");
+		int[] result = ArrayUtil.intTensorToIntArray(t);
+		Assert.assertArrayEquals(new int[] { 5, 7, 9 }, result);
+	}
+
+	@Test
+	public void inputArrayIntegerTensorsOutputArrayIntegerTensorSpecifyType() {
+		int[] i1 = new int[] { 1, 2, 3 };
+		int[] i2 = new int[] { 4, 5, 6 };
+		Tensor<Integer> t1 = Tensor.create(i1, Integer.class);
+		Tensor<Integer> t2 = Tensor.create(i2, Integer.class);
+		Tensor<Integer> t = model.in("input1", t1).in("input2", t2).out("output").run().getTensor("output",
+				Integer.class);
+		int[] result = ArrayUtil.intTensorToIntArray(t);
+		Assert.assertArrayEquals(new int[] { 5, 7, 9 }, result);
+	}
+
+	@Test
+	public void input2dArrayIntegerTensorsOutputArrayIntegerTensor() {
+		int[][] i1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] i2 = new int[][] { { 4, 5 }, { 6, 7 } };
+		Tensor<Integer> t1 = Tensor.create(i1, Integer.class);
+		Tensor<Integer> t2 = Tensor.create(i2, Integer.class);
+		@SuppressWarnings("unchecked")
+		Tensor<Integer> t = (Tensor<Integer>) model.in("input1", t1).in("input2", t2).out("output").run()
+				.getTensor("output");
+		int[][] result = (int[][]) ArrayUtil.intTensorToMultidimensionalIntArray(t);
+		Assert.assertArrayEquals(new int[][] { { 5, 7 }, { 9, 11 } }, result);
+	}
+
+	@Test
+	public void input2dArrayIntegerTensorsOutputArrayIntegerTensorSpecifyType() {
+		int[][] i1 = new int[][] { { 1, 2 }, { 3, 4 } };
+		int[][] i2 = new int[][] { { 4, 5 }, { 6, 7 } };
+		Tensor<Integer> t1 = Tensor.create(i1, Integer.class);
+		Tensor<Integer> t2 = Tensor.create(i2, Integer.class);
+		Tensor<Integer> t = model.in("input1", t1).in("input2", t2).out("output").run().getTensor("output",
+				Integer.class);
+		int[][] result = (int[][]) ArrayUtil.intTensorToMultidimensionalIntArray(t);
+		Assert.assertArrayEquals(new int[][] { { 5, 7 }, { 9, 11 } }, result);
 	}
 }
